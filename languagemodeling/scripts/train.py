@@ -11,17 +11,18 @@ Options:
 """
 from docopt import docopt
 import pickle
-
 from nltk.corpus import gutenberg
-
 from languagemodeling.ngram import NGram
+from MyCorpus import *
 
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
 
     # load the data
-    sents = gutenberg.sents('austen-emma.txt')
+    #sents = gutenberg.sents('austen-emma.txt')
+    corpus = MyCorpus()
+    sents = corpus.sents()
 
     # train the model
     n = int(opts['-n'])

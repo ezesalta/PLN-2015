@@ -13,17 +13,20 @@ class MyCorpus:
         reg_exp = '.+'
         my_sent_tokenizer = RegexpTokenizer(reg_exp, discard_empty=True)
         # Create the new corpus reader object.
-        corpus = PlaintextCorpusReader('.', 'prueba.txt',sent_tokenizer=my_sent_tokenizer)
+        corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
         # Use the new corpus reader object.
         self.reader = corpus.raw().split('\n')
 
     def sents(self):
+        out = ''
         for s in self.reader:
-            if s[0] != '#':
-                s = s[3:]
-                if s.find('[') != -1:
-                    rep = re.sub('\[.+\]','',s)
-                    s = rep
-                reg_exp = '\w+|[.¿?¡!;$%"]+'
-                tokenizer = RegexpTokenizer(reg_exp, discard_empty=True)
-                yield tokenizer.tokenize(s)
+            if len(s) > 0:
+                if s[0] != '#':
+                    s = s[3:]
+                    if s.find('[') != -1:
+                        rep = re.sub('\[.+\]','',s)
+                        s = rep
+                    out += s
+        reg_exp = '\w+|[.¿?¡!;$%"]+'
+        tokenizer = RegexpTokenizer(reg_exp, discard_empty=True)
+        return tokenizer.tokenize(out)
