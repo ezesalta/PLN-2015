@@ -7,12 +7,13 @@ def main():
     #lines = corpus.sents()
     #n = lines.__sizeof__()
 
-    try:
+    print (corpus.sents())
+    """try:
         for s in corpus.sents():
             print (s)
     except IndexError:
         #print ('no hay mas elementos')
-        pass
+        pass"""
 
 
 if __name__=='__main__':
