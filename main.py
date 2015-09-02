@@ -7,7 +7,7 @@ def main():
     #lines = corpus.sents()
     #n = lines.__sizeof__()
 
-    print (corpus.sents())
+    print (corpus.sents2())
     """try:
         for s in corpus.sents():
             print (s)
