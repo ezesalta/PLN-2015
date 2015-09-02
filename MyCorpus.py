@@ -27,6 +27,30 @@ class MyCorpus:
                         rep = re.sub('\[.+\]','',s)
                         s = rep
                     out += s
-        reg_exp = '\w+|[.¿?¡!;$%"]+'
-        tokenizer = RegexpTokenizer(reg_exp, discard_empty=True)
+        pattern = r'''(?ix)           # set flag to allow verbose regexps
+                  (sr\.|sra\.)
+                  | ([A-Z]\.)+        # abbreviations, e.g. U.S.A.
+                  | \w+(-\w+)*        # words with optional internal hyphens
+                  | \$?\d+(\.\d+)?%?  # currency and percentages, e.g. $12.40, 82%
+                  | \.\.\.            # ellipsis
+                  | [][.,;"'?():-_`]  # these are separate tokens; includes ], [
+                  '''
+        tokenizer = RegexpTokenizer(pattern, discard_empty=True)
+        #tokenizer.tokenize_sents(out)
         return tokenizer.tokenize(out)
+
+
+    def sents2(self):
+        pattern = r'''(?ix)           # set flag to allow verbose regexps
+                  (sr\.|sra\.)
+                  | ([A-Z]\.)+        # abbreviations, e.g. U.S.A.
+                  | \w+(-\w+)*        # words with optional internal hyphens
+                  | \$?\d+(\.\d+)?%?  # currency and percentages, e.g. $12.40, 82%
+                  | \.\.\.            # ellipsis
+                  | [][.,;"'?():-_`]  # these are separate tokens; includes ], [
+                  '''
+        my_sent_tokenizer = RegexpTokenizer(pattern, discard_empty=True)
+        # Create the new corpus reader object.
+        corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
+        # Use the new corpus reader object.
+        return corpus.sents()
