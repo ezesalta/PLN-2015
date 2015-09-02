@@ -37,7 +37,7 @@ class NGram(object):
 
         tokens -- the n-gram or (n-1)-gram tuple.
         """
-        t = (tokens,)
+        #t = (tokens,)
         return self.counts[tokens]
 
 
@@ -47,6 +47,15 @@ class NGram(object):
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
+        out = 0
+        if self.n > 1:
+            token_n_1 = prev_tokens[-1]
+            c1 = self.count( (token_n_1,token,) )
+            c2 = self.count( (token_n_1,) )
+            out = float(c1)/float(c2)
+        else:
+            out = self.count( (token,) ) / self.count(())
+        return float(out)
 
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
