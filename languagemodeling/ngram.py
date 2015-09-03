@@ -1,6 +1,6 @@
 # https://docs.python.org/3/library/collections.html
 from collections import defaultdict
-
+from math import log
 
 class NGram(object):
 
@@ -87,3 +87,20 @@ class NGram(object):
 
         sent -- the sentence as a list of tokens.
         """
+        log2 = lambda x: log(x, 2)
+        out = 0
+        if self.n > 1:
+            sent.insert(0,'<s>')
+        sent.append('</s>')
+        i = 0
+        while i < len(sent):
+            if sent[i] != '<s>':
+                prev_tokens = sent[i - self.n + 1: i]
+                if self.cond_prob(sent[i], prev_tokens) > 0:
+                    out += log2( self.cond_prob(sent[i], prev_tokens) )
+                else:
+                    # sent unseen
+                    out = float('-inf')
+
+            i += 1
+        return out
