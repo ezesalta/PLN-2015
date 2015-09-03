@@ -47,12 +47,18 @@ class NGram(object):
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-        out = 0
+        out = 1
         if self.n > 1:
-            token_n_1 = prev_tokens[-1]
-            c1 = self.count( (token_n_1,token,) )
-            c2 = self.count( (token_n_1,) )
-            out = float(c1)/float(c2)
+            if prev_tokens == [] or prev_tokens == None:
+                # It can not happen theoretically
+                out = self.count( (token,) ) / float(sum(self.counts.values()))
+                print ('Omg happen!')
+            else:
+                token_n_1 = prev_tokens[-1]
+                c1 = self.count( (token_n_1,token,) )
+                c2 = self.count( (token_n_1,) )
+                if c2!=0:
+                    out = c1/float(c2)
         else:
             out = self.count( (token,) ) / self.count(())
         return float(out)
@@ -62,6 +68,19 @@ class NGram(object):
 
         sent -- the sentence as a list of tokens.
         """
+        out = 1
+        if self.n > 1:
+            sent.insert(0,'<s>')
+        sent.append('</s>')
+        i = 0
+        while i < len(sent):
+            #out *= self.cond_prob(sent[i],sent[i - self.n + 1 : i])
+            if sent[i] != '<s>':
+                prev_tokens = sent[i - self.n + 1: i]
+                out *= self.cond_prob(sent[i],prev_tokens)
+            i += 1
+
+        return out
 
     def sent_log_prob(self, sent):
         """Log-probability of a sentence.
