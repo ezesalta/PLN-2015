@@ -1,6 +1,7 @@
 # https://docs.python.org/3/library/collections.html
 from collections import defaultdict
 from math import log
+import random
 
 class NGram(object):
 
@@ -104,3 +105,31 @@ class NGram(object):
 
             i += 1
         return out
+
+
+class NGramGenerator:
+
+    def __init__(self, model):
+        """
+        model -- n-gram model.
+        """
+        self.ngram = model
+
+    def generate_sent(self):
+        """Randomly generate a sentence."""
+        sent = ''
+        cant_ngrams = len(self.ngram.counts)-1
+        for i in range(4):
+            rand = random.randint(0,cant_ngrams)
+            tup = list(self.ngram.counts.keys())[rand]
+            if tup != ():
+                word = list(tup)[0]
+                sent += word + ' '
+        print (sent)
+
+    def generate_token(self, prev_tokens=None):
+        """Randomly generate a token, given prev_tokens.
+
+
+        prev_tokens -- the previous n-1 tokens (optional only if n = 1).
+        """
