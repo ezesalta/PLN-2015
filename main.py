@@ -1,15 +1,16 @@
 __author__ = 'Ezequiel Medina'
 
-from MyCorpus import *
+from MyCorpus import MyCorpus
+
 
 def main():
     corpus = MyCorpus()
     lines = corpus.sents()
     n = lines.__sizeof__()
 
-    print (corpus.sents())
-    print (corpus.sents2())
+    print(corpus.sents())
+    print(corpus.sents2())
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()

@@ -3,6 +3,7 @@ from collections import defaultdict
 from math import log
 import random
 
+
 class NGram(object):
 
     def __init__(self, n, sents):
@@ -38,7 +39,6 @@ class NGram(object):
 
         tokens -- the n-gram or (n-1)-gram tuple.
         """
-        #t = (tokens,)
         return self.counts[tokens]
 
 
@@ -48,18 +48,14 @@ class NGram(object):
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-        out = 1
+        out = 0
         if self.n > 1:
-            if prev_tokens == [] or prev_tokens == None:
-                # It can not happen theoretically
-                out = self.count( (token,) ) / float(sum(self.counts.values()))
-                print ('Omg happen!')
-            else:
-                token_n_1 = prev_tokens[-1]
-                c1 = self.count( (token_n_1,token,) )
-                c2 = self.count( (token_n_1,) )
-                if c2!=0:
-                    out = c1/float(c2)
+            assert prev_tokens != [] and prev_tokens != None
+            token_n_1 = prev_tokens[-1]
+            c1 = self.count( (token_n_1,token,) )
+            c2 = self.count( (token_n_1,) )
+            if c2!=0:
+                out = c1/float(c2)
         else:
             out = self.count( (token,) ) / self.count(())
         return float(out)
@@ -139,3 +135,70 @@ class NGramGenerator:
 
         #self.ngram.cond_prob(token,prev_tokens)
         return token
+
+
+class AddOneNGram:
+
+    def __init__(self, n, sents):
+        """
+        n -- order of the model.
+        sents -- list of sentences, each one being a list of tokens.
+        """
+        assert n > 0
+        self.n = n
+        self.counts = counts = defaultdict(int)
+
+        for sent in sents:
+            if n > 1:
+                sent.insert(0,'<s>')
+            sent.append('</s>')
+            for i in range(len(sent) - n + 1):
+                ngram = tuple(sent[i: i + n])
+                counts[ngram] += 1
+                counts[ngram[:-1]] += 1
+
+    def count(self, tokens):
+        """Count for an n-gram or (n-1)-gram.
+
+        tokens -- the n-gram or (n-1)-gram tuple.
+        """
+        return self.counts[tokens]
+
+    def cond_prob(self, token, prev_tokens=None):
+        """Conditional probability of a token.
+
+        token -- the token.
+        prev_tokens -- the previous n-1 tokens (optional only if n = 1).
+        """
+        out = 0
+        if self.n > 1:
+            assert prev_tokens != [] and prev_tokens != None
+            token_n_1 = prev_tokens[-1]
+            Ci = float(self.count( (token_n_1,token,) ))
+            N = float(self.count( (token_n_1,) ))
+            V = float(self.V())
+            #if N != 0:
+            #out = (Ci + 1) * (N / float(N + V))
+            out = (Ci + 1) / (N + V)
+        else:
+            Ci = float(self.count( (token,) ))
+            N = float(self.count(()))
+            V = float(self.V())
+            #print(token,Ci,N,V)
+            #print(self.counts)
+            #out = ((Ci + 1) * N) / float(N + V)
+            out = (Ci + 1) / (N + V)
+        return out
+
+    def V(self):
+        """Size of the vocabulary.
+        """
+        voc = []
+        V = 0
+        for t in self.counts.keys():
+            if t != ():
+                if t[0] not in voc and self.count(t)>0:
+                    voc.append(t[0])
+                    V += 1
+
+        return V
