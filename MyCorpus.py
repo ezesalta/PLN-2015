@@ -9,25 +9,7 @@ class MyCorpus:
     def __init__(self):
         self.sentsList = []
         self.reader = ''
-        # Create our custom sentence tokenizer.
-        reg_exp = '.+'
-        my_sent_tokenizer = RegexpTokenizer(reg_exp, discard_empty=True)
-        # Create the new corpus reader object.
-        corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
-        # Use the new corpus reader object.
-        self.reader = corpus.raw().split('\n')
-
-    def sents(self):
-        out = ''
-        for s in self.reader:
-            if len(s) > 0:
-                if s[0] != '#':
-                    s = s[3:]
-                    if s.find('[') != -1:
-                        rep = re.sub('\[.+\]','',s)
-                        s = rep
-                    out += s
-        pattern = r'''(?ix)           # set flag to allow verbose regexps
+        self.pattern = r'''(?ix)           # set flag to allow verbose regexps
                   (sr\.|sra\.)
                   | ([A-Z]\.)+        # abbreviations, e.g. U.S.A.
                   | \w+(-\w+)*        # words with optional internal hyphens
@@ -35,9 +17,23 @@ class MyCorpus:
                   | \.\.\.            # ellipsis
                   | [][.,;"'?():-_`]  # these are separate tokens; includes ], [
                   '''
-        tokenizer = RegexpTokenizer(pattern, discard_empty=True)
-        #tokenizer.tokenize_sents(out)
-        return tokenizer.tokenize(out)
+        my_sent_tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
+        self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
+        self.reader = self.corpus.raw().split('\n')
+
+    def sents(self):
+        out = []
+        tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
+        for s in self.reader:
+            if len(s) > 0:
+                if s[0] != '#':
+                    s = s[3:]
+                    if s.find('[') != -1:
+                        rep = re.sub('\[.+\]','',s)
+                        s = rep
+                    out.append(tokenizer.tokenize(s))
+                    #yield tokenizer.tokenize(s)
+        return out
 
 
     def sents2(self):
