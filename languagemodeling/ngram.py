@@ -14,8 +14,12 @@ class NGram(object):
         assert n > 0
         self.n = n
         self.counts = counts = defaultdict(int)
+        self.words = []
 
         for sent in sents:
+            for s in sent:
+                if s not in self.words:
+                    self.words.append(s)
             if n > 1:
                 sent.insert(0,'<s>')
             sent.append('</s>')
@@ -24,6 +28,7 @@ class NGram(object):
                 ngram = tuple(sent[i: i + n])
                 counts[ngram] += 1
                 counts[ngram[:-1]] += 1
+        self.words.append('</s>')
 
     def prob(self, token, prev_tokens=None):
         n = self.n
@@ -39,7 +44,11 @@ class NGram(object):
 
         tokens -- the n-gram or (n-1)-gram tuple.
         """
-        return self.counts[tokens]
+        out = 0
+        #self.counts.has_key(tokens)
+        if (tokens in list(self.counts)):
+            out = self.counts[tokens]
+        return out
 
 
     def cond_prob(self, token, prev_tokens=None):
@@ -137,32 +146,7 @@ class NGramGenerator:
         return token
 
 
-class AddOneNGram:
-
-    def __init__(self, n, sents):
-        """
-        n -- order of the model.
-        sents -- list of sentences, each one being a list of tokens.
-        """
-        assert n > 0
-        self.n = n
-        self.counts = counts = defaultdict(int)
-
-        for sent in sents:
-            if n > 1:
-                sent.insert(0,'<s>')
-            sent.append('</s>')
-            for i in range(len(sent) - n + 1):
-                ngram = tuple(sent[i: i + n])
-                counts[ngram] += 1
-                counts[ngram[:-1]] += 1
-
-    def count(self, tokens):
-        """Count for an n-gram or (n-1)-gram.
-
-        tokens -- the n-gram or (n-1)-gram tuple.
-        """
-        return self.counts[tokens]
+class AddOneNGram(NGram):
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -184,8 +168,6 @@ class AddOneNGram:
             Ci = float(self.count( (token,) ))
             N = float(self.count(()))
             V = float(self.V())
-            #print(token,Ci,N,V)
-            #print(self.counts)
             #out = ((Ci + 1) * N) / float(N + V)
             out = (Ci + 1) / (N + V)
         return out
@@ -193,12 +175,14 @@ class AddOneNGram:
     def V(self):
         """Size of the vocabulary.
         """
-        voc = []
+        """voc = []
         V = 0
         for t in self.counts.keys():
             if t != ():
                 if t[0] not in voc and self.count(t)>0:
                     voc.append(t[0])
-                    V += 1
+                    V += 1"""
+        V = len(self.words)
+        #print(self.words)
 
         return V
