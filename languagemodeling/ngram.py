@@ -46,7 +46,7 @@ class NGram(object):
         """
         out = 0
         #self.counts.has_key(tokens)
-        if (tokens in list(self.counts)):
+        if (tokens in self.counts):
             out = self.counts[tokens]
         return out
 
@@ -118,15 +118,42 @@ class NGramGenerator:
         """
         model -- n-gram model.
         """
-        self.ngram = model
+        self.model = model
+        self.probs = {}
+        self.sorted_probs = {}
+        if model.n > 1:
+            set_probs = {}
+            tokens = model.words
+            tokens.insert(0,'<s>')
+            for token in tokens:
+                if token != '</s>':
+                    tokens_aux = list(tokens)
+                    tokens_aux.remove(token)
+                    for word in tokens_aux:
+                        if (model.cond_prob(word,[token]) > 0):
+                            set_probs[word] = model.cond_prob(word,[token])
+                    self.probs[tuple([token])] = set_probs
+                    self.sorted_probs[tuple([token])] = sorted(list(set_probs.items()))
+                    set_probs = {}
+        else:
+            set_probs = {}
+            for token in model.words:
+                set_probs[token] = model.cond_prob(token)
+            self.probs[()] = set_probs
 
     def generate_sent(self):
         """Randomly generate a sentence."""
-        sent = ''
-        n = random.randint(1,5)
-        for i in range(n):
-            token = self.generate_token()
-            sent += token + ' '
+        sent = []
+        prev_tokens = ['<s>']
+        #print(type(self.sorted_probs), self.sorted_probs)
+        i = 0
+        token = self.generate_token(prev_tokens)
+        prev_tokens = [token]
+        while token != '</s>' and i < 100:
+            sent.append(token)
+            token = self.generate_token(prev_tokens)
+            prev_tokens.append(token)
+            i += 1
         return sent
 
     def generate_token(self, prev_tokens=None):
@@ -135,14 +162,25 @@ class NGramGenerator:
 
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-        cant_ngrams = len(self.ngram.counts)-1
-        rand = random.randint(0,cant_ngrams-1)
-        tup = list(self.ngram.counts.keys())[rand]
         token = ''
-        if tup != ():
-            token = list(tup)[0]
+        #if self.model.n == 1:
+        if self.model.n == 1 or prev_tokens is None or prev_tokens == []:
+            rand = random.randint(0,len(self.probs[()])-1)
+            keys_list = list(self.probs[()].keys())
+            token = keys_list[rand]
+        else:
+            for token in prev_tokens:
+                if tuple([token]) in self.sorted_probs:
+                    probs = self.sorted_probs[tuple([token])]
+                    max_probs = []
+                    for p in probs:
+                        if p[1] >= probs[-1][1]:
+                            max_probs.append(p)
+                    rand = random.randint(0,len(max_probs)-1)
+                    selected = max_probs[rand]
+                    token = selected[0]
+                    #print( token,self.sorted_probs[tuple([token])][-1][0] )
 
-        #self.ngram.cond_prob(token,prev_tokens)
         return token
 
 

@@ -18,7 +18,7 @@ from docopt import docopt
 from MyCorpus import MyCorpus
 
 def generate(filename, n):
-    f = open(filename, 'r')
+    #f = open(filename, 'r')
     #data = f.readlines()
     sents = [
         'el gato come pescado .'.split(),
@@ -27,14 +27,14 @@ def generate(filename, n):
     corpus = MyCorpus()
     sents = corpus.sents()
     gen_sents = []
-    ngram = NGram(1, sents)
+    ngram = NGram(2, sents)
     #ngram = NGram(1, data)
     generator = NGramGenerator(ngram)
     for i in range(n):
         gen_sents.append(generator.generate_sent())
 
     print (gen_sents)
-    f.close()
+    #f.close()
 
 
 if __name__=='__main__':
