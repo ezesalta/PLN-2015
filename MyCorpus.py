@@ -19,6 +19,7 @@ class MyCorpus:
                   '''
         my_sent_tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
         self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
+        #self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'LAVOZ/lavoz.txt',sent_tokenizer=my_sent_tokenizer)
         self.reader = self.corpus.raw().split('\n')
 
     def sents(self):

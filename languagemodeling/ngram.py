@@ -213,14 +213,6 @@ class AddOneNGram(NGram):
     def V(self):
         """Size of the vocabulary.
         """
-        """voc = []
-        V = 0
-        for t in self.counts.keys():
-            if t != ():
-                if t[0] not in voc and self.count(t)>0:
-                    voc.append(t[0])
-                    V += 1"""
         V = len(self.words)
-        #print(self.words)
 
         return V

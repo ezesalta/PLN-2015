@@ -16,31 +16,27 @@ __author__ = 'Ezequiel Medina'
 from languagemodeling.ngram import NGram, NGramGenerator
 from docopt import docopt
 from MyCorpus import MyCorpus
+import pickle
 
-def generate(filename, n):
-    #f = open(filename, 'r')
-    #data = f.readlines()
-    sents = [
-        'el gato come pescado .'.split(),
-        'la gata come salmón .'.split(),
-    ]
-    corpus = MyCorpus()
-    sents = corpus.sents()
-    gen_sents = []
-    ngram = NGram(2, sents)
+def generate(ngram, n):
+    #sents = ['el gato come pescado .'.split(),'la gata come salmón .'.split(),]
+    #corpus = MyCorpus()
+    #sents = corpus.sents()
+
+    #ngram = NGram(2, sents)
     #ngram = NGram(1, data)
-    generator = NGramGenerator(ngram)
-    for i in range(n):
-        gen_sents.append(generator.generate_sent())
 
-    print (gen_sents)
-    #f.close()
+    generator = NGramGenerator(ngram)
+    out = [generator.generate_sent() for x in range(n)]
+    print (out)
 
 
 if __name__=='__main__':
     opts = docopt(__doc__)
     file = opts['-i']
     n = int(opts['-n'])
-
-    generate(file, n)
+    f = open(file, 'rb')
+    ngram = pickle.load(f)
+    f.close()
+    generate(ngram, n)
 
