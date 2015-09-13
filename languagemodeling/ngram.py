@@ -46,10 +46,9 @@ class NGram(object):
         """
         out = 0
         #self.counts.has_key(tokens)
-        if (tokens in self.counts):
+        if tokens in self.counts:
             out = self.counts[tokens]
         return out
-
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -59,11 +58,11 @@ class NGram(object):
         """
         out = 0
         if self.n > 1:
-            assert prev_tokens != [] and prev_tokens != None
-            token_n_1 = prev_tokens[-1]
-            c1 = self.count( (token_n_1,token,) )
-            c2 = self.count( (token_n_1,) )
-            if c2!=0:
+            assert prev_tokens != [] and prev_tokens is not None
+            token_n_1 = prev_tokens + [token]
+            c1 = self.count( tuple(token_n_1) )
+            c2 = self.count( tuple(prev_tokens) )
+            if c2 != 0:
                 out = c1/float(c2)
         else:
             out = self.count( (token,) ) / self.count(())
@@ -75,17 +74,20 @@ class NGram(object):
         sent -- the sentence as a list of tokens.
         """
         out = 1
-        if self.n > 1:
-            sent.insert(0,'<s>')
         sent.append('</s>')
         i = 0
+        default = ['<s>']*(self.n-1)
         while i < len(sent):
-            #out *= self.cond_prob(sent[i],sent[i - self.n + 1 : i])
-            if sent[i] != '<s>':
-                prev_tokens = sent[i - self.n + 1: i]
-                out *= self.cond_prob(sent[i],prev_tokens)
+            l1 = sent[:i]
+            l2 = sent[i+1:]
+            if len(l1) >= self.n - 1:
+                #out *= self.cond_prob(sent[i],sent[i - self.n + 1 : i])
+                out *= self.cond_prob(sent[i], l1[-self.n+1:])
+            else:
+                #print(sent[i],default)
+                aux = ['<s>']*((self.n-1)-len(l1))
+                out *= self.cond_prob(sent[i], aux+l1)
             i += 1
-
         return out
 
     def sent_log_prob(self, sent):
@@ -98,16 +100,28 @@ class NGram(object):
         if self.n > 1:
             sent.insert(0,'<s>')
         sent.append('</s>')
+        default = ['<s>']*(self.n-1)
         i = 0
         while i < len(sent):
             if sent[i] != '<s>':
-                prev_tokens = sent[i - self.n + 1: i]
-                if self.cond_prob(sent[i], prev_tokens) > 0:
-                    out += log2( self.cond_prob(sent[i], prev_tokens) )
+                #assert len(prev_tokens) == self.n - 1
+                l1 = sent[:i]
+                l2 = sent[i+1:]
+                if len(l1) >= self.n - 1:
+                    if self.cond_prob(sent[i], l1[-self.n+1:]) > 0:
+                        out += log2(self.cond_prob(sent[i], l1[-self.n+1:]))
+                    else:
+                        # sent unseen
+                        out = float('-inf')
                 else:
-                    # sent unseen
-                    out = float('-inf')
-
+                    #print(sent[i],default)
+                    #out += log2(self.cond_prob(sent[i], default))
+                    aux = ['<s>']*((self.n-1)-len(l1))
+                    value = self.cond_prob(sent[i], aux+l1)
+                    if value > 0:
+                        out += log2(value)
+                    else:
+                        out = float('-inf')
             i += 1
         return out
 
@@ -144,8 +158,8 @@ class NGramGenerator:
     def generate_sent(self):
         """Randomly generate a sentence."""
         sent = []
-        prev_tokens = ['<s>']
-        #print(type(self.sorted_probs), self.sorted_probs)
+        prev_tokens = ['<s>']*self.model.n
+        #print(self.model.n, self.sorted_probs)
         i = 0
         token = self.generate_token(prev_tokens)
         prev_tokens = [token]
@@ -164,22 +178,31 @@ class NGramGenerator:
         """
         token = ''
         #if self.model.n == 1:
-        if self.model.n == 1 or prev_tokens is None or prev_tokens == []:
-            rand = random.randint(0,len(self.probs[()])-1)
-            keys_list = list(self.probs[()].keys())
-            token = keys_list[rand]
+        if self.model.n > 1 and prev_tokens is not None:
+            for tk in prev_tokens:
+                if tuple([tk]) in self.sorted_probs:
+                    probs = self.sorted_probs[tuple([tk])]
+                    if len(probs) > 0:
+                        max_probs = []
+                        for p in probs:
+                            if p[1] >= probs[-1][1]:
+                                max_probs.append(p)
+                        if len(max_probs) > 1:
+                            rand = random.randint(0,len(max_probs)-1)
+                            selected = max_probs[rand]
+                            token = selected[0]
+                        elif len(max_probs) == 1:
+                            token = max_probs[0][0]
+                    else:
+                        #token = tk
+                        rand = random.randint(0,len(self.model.words)-1)
+                        token = self.model.words[rand]
+                else:
+                    rand = random.randint(0,len(self.model.words)-1)
+                    token = self.model.words[rand]
         else:
-            for token in prev_tokens:
-                if tuple([token]) in self.sorted_probs:
-                    probs = self.sorted_probs[tuple([token])]
-                    max_probs = []
-                    for p in probs:
-                        if p[1] >= probs[-1][1]:
-                            max_probs.append(p)
-                    rand = random.randint(0,len(max_probs)-1)
-                    selected = max_probs[rand]
-                    token = selected[0]
-                    #print( token,self.sorted_probs[tuple([token])][-1][0] )
+            rand = random.randint(0,len(self.model.words)-1)
+            token = self.model.words[rand]
 
         return token
 
@@ -194,12 +217,11 @@ class AddOneNGram(NGram):
         """
         out = 0
         if self.n > 1:
-            assert prev_tokens != [] and prev_tokens != None
-            token_n_1 = prev_tokens[-1]
-            Ci = float(self.count( (token_n_1,token,) ))
-            N = float(self.count( (token_n_1,) ))
+            assert prev_tokens != [] and prev_tokens is not None
+            token_n_1 = prev_tokens + [token]
+            Ci = float(self.count( tuple(token_n_1) ))
+            N = float(self.count( tuple(prev_tokens) ))
             V = float(self.V())
-            #if N != 0:
             #out = (Ci + 1) * (N / float(N + V))
             out = (Ci + 1) / (N + V)
         else:

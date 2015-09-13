@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # load the data
     #sents = gutenberg.sents('austen-emma.txt')
     corpus = MyCorpus()
-    sents = corpus.sents()
+    sents = corpus.sents_train()
 
     # train the model
     n = int(opts['-n'])

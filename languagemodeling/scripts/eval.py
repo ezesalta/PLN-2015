@@ -22,26 +22,18 @@ def log_probability(model, test):
 
 def cross_entropy(model, test):
     n = len(test)
-    out = log_probability(model,test) * (-1.0 / n)
+    m = sum([len(x) for x in test]) + len(test)
+    out = log_probability(model,test) * (-1.0 / m)
     return out
 
 def perplexity(model, test):
     out = 2.0 ** cross_entropy(model,test)
     return out
 
-def split_corpus():
-    corpus = MyCorpus()
-    sents = corpus.sents()
-    n = len(sents)
-    n1 = math.floor(n*0.9)
-    n2 = n-n1
-    train = sents[0:n1]
-    test = sents[n1:]
-    return (train,test)
-
 def eval(model):
-    (train,test) = split_corpus()
-    print(perplexity(model,test))
+    corpus = MyCorpus()
+    sents = corpus.sents_test()
+    print(perplexity(model,sents))
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
