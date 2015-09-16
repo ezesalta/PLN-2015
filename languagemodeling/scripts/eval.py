@@ -11,8 +11,6 @@ Options:
 __author__ = 'Ezequiel Medina'
 from docopt import docopt
 from MyCorpus import MyCorpus
-from languagemodeling.ngram import NGram, AddOneNGram
-import math
 import pickle
 
 
