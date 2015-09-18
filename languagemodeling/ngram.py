@@ -140,8 +140,8 @@ class NGramGenerator:
         self.sorted_probs = {}
         if model.n > 1:
             tokens = model.words
-            print('model counts:',len(self.model.counts))
-            print('words:', len(self.model.words))
+            print('model counts:', len(model.counts))
+            print('words:', len(model.words))
             for t in self.model.counts:
                 if len(t) == self.model.n - 1:
                     set_probs = {}
@@ -157,20 +157,6 @@ class NGramGenerator:
             for token in model.words:
                 set_probs[token] = model.cond_prob(token)
             self.probs[()] = set_probs
-        """
-                    exit()
-            tokens = model.words
-            tokens.insert(0,'<s>')
-            for token in tokens:
-                if token != '</s>':
-                    tokens_aux = list(tokens)
-                    tokens_aux.remove(token)
-                    for word in tokens_aux:
-                        if model.cond_prob(word,[token]) > 0:
-                            set_probs[word] = model.cond_prob(word,[token])
-                    self.probs[tuple([token])] = set_probs
-                    self.sorted_probs[tuple([token])] = sorted(list(set_probs.items()))
-                    set_probs = {}"""
 
     def generate_sent(self):
         """Randomly generate a sentence."""
@@ -302,7 +288,7 @@ class InterpolatedNGram(NGram):
                 self.addone_ngram = AddOneNGram(1, self.sents_addone)
             self.gamma = 1.0
             # REVISAR PORQUE NO FUNCIONA LA APROXIMACION DEL MEJOR GAMMA
-            val = float('inf')
+            """val = float('inf')
             best_gamma = self.gamma
             for g in range(10):
                 self.gamma = float(g+1)
@@ -310,7 +296,7 @@ class InterpolatedNGram(NGram):
                 if p < val:
                     best_gamma = float(g+1)
                     val = p
-            self.gamma = best_gamma
+            self.gamma = best_gamma"""
             # ----------------------------------------------------------
         my_counts = defaultdict(int)
         m = 1
@@ -320,12 +306,10 @@ class InterpolatedNGram(NGram):
             elif m > 1:
                 sents = [['<s>']+x for x in sents]
             for sent in sents:
-                """if m == 1:
+                if m == n:
                     for s in sent:
                         if s not in self.words:
                             self.words.append(s)
-                    self.words.append('</s>')"""
-
                 for i in range(len(sent) - m + 1):
                     ngram = tuple(sent[i: i + m])
                     my_counts[ngram] += 1
@@ -379,12 +363,14 @@ class InterpolatedNGram(NGram):
                             c = self.addone_ngram.cond_prob(token,prev_tokens)
 
                     out += self.lambdas[i] * c
-            #assert sum([x for x in self.lambdas.values()]) == 1.0
+            assert sum([x for x in self.lambdas.values()]) == 1.0
             #if sum([x for x in self.lambdas.values()]) != 1.0:
                 #print(self.lambdas)
                 #print(sum([x for x in self.lambdas.values()]), self.gamma)
-        #print(list(self.lambdas.values())[-1], 1 - sum([x for x in list(self.lambdas.values())[0:-1]]))
-        #print(sum([float(x) for x in self.lambdas.values()]))
+        else:
+            print('no deberia pasar')
+            #out = self.count(tuple([token])) / float(self.count(()))
+
         return out
 
     def perplexity(self, test):
@@ -413,51 +399,56 @@ class BackOffNGram(NGram):
         self.words = []
         self.beta = beta
         self.nonzero_words = {}
+        self.addone = addone
+        self.addone_ngram = None
 
         if self.beta is None:
             p = math.ceil(len(sents)*0.1)
-            sents = sents[:p]
             held_out = sents[p:]
+            sents = sents[:p]
             # Falta estimar beta usando los datos de held-out
-            """
-            val = float('inf')
-            best_gamma = self.gamma
-            for g in range(1):
-                self.gamma = float(g+1)
-                p = self.perplexity(held_out)
-                if p < val:
-                    best_gamma = float(g+1)
-            self.gamma = best_gamma
-            """
             self.beta = 0.5
-        if n == 1:
-            # usar add-one
-            addone_ngram = AddOneNGram(n,sents)
-            self.counts = addone_ngram.counts
-            self.words = addone_ngram.words
-        elif n > 1:
+
+        # Counts
+        my_counts = defaultdict(int)
+        m = 1
+        while m <= n:
+            if m == 1:
+                sents = [x+['</s>'] for x in sents]
+            elif m > 1:
+                sents = [['<s>']+x for x in sents]
             for sent in sents:
-                # Initial count
-                for s in sent:
-                    if s not in self.words:
-                        self.words.append(s)
-                self.words.append('</s>')
-                sent.insert(0,'<s>')
-                sent.append('</s>')
-                for i in range(len(sent) - n + 1):
-                    ngram = tuple(sent[i: i + n])
-                    counts[ngram] += 1
-                    counts[ngram[:-1]] += 1
-                # Count non-zero words
-                m = n - 1
-                tokens = self.words
+                # Count ngrams
                 for i in range(len(sent) - m + 1):
                     ngram = tuple(sent[i: i + m])
-                    words = []
-                    for tk in tokens:
-                        if self.cond_prob_a(tk,list(ngram)) > 0:
-                            words.append(tk)
-                    self.nonzero_words[ngram] = set(words)
+                    my_counts[ngram] += 1
+                    my_counts[ngram[:-1]] += 1
+                if m == n:
+                    # Count words
+                    for s in sent:
+                        if s not in self.words:
+                            self.words.append(s)
+            #print(my_counts)
+            self.counts.update(my_counts)
+            my_counts.clear()
+            m += 1
+        #print('words:',self.words)
+        for sent in sents:
+            # Count non-zero words
+            mm = n - 1
+            tokens = self.words
+            for i in range(len(sent) - mm + 1):
+                ngram = tuple(sent[i: i + mm])
+                words = []
+                for tk in tokens:
+                    #print(list(ngram),tk, self.q_ml(tk,list(ngram)))
+                    if self.q_ml(tk,list(ngram)) > 0:
+                        #if self.cond_prob(tk,list(ngram)) > 0:
+                        words.append(tk)
+                self.nonzero_words[ngram] = set(words)
+        #print(self.nonzero_words)
+        if addone and self.addone_ngram is None:
+            self.addone_ngram = AddOneNGram(n,sents)
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -466,36 +457,44 @@ class BackOffNGram(NGram):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         out = 0
-        otherwise = False
-        if prev_tokens is not None:
-            #assert len(prev_tokens) > 0
-            #if self.count(tuple(prev_tokens)) > 0:
-            if self.A(tuple(prev_tokens)):
+        if self.n == 1:
+            if self.addone:
+                out = self.addone_ngram.cond_prob(token, prev_tokens)
+            else:
+                out = self.count(tuple([token])) / float(self.count(()))
+                #out = self.count(tuple([token])) / float(len(self.counts))
+        elif self.n > 1 and prev_tokens is not None:
+            if token in self.nonzero_words:
                 c_star = self.count(tuple(prev_tokens + [token])) - self.beta
                 p_star = float(c_star) / self.count(tuple(prev_tokens))
                 out = p_star
             else:
-                #otherwise = True
-                if prev_tokens is not None:
+                if len(prev_tokens) > 0:
                     a = self.alpha(tuple(prev_tokens))
+                    prev = prev_tokens.copy()
+                    prev.pop(0)
+                    q_d = self.cond_prob(token,prev)
+                    p_katz = float(q_d) / self.denom(tuple(prev_tokens))
+                    #print('q_d / denom:',q_d, self.denom(tuple(prev_tokens)), p_katz)
+                    out = a * p_katz
                 else:
-                    otherwise = True
+                    # prev_tokens = []
+                    #out = self.count(tuple([token])) / float(self.count(()))
+                    #out = self.count(tuple([token])) / float(len(self.words))
+                    #out = self.count(tuple([token])) / float(len(self.counts))
+                    #print(token, prev_tokens, out)
+                    print('no deberia pasar2', token, prev_tokens, out)
         else:
-            #prev_tokens = None
-            otherwise = True
-            #print('prev_tokens None')
-        if otherwise:
-            a = self.alpha(())
-            s = 0
-            for w in self.words:
-                if w not in self.nonzero_words:
-                    s += self.cond_prob_a(w)
-            p_katz = self.cond_prob_a(token) / float(s)
-            out = a * p_katz
+            print('no deberia pasar1')
+            #out = self.count(tuple([token])) / float(self.count(()))
+            #out = self.count(tuple([token])) / float(len(self.words))
+            #out = self.count(tuple([token])) / float(len(self.counts))
+            #print(token, prev_tokens, out)
+            #print(token, prev_tokens, self.count(tuple([token])) , float(len(self.counts)))
 
         return out
 
-    def cond_prob_a(self, token, prev_tokens=None):
+    def q_ml(self, token, prev_tokens=None):
         out = 0
         if self.n > 1:
             assert prev_tokens != [] and prev_tokens is not None
@@ -505,8 +504,9 @@ class BackOffNGram(NGram):
             if c2 != 0:
                 out = c1/float(c2)
         else:
-            #out = self.count( (token,) ) / self.count(())
-            out = self.count(tuple(token)) / float(len(self.words))
+            out = self.count( (token,) ) / self.count(())
+            #out = self.count(tuple([token])) / float(len(self.words))
+            #out = self.count(tuple([token])) / float(len(self.counts))
         return out
 
     def A(self, tokens):
@@ -528,10 +528,13 @@ class BackOffNGram(NGram):
         out = 0
         for w in self.nonzero_words:
             c = self.count(tuple(list(tokens) + list(w)))
-            if c > 0:
-                val = (c - self.beta) / float(self.count(tokens))
+            cc = self.count(tokens)
+            if c > 0 and cc > 0:
+                val = (c - self.beta) / float(cc)
                 #val = self.count(tuple(list(tokens) + list(w))) / float(self.count(tokens))
                 out += val
+            elif cc <= 0:
+                print('cc <= 0')
             #print(tokens, w, val)
         return 1.0 - out
 
@@ -540,3 +543,10 @@ class BackOffNGram(NGram):
 
         tokens -- the k-gram tuple.
         """
+        out = 0
+        for x in self.nonzero_words[tokens]:
+            l = list(tokens)
+            l.pop(0)
+            out += self.cond_prob(x,l)
+
+        return 1.0 - out
