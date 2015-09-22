@@ -19,8 +19,8 @@ class MyCorpus:
                   | [][.,;"'?():-_`]  # these are separate tokens; includes ], [
                   '''
         my_sent_tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
-        #self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'ADM/ADM.txt',sent_tokenizer=my_sent_tokenizer)
-        self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'LAVOZ/lavoz2.txt',sent_tokenizer=my_sent_tokenizer)
+        self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'corpus.txt',sent_tokenizer=my_sent_tokenizer)
+        #self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'LAVOZ/lavoz2.txt',sent_tokenizer=my_sent_tokenizer)
         #self.reader = self.corpus.raw().split('\n')
         self.reader = self.corpus.raw().split('.')
         self.n = len(self.reader)
@@ -35,10 +35,10 @@ class MyCorpus:
         for s in self.reader:
             if len(s) > 0:
                 if s[0] != '#':
-                    """s = s[3:]
+                    s = s[3:]
                     if s.find('[') != -1:
                         rep = re.sub('\[.+\]','',s)
-                        s = rep"""
+                        s = rep
                     out.append(tokenizer.tokenize(s))
                     #yield tokenizer.tokenize(s)
         return out
@@ -49,6 +49,10 @@ class MyCorpus:
         for s in self.train:
             if len(s) > 0:
                 if s[0] != '#':
+                    s = s[3:]
+                    if s.find('[') != -1:
+                        rep = re.sub('\[.+\]','',s)
+                        s = rep
                     out.append(tokenizer.tokenize(s))
         return out
 
@@ -58,6 +62,10 @@ class MyCorpus:
         for s in self.test:
             if len(s) > 0:
                 if s[0] != '#':
+                    s = s[3:]
+                    if s.find('[') != -1:
+                        rep = re.sub('\[.+\]','',s)
+                        s = rep
                     out.append(tokenizer.tokenize(s))
         return out
 

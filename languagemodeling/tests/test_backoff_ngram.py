@@ -58,7 +58,7 @@ class TestBackoffNGram(TestCase):
             ('salmón',): 1.0 - model.cond_prob('.'),
         }
         for tokens, d in denom.items():
-            self.assertEqual(model.denom(tokens), d, tokens)
+            self.assertAlmostEqual(model.denom(tokens), d)
 
     def test_count_1gram(self):
         models = [
@@ -212,3 +212,4 @@ class TestBackoffNGram(TestCase):
                 probs = [(token, model.cond_prob(token, [prev])) for token in tokens]
                 # prob_sum < 1.0 or almost equal to 1.0:
                 self.assertTrue(prob_sum < 1.0 or abs(prob_sum - 1.0) < 1e-10)
+

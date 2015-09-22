@@ -48,7 +48,6 @@ class NGram(object):
         tokens -- the n-gram or (n-1)-gram tuple.
         """
         out = 0
-        #self.counts.has_key(tokens)
         if tokens in self.counts:
             out = self.counts[tokens]
         return out
@@ -235,8 +234,10 @@ class AddOneNGram(NGram):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         out = 0
-        if self.n > 1:
-            assert prev_tokens != [] and prev_tokens is not None
+        if prev_tokens is None:
+            prev_tokens = []
+        if self.n > 1 and len(prev_tokens) > 0:
+            #assert prev_tokens != [] and prev_tokens is not None
             token_n_1 = prev_tokens + [token]
             Ci = float(self.count( tuple(token_n_1) ))
             N = float(self.count( tuple(prev_tokens) ))
@@ -288,7 +289,7 @@ class InterpolatedNGram(NGram):
                 self.addone_ngram = AddOneNGram(1, self.sents_addone)
             self.gamma = 1.0
             # REVISAR PORQUE NO FUNCIONA LA APROXIMACION DEL MEJOR GAMMA
-            """val = float('inf')
+            val = float('inf')
             best_gamma = self.gamma
             for g in range(10):
                 self.gamma = float(g+1)
@@ -296,7 +297,7 @@ class InterpolatedNGram(NGram):
                 if p < val:
                     best_gamma = float(g+1)
                     val = p
-            self.gamma = best_gamma"""
+            self.gamma = best_gamma
             # ----------------------------------------------------------
         my_counts = defaultdict(int)
         m = 1
@@ -331,25 +332,40 @@ class InterpolatedNGram(NGram):
                 out = self.counts[tokens]
         return out
 
+    def q_ml(self, token, prev_tokens=None):
+        out = 0
+        if prev_tokens is None:
+            prev_tokens = []
+        if len(prev_tokens) > 0:
+            token_n_1 = prev_tokens + [token]
+            c1 = self.count(tuple(token_n_1))
+            c2 = self.count(tuple(prev_tokens))
+            if c2 != 0:
+                out = c1 / float(c2)
+        else:
+            out = self.count(tuple([token])) / float(self.count(()))
+
+        return out
+
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
 
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
+        if prev_tokens is None:
+            prev_tokens = []
         out = 0
         if self.n == 1:
+            out = self.q_ml(token)
             if self.addone:
                 out = self.addone_ngram.cond_prob(token, prev_tokens)
-            else:
-                out = self.count(tuple([token])) / float(self.count(()))
-        elif self.n > 1 and prev_tokens is not None:
+        elif self.n > 1 and len(prev_tokens) > 0:
             for i in range(self.n):
-                token_n_1 = prev_tokens + [token]
-                c1 = self.count( tuple(token_n_1) )
+                c1 = self.count(tuple(prev_tokens + [token]))
+                c2 = self.count(tuple(prev_tokens))
                 if len(prev_tokens) > 0 and i > 0:
                     prev_tokens.pop(0)
-                c2 = self.count( tuple(prev_tokens) )
                 if c2 != 0:
                     c = c1 / float(c2)
                     aux = 0.0
@@ -358,12 +374,14 @@ class InterpolatedNGram(NGram):
                     #self.lambdas[i] = ((1.0 - aux) * c3) / float(c3 + self.gamma)
                     self.lambdas[i] = (1.0 - aux) * (c2 / float(c2 + self.gamma))
                     if i+1 == self.n:
-                        self.lambdas[i] = 1 - sum([x for x in list(self.lambdas.values())[0:-1]])
+                        self.lambdas[i] = 1.0 - sum([x for x in list(self.lambdas.values())[0:-1]])
                         if self.addone:
                             c = self.addone_ngram.cond_prob(token,prev_tokens)
+                        else:
+                            c = self.q_ml(token)
 
                     out += self.lambdas[i] * c
-            assert sum([x for x in self.lambdas.values()]) == 1.0
+            #assert sum([x for x in self.lambdas.values()]) == 1.0
             #if sum([x for x in self.lambdas.values()]) != 1.0:
                 #print(self.lambdas)
                 #print(sum([x for x in self.lambdas.values()]), self.gamma)
@@ -399,6 +417,8 @@ class BackOffNGram(NGram):
         self.words = []
         self.beta = beta
         self.nonzero_words = {}
+        self.alpha_dict = {}
+        self.denom_dict = {}
         self.addone = addone
         self.addone_ngram = None
 
@@ -423,6 +443,7 @@ class BackOffNGram(NGram):
                     ngram = tuple(sent[i: i + m])
                     my_counts[ngram] += 1
                     my_counts[ngram[:-1]] += 1
+
                 if m == n:
                     # Count words
                     for s in sent:
@@ -432,9 +453,8 @@ class BackOffNGram(NGram):
             self.counts.update(my_counts)
             my_counts.clear()
             m += 1
-        #print('words:',self.words)
+        # Count non-zero words
         for sent in sents:
-            # Count non-zero words
             mm = n - 1
             tokens = self.words
             for i in range(len(sent) - mm + 1):
@@ -443,12 +463,11 @@ class BackOffNGram(NGram):
                 for tk in tokens:
                     #print(list(ngram),tk, self.q_ml(tk,list(ngram)))
                     if self.q_ml(tk,list(ngram)) > 0:
-                        #if self.cond_prob(tk,list(ngram)) > 0:
+                    #if self.cond_prob(tk,list(ngram)) > 0:
                         words.append(tk)
                 self.nonzero_words[ngram] = set(words)
-        #print(self.nonzero_words)
         if addone and self.addone_ngram is None:
-            self.addone_ngram = AddOneNGram(n,sents)
+            self.addone_ngram = AddOneNGram(n, sents)
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -457,14 +476,21 @@ class BackOffNGram(NGram):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         out = 0
+        if prev_tokens is None:
+            prev_tokens = []
         if self.n == 1:
             if self.addone:
                 out = self.addone_ngram.cond_prob(token, prev_tokens)
             else:
-                out = self.count(tuple([token])) / float(self.count(()))
-                #out = self.count(tuple([token])) / float(len(self.counts))
-        elif self.n > 1 and prev_tokens is not None:
-            if token in self.nonzero_words:
+                #out = self.count(tuple([token])) / float(self.count(()))
+                out = self.q_ml(token)
+        elif self.n > 1:
+            #if tuple([token]) in self.nonzero_words:
+            #if tuple([token]) in self.A(tuple(prev_tokens)):
+            A = self.A(tuple(prev_tokens))
+            if A is None:
+                A = []
+            if token in A:
                 c_star = self.count(tuple(prev_tokens + [token])) - self.beta
                 p_star = float(c_star) / self.count(tuple(prev_tokens))
                 out = p_star
@@ -473,40 +499,34 @@ class BackOffNGram(NGram):
                     a = self.alpha(tuple(prev_tokens))
                     prev = prev_tokens.copy()
                     prev.pop(0)
-                    q_d = self.cond_prob(token,prev)
-                    p_katz = float(q_d) / self.denom(tuple(prev_tokens))
+                    q_d = self.cond_prob(token, prev)
+                    denom = self.denom(tuple(prev_tokens))
+                    p_katz = float(q_d) / denom
                     #print('q_d / denom:',q_d, self.denom(tuple(prev_tokens)), p_katz)
                     out = a * p_katz
+                    print('\n\n', token, prev_tokens, a, q_d, denom)
                 else:
                     # prev_tokens = []
-                    #out = self.count(tuple([token])) / float(self.count(()))
-                    #out = self.count(tuple([token])) / float(len(self.words))
-                    #out = self.count(tuple([token])) / float(len(self.counts))
-                    #print(token, prev_tokens, out)
-                    print('no deberia pasar2', token, prev_tokens, out)
+                    out = self.q_ml(token)
         else:
-            print('no deberia pasar1')
-            #out = self.count(tuple([token])) / float(self.count(()))
-            #out = self.count(tuple([token])) / float(len(self.words))
-            #out = self.count(tuple([token])) / float(len(self.counts))
-            #print(token, prev_tokens, out)
-            #print(token, prev_tokens, self.count(tuple([token])) , float(len(self.counts)))
+            print('no deberia pasar')
 
+        #print('cond_prob', token, prev_tokens, out)
         return out
 
     def q_ml(self, token, prev_tokens=None):
         out = 0
-        if self.n > 1:
-            assert prev_tokens != [] and prev_tokens is not None
+        if prev_tokens == None:
+            prev_tokens = []
+        if len(prev_tokens) > 0:
             token_n_1 = prev_tokens + [token]
             c1 = self.count( tuple(token_n_1) )
             c2 = self.count( tuple(prev_tokens) )
             if c2 != 0:
                 out = c1/float(c2)
         else:
-            out = self.count( (token,) ) / self.count(())
-            #out = self.count(tuple([token])) / float(len(self.words))
-            #out = self.count(tuple([token])) / float(len(self.counts))
+            out = self.count(tuple([token])) / self.count(())
+
         return out
 
     def A(self, tokens):
@@ -526,6 +546,29 @@ class BackOffNGram(NGram):
         tokens -- the k-gram tuple.
         """
         out = 0
+        if tokens in self.alpha_dict:
+            out = self.alpha_dict[tokens]
+        else:
+            self.calculate_alpha(tokens)
+            out = self.alpha_dict[tokens]
+        return out
+
+    def denom(self, tokens):
+        """Normalization factor for a k-gram with 0 < k < n.
+
+        tokens -- the k-gram tuple.
+        """
+        out = 0
+        if tokens in self.denom_dict:
+            out = self.denom_dict[tokens]
+        else:
+            self.calculate_denom(tokens)
+            out = self.denom_dict[tokens]
+
+        return out
+
+    def calculate_alpha(self, tokens):
+        out = 0
         for w in self.nonzero_words:
             c = self.count(tuple(list(tokens) + list(w)))
             cc = self.count(tokens)
@@ -536,17 +579,16 @@ class BackOffNGram(NGram):
             elif cc <= 0:
                 print('cc <= 0')
             #print(tokens, w, val)
-        return 1.0 - out
+        self.alpha_dict[tokens] = 1.0 - out
 
-    def denom(self, tokens):
-        """Normalization factor for a k-gram with 0 < k < n.
-
-        tokens -- the k-gram tuple.
-        """
+    def calculate_denom(self, tokens):
         out = 0
         for x in self.nonzero_words[tokens]:
             l = list(tokens)
             l.pop(0)
             out += self.cond_prob(x,l)
+        self.denom_dict[tokens] = 1.0 - out
 
-        return 1.0 - out
+
+    def calculate_beta(self):
+        pass
