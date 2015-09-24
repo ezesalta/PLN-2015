@@ -33,11 +33,11 @@ if __name__ == '__main__':
     n = int(opts['-n'])
     typeModel = opts['-m']
     if typeModel == 'addone':
-        model = AddOneNGram(n,sents)
+        model = AddOneNGram(n, sents)
     elif typeModel == 'interpolated':
-        model = InterpolatedNGram(n,sents)
+        model = InterpolatedNGram(n, sents)
     elif typeModel == 'backoff':
-        model = BackOffNGram(n,sents)
+        model = BackOffNGram(n, sents)
     else:
         model = NGram(n, sents)
 

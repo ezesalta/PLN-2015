@@ -15,23 +15,34 @@ import pickle
 
 
 def log_probability(model, test):
-    out = sum( [model.sent_log_prob(sent) for sent in test] )
+    # out = sum([model.sent_log_prob(sent) for sent in test])
+    out = 0
+    for sent in test:
+        val = model.sent_log_prob(sent)
+        if val == float('-inf'):
+            out = float('-inf')
+            break
+        out += val
+    print('log-prob', out)
+
     return out
 
 def cross_entropy(model, test):
     n = len(test)
     m = sum([len(x) for x in test]) + len(test)
     out = log_probability(model,test) * (-1.0 / m)
+    print('cross-entropy', out)
     return out
 
 def perplexity(model, test):
-    out = 2.0 ** cross_entropy(model,test)
+    out = 2.0 ** cross_entropy(model, test)
+    print('perplexity', out)
     return out
 
 def eval(model):
     corpus = MyCorpus()
     sents = corpus.sents_test()
-    print(perplexity(model,sents))
+    perplexity(model, sents)
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
