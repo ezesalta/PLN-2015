@@ -71,6 +71,6 @@ Back-off        | 756.6594355395407  | inf               | inf                | 
 
 Suavizado por Back-Off con Discounting:
 
-Tuve problemas con este punto, a pesar de que pasa todos los test y no veo claramente donde puede estar el problema,
+Tuve problemas con este punto a pesar de que pasa todos los test, no veo claramente donde puede estar el error,
 algunas probabilidades condicionales me dan negativas, por eso la perplexity me da inf.
 Lo parche devolviendo 10**-3 en los casos donde la probabilidad condicional me da negativa.

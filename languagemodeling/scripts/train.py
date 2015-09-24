@@ -18,14 +18,14 @@ from docopt import docopt
 import pickle
 from nltk.corpus import gutenberg
 from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram, BackOffNGram
-from MyCorpus import MyCorpus
+from languagemodeling.MyCorpus import MyCorpus
 
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
 
     # load the data
-    #sents = gutenberg.sents('austen-emma.txt')
+    # sents = gutenberg.sents('austen-emma.txt')
     corpus = MyCorpus()
     sents = corpus.sents_train()
 

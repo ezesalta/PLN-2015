@@ -121,8 +121,8 @@ class NGram(object):
                     else:
                         # sent unseen
                         out = float('-inf')
-                        #print(sent[i], l1[-self.n+1:], self.cond_prob(sent[i], l1[-self.n+1:]))
-                        #exit()
+                        # print(sent[i], l1[-self.n+1:], self.cond_prob(sent[i], l1[-self.n+1:]))
+                        # exit()
                 else:
                     aux = ['<s>'] * ((self.n-1)-len(l1))
                     value = self.cond_prob(sent[i], aux+l1)
@@ -397,7 +397,6 @@ class BackOffNGram(NGram):
         self.counts = defaultdict(int)
         self.words = []
         self.nonzero_words = defaultdict(set)
-        #self.nonzero_words = {}
         self.alpha_dict = {}
         self.denom_dict = {}
         self.addone = addone
@@ -482,9 +481,8 @@ class BackOffNGram(NGram):
                 else:
                     # prev_tokens = []
                     out = self.q_ml(token)
-        if out < 0:
+        # if out < 0:
             # print('cond_prob', token, prev_tokens, out)
-            out = 10**-3
 
         return out
 

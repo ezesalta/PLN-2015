@@ -10,7 +10,7 @@ Options:
 """
 __author__ = 'Ezequiel Medina'
 from docopt import docopt
-from MyCorpus import MyCorpus
+from languagemodeling.MyCorpus import MyCorpus
 import pickle
 
 
@@ -27,17 +27,19 @@ def log_probability(model, test):
 
     return out
 
+
 def cross_entropy(model, test):
-    n = len(test)
     m = sum([len(x) for x in test]) + len(test)
-    out = log_probability(model,test) * (-1.0 / m)
+    out = log_probability(model, test) * (-1.0 / m)
     print('cross-entropy', out)
     return out
+
 
 def perplexity(model, test):
     out = 2.0 ** cross_entropy(model, test)
     print('perplexity', out)
     return out
+
 
 def eval(model):
     corpus = MyCorpus()
