@@ -20,4 +20,6 @@ if __name__ == '__main__':
     sents = corpus.tagged_sents()
 
     # compute the statistics
-    print('sents: {}'.format(len(sents)))
+    cant_sents = len(sents)
+    print(sents[0])
+    print('sents: {}'.format(cant_sents))
