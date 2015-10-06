@@ -37,7 +37,7 @@ if __name__ == '__main__':
     init_time = time.clock()
     # load the data
     corpus = SimpleAncoraCorpusReader('ancora/ancora-2.0/')
-    sents = corpus.tagged_sents()
+    sents = list(corpus.tagged_sents())
 
     # compute the statistics
     cant_sents = len(sents)
