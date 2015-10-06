@@ -43,16 +43,17 @@ if __name__ == '__main__':
     cant_sents = len(sents)
     words = defaultdict(int)
     tags = defaultdict(int)
+    ambiguity = defaultdict(set)
     cant_occ_words = 0
     for sent in sents:
         cant_occ_words += len(sent)
         for s in sent:
             words[s[0]] += 1
             tags[s[1]] += 1
+            ambiguity[s[0]].add(s[1])
     cant_words = len(words)
     cant_tags = len(tags)
     cant_occ_tags = cant_occ_words
-    # OPTIMIZAR!!!
     tags_most_frec = {}
     tmf = []
     aux = tags.copy()
@@ -62,7 +63,6 @@ if __name__ == '__main__':
         tags_most_frec[x + 1] = t
         tmf.append(k)
         aux.pop(k)
-    # --------------------------
     words_most_frec = defaultdict(dict)
     for sent in sents:
         for s in sent:
@@ -88,6 +88,32 @@ if __name__ == '__main__':
                 # despues del print
                 aux.pop(k)
         print(pos, tag, frec, float(frec) / cant_occ_tags, wmf)
+    ambiguous = defaultdict(int)
+    for x in ambiguity.values():
+        cant = len(x)
+        if cant == 1:
+            ambiguous[1] += 1
+        elif cant == 2:
+            ambiguous[2] += 1
+        elif cant == 3:
+            ambiguous[3] += 1
+        elif cant == 4:
+            ambiguous[4] += 1
+        elif cant == 5:
+            ambiguous[5] += 1
+        elif cant == 6:
+            ambiguous[6] += 1
+        elif cant == 7:
+            ambiguous[7] += 1
+        elif cant == 8:
+            ambiguous[8] += 1
+        elif cant == 9:
+            ambiguous[9] += 1
+    ambiguous_list = list(ambiguous.values())
+    print('unambiguous', ambiguous[1])
+    print('ambiguous 2-9', sum(ambiguous_list[1:]))
+    for i, x in enumerate(ambiguous_list[1:]):
+        print('\t{} tags: {}'.format(i + 1, x))
 
     final_time = time.clock()
     print('time lapsed:', final_time - init_time)

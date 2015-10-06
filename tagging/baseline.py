@@ -36,6 +36,9 @@ class BaselineTagger:
         w -- the word.
         """
         out = 'N'
+        mft = self.max_d(self.tags)
+        if mft != ():
+            out = mft[0]
         tags = self.tagged_words[w]
         tup = self.max_d(tags)
         if tup != ():
@@ -59,7 +62,7 @@ class BaselineTagger:
         m = 0
         out = ()
         for key in d:
-            if d[key] >= m:
+            if d[key] > m:
                 k = key
                 m = d[key]
         if k != -1:
