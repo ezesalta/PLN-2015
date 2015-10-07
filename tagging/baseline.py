@@ -35,7 +35,7 @@ class BaselineTagger:
 
         w -- the word.
         """
-        out = 'N'
+        out = 'nc'
         mft = self.max_d(self.tags)
         if mft != ():
             out = mft[0]
