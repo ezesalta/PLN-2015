@@ -1,6 +1,6 @@
-__author__ = 'Ezequiel Medina'
 from math import log
 from collections import defaultdict
+__author__ = 'Ezequiel Medina'
 
 
 class HMM:
@@ -121,20 +121,8 @@ class HMM:
 
         sent -- the sentence.
         """
-        tagging = []
-        for word in sent:
-            max = 0
-            t = ''
-            for tag in self.set_tags:
-                prob = self.out_prob(word, tag)
-                if prob > max:
-                    max = prob
-                    t = tag
-            tagging.append(t)
-
-        # CONSULTAR !!!
-
-        return tagging
+        tagger = ViterbiTagger(self)
+        return tagger.tag(sent)
 
 
 class ViterbiTagger:
@@ -157,45 +145,39 @@ class ViterbiTagger:
         prev_tags = init.copy()
         self._pi[0][tuple(init)] = (1.0, tagging.copy())
         # Recursive
-        #i = 0
-        #cant_trans = len(self.hmm.dict_trans)
-        #for word in sent:
-        for i in range(len(self.hmm.dict_trans)):
-            word = 'pepe'
-            if i < len(sent):
-                word = sent[i]
+        #for i in range(len(self.hmm.dict_trans)):
+        for i in range(len(sent)):
+            word = sent[i]
             i += 1
-            # Asumo que siempre me da un tag
-            u = prev_tags[-1]
-            if u == '</s>':
-                break
-            aux = list(self.hmm.dict_trans[tuple(prev_tags)])
-            #if len(aux) > 0:
-            v = aux.pop(0)
-            if v == '</s>':
-                break
-            tagging.append(v)
-            p = [1.0]
-            if tuple(prev_tags) in self._pi[i - 1]:
+            m = float('-inf')
+            t = ''
+            for v in self.hmm.tagset():
                 p = self._pi[i - 1][tuple(prev_tags)]
-            # log?
-            q = self.hmm.trans_prob(v, tuple(prev_tags))
-            e = self.hmm.out_prob(word, v)
-            t = tuple([u] + [v])
-            #val = log(p[0] * q * e, 2)
-            val = p[0] * q * e
-            #print(i, 'p:', p, 'q:', q, 'e:', e, 't:', t, word, 'val:', val)
-            #tup = (val, tagging.copy())
-            #print(tup)
-            self._pi[i][t] = (val, tagging.copy())
-
+                q = self.hmm.trans_prob(v, tuple(prev_tags))
+                e = self.hmm.out_prob(word, v)
+                val = p[0] * q * e
+                #print(prev_tags, v, p, q, e, val)
+                if val > m:
+                    m = val
+                    t = v
+            tagging.append(t)
             # Set next prev_tags
-            if len(prev_tags) == (self.hmm.n - 1):
+            if len(prev_tags) == (self.hmm.n - 1) and len(prev_tags) > 0:
                 prev_tags.pop(0)
-            prev_tags.append(v)
+            prev_tags.append(t)
+            #print(t, m, prev_tags)
+            self._pi[i][tuple(prev_tags)] = (m, tagging.copy())
 
         self._pi = dict(self._pi)
-        print(*self._pi.items(), sep='\n')
+        # CONSULTAR PORQUE TENGO QUE HACER ESTO
+        for i in self._pi:
+            for t in self._pi[i]:
+                v, tg = self._pi[i][t]
+                self._pi[i][t] = (log(v, 2), tg)
+        # --------------------------------------
+
+        #print('n:', self.hmm.n)
+        #print(*self._pi.items(), sep='\n')
 
         return tagging
 
@@ -214,7 +196,6 @@ class MLHMM:
         self.tags = set()
         self.addone = addone
         self.n = n
-        self.dict_trans = defaultdict(dict)
 
         my_counts = defaultdict(int)
         m = 1
@@ -239,19 +220,6 @@ class MLHMM:
             my_counts.clear()
             m += 1
         #print(*self.counts_tag.items(), sep='\n')
-        if n > 1:
-            prev_tags = ['<s>']*(n - 1)
-            for i in range(len(self.tagset())):
-                m = float('-inf')
-                t = '<s>'
-                for tag in self.tagset():
-                    p = self.trans_prob(tag, tuple(prev_tags))
-                    if p > m:
-                        m = p
-                        t = tag
-                self.dict_trans[tuple(prev_tags)][t] = m
-                prev_tags.pop(0)
-                prev_tags.append(t)
 
     def tcount(self, tokens):
         """Count for an k-gram for k <= n.
@@ -377,17 +345,6 @@ class MLHMM:
 
         sent -- the sentence.
         """
-        tagging = []
-        for word in sent:
-            max = 0
-            t = ''
-            for tag in self.set_tags:
-                prob = self.out_prob(word, tag)
-                if prob > max:
-                    max = prob
-                    t = tag
-            tagging.append(t)
+        tagger = ViterbiTagger(self)
 
-        # CONSULTAR !!!
-
-        return tagging
+        return tagger.tag(sent)
