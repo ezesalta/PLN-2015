@@ -1,4 +1,9 @@
 from collections import namedtuple, defaultdict
+from featureforge.vectorizer import Vectorizer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from tagging.features import (word_lower, word_istitle, word_isupper,
+                              word_isdigit, prev_tags, NPrevTags, PrevWord)
 __author__ = 'Ezequiel Medina'
 
 # sent -- the whole sentence.
@@ -24,6 +29,22 @@ class MEMM:
             for x in sent:
                 self.words.add(x[0])
                 self.tags.add(x[1])
+        # Features
+        """features = [word_lower, word_istitle, word_isupper,
+                    word_isdigit, prev_tags, NPrevTags, PrevWord]"""
+        features = [word_lower, word_istitle, word_isupper,
+                    word_isdigit]
+        vect = Vectorizer(features)
+        histories = self.sents_histories(tagged_sents)
+        """vect.fit(histories)
+
+        text_clf = Pipeline([('vect', Vectorizer()),
+                      ('clf', LogisticRegression()),
+
+        h = History('Come Salmón el mormón .'.split(), ('<s>', '<s>'), 0)
+        m = vect.transform([h])
+        print(m.toarray())
+        exit()"""
 
     def sents_histories(self, tagged_sents):
         """
@@ -85,15 +106,25 @@ class MEMM:
 
         sent -- the sentence.
         """
+        b = 1
+        # Init
+
+        # Recursive
 
     def tag_history(self, h):
         """Tag a history.
 
         h -- the history.
         """
+        pass
 
     def unknown(self, w):
         """Check if a word is unknown for the model.
 
         w -- the word.
         """
+        out = True
+        if w in self.words:
+            out = False
+
+        return out

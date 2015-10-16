@@ -15,16 +15,16 @@ class HMM:
         self.n = n
         self.dict_trans = trans
         self.dict_out = out
-        self.set_tags = tagset
-        self.set_words = set()
+        self.tags = tagset
+        self.words = set()
         for tag in out:
             for w in out[tag].keys():
-                self.set_words.add(w)
+                self.words.add(w)
 
     def tagset(self):
         """Returns the set of tags.
         """
-        return self.set_tags
+        return self.tags
 
     def trans_prob(self, tag, prev_tags):
         """Probability of a tag.
@@ -60,15 +60,15 @@ class HMM:
 
         y -- tagging.
         """
-        out = 0
-        y_r = y.copy()
-        y_r.reverse()
-        for i, tag in enumerate(y_r):
-            prev_tags = ()
-            if i + 1 < len(y_r):
-                prev_tags = y_r[i + 1:]
-                prev_tags.reverse()
-            out += self.trans_prob(tag, tuple(prev_tags))
+        out = 1
+        yy = y.copy()
+        yy.append('</s>')
+        prev_tags = ['<s>'] * (self.n - 1)
+        for i, tag in enumerate(yy):
+            out *= self.trans_prob(tag, tuple(prev_tags))
+            if len(prev_tags) > 0:
+                prev_tags.pop(0)
+                prev_tags.append(tag)
 
         return out
 
@@ -80,10 +80,16 @@ class HMM:
         x -- sentence.
         y -- tagging.
         """
-        out = 1
+        """out = 1
         for x in [self.out_prob(word, tag) for word, tag in zip(x, y)]:
             out *= x
-        return out
+        return out"""
+        out_prob = 1
+        for x in [self.out_prob(word, tag) for word, tag in zip(x, y)]:
+            out_prob *= x
+        trans_prob = self.tag_prob(y)
+
+        return out_prob * trans_prob
 
     def tag_log_prob(self, y):
         """
@@ -91,19 +97,7 @@ class HMM:
 
         y -- tagging.
         """
-        out = 0
-        y_r = y.copy()
-        y_r.reverse()
-        for i, tag in enumerate(y_r):
-            prev_tags = []
-            if i + 1 < len(y_r):
-                prev_tags = y_r[i + 1:]
-                prev_tags.reverse()
-            prob = self.trans_prob(tag, tuple(prev_tags))
-            if prob > 0:
-                out += log(prob, 2)
-
-        return out
+        return log(self.tag_prob(y), 2)
 
     def log_prob(self, x, y):
         """
@@ -173,7 +167,10 @@ class ViterbiTagger:
         for i in self._pi:
             for t in self._pi[i]:
                 v, tg = self._pi[i][t]
-                self._pi[i][t] = (log(v, 2), tg)
+                if v > 0:
+                    self._pi[i][t] = (log(v, 2), tg)
+                else:
+                    self._pi[i][t] = (float('-inf'), tg)
         # --------------------------------------
 
         #print('n:', self.hmm.n)
@@ -182,7 +179,7 @@ class ViterbiTagger:
         return tagging
 
 
-class MLHMM:
+class MLHMM(HMM):
 
     def __init__(self, n, tagged_sents, addone=True):
         """
@@ -244,11 +241,6 @@ class MLHMM:
             out = self.counts[tokens]
         return out
 
-    def tagset(self):
-        """Returns the set of tags.
-        """
-        return self.tags
-
     def trans_prob(self, tag, prev_tags):
         """Probability of a tag.
 
@@ -286,65 +278,4 @@ class MLHMM:
 
         return out
 
-    # CONSULTAR!!!!
-    def tag_prob(self, y):
-        """
-        Probability of a tagging.
-        Warning: subject to underflow problems.
 
-        y -- tagging.
-        """
-        out = 1
-        yy = y.copy()
-        yy.append('</s>')
-        for i, tag in enumerate(yy):
-            prev_tags = ['<s>']
-            pos = i - (self.n - 1)
-            if pos >= 0:
-                prev_tags = yy[pos:i]
-            out *= self.trans_prob(tag, tuple(prev_tags))
-
-        return out
-
-    def tag_log_prob(self, y):
-        """
-        Log-probability of a tagging.
-
-        y -- tagging.
-        """
-        out = log(self.tag_prob(y), 2)
-
-        return out
-
-    def prob(self, x, y):
-        """
-        Joint probability of a sentence and its tagging.
-        Warning: subject to underflow problems.
-
-        x -- sentence.
-        y -- tagging.
-        """
-        out_prob = 1
-        for x in [self.out_prob(word, tag) for word, tag in zip(x, y)]:
-            out_prob *= x
-        trans_prob = self.tag_prob(y)
-
-        return out_prob * trans_prob
-
-    def log_prob(self, x, y):
-        """
-        Joint log-probability of a sentence and its tagging.
-
-        x -- sentence.
-        y -- tagging.
-        """
-        return log(self.prob(x, y), 2)
-
-    def tag(self, sent):
-        """Returns the most probable tagging for a sentence.
-
-        sent -- the sentence.
-        """
-        tagger = ViterbiTagger(self)
-
-        return tagger.tag(sent)

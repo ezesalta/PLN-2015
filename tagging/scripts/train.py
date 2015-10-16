@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # train the model
     m = opts['-m']
-    if m == 'mlhmm':
+    if m != 'base':
         model = models[m](n, sents)
     else:
         model = models[m](sents)
