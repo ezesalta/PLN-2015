@@ -2,6 +2,7 @@ from collections import namedtuple, defaultdict
 from featureforge.vectorizer import Vectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.feature_extraction.text import TfidfTransformer
 from tagging.features import (word_lower, word_istitle, word_isupper,
                               word_isdigit, prev_tags, NPrevTags, PrevWord)
 __author__ = 'Ezequiel Medina'
@@ -30,21 +31,15 @@ class MEMM:
                 self.words.add(x[0])
                 self.tags.add(x[1])
         # Features
-        """features = [word_lower, word_istitle, word_isupper,
-                    word_isdigit, prev_tags, NPrevTags, PrevWord]"""
         features = [word_lower, word_istitle, word_isupper,
                     word_isdigit]
-        vect = Vectorizer(features)
+        #prev_tags, NPrevTags, PrevWord
         histories = self.sents_histories(tagged_sents)
-        """vect.fit(histories)
+        tags = self.sents_tags(tagged_sents)
+        self.vect_clf = Pipeline([('vect', Vectorizer(features)),
+                             ('clf', LogisticRegression())])
+        self.vect_clf.fit(histories, tags)
 
-        text_clf = Pipeline([('vect', Vectorizer()),
-                      ('clf', LogisticRegression()),
-
-        h = History('Come Salmón el mormón .'.split(), ('<s>', '<s>'), 0)
-        m = vect.transform([h])
-        print(m.toarray())
-        exit()"""
 
     def sents_histories(self, tagged_sents):
         """
@@ -106,17 +101,24 @@ class MEMM:
 
         sent -- the sentence.
         """
-        b = 1
-        # Init
-
-        # Recursive
+        tagging = []
+        prev_tags = ['<s>'] * (self.n - 1)
+        for i, s in enumerate(sent):
+            h = History(sent, prev_tags, i)
+            # beam = 1
+            tag = self.tag_history(h)
+            tagging.append(tag)
+            if len(prev_tags) > 0:
+                prev_tags.pop(0)
+                prev_tags.append(tag)
+        return tagging
 
     def tag_history(self, h):
         """Tag a history.
 
         h -- the history.
         """
-        pass
+        return self.vect_clf.predict([h])[0]
 
     def unknown(self, w):
         """Check if a word is unknown for the model.

@@ -8,6 +8,8 @@ Options:
   -i <file>     Tagging model file.
   -h --help     Show this screen.
 """
+import matplotlib.pyplot as plt
+import numpy as np
 from docopt import docopt
 from collections import defaultdict
 import pickle
@@ -82,18 +84,30 @@ if __name__ == '__main__':
     print('Accuracy known: {:2.2f}%'.format(acc_known * 100))
     print('Accuracy unknown: {:2.2f}%'.format(acc_unknown * 100))
     print('Confusion Matrix:')
-    print('  ', *confusion_matrix.keys())
+    gold_tags = list(confusion_matrix.keys())
     cant_gold = len(confusion_matrix.keys())
-    #txt = ' '.join(['{'+str(x)+'}' for x in range(3)])
-    #txt = ' {}'*cant_gold
     keys = list(confusion_matrix.keys())
+    cm = []
+    # Print Confusion Matrix in console
+    print('  ', *gold_tags)
     for gold_tag in confusion_matrix:
-        print(gold_tag, list(confusion_matrix[gold_tag].items()))
-        """out_cm = gold_tag
-        for tag, val in confusion_matrix[gold_tag].items():
-            pos = 1
-            if tag in keys:
-                pos = keys.index(tag)
-            out_cm += ' {}{}:{}'.format((' '*pos), tag, val)
-
-        print(out_cm)"""
+        positions = [0] * len(gold_tags)
+        for t, v in confusion_matrix[gold_tag].items():
+            pos = 0
+            if t in gold_tags:
+                pos = gold_tags.index(t)
+            positions.remove(positions[pos])
+            positions.insert(pos, v)
+        print(gold_tag, positions)
+        cm.append(positions)
+    # Show confusion matrix in a separate window
+    gold_tags_str = ' '.join([str(x) for x in gold_tags])
+    #plt.matshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.matshow(cm)
+    plt.xticks(np.arange(len(gold_tags)), tuple(gold_tags), rotation=90)
+    plt.yticks(np.arange(len(gold_tags)), tuple(gold_tags))
+    plt.title('Confusion matrix')
+    plt.colorbar()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
