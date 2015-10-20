@@ -2,9 +2,9 @@ from collections import namedtuple, defaultdict
 from featureforge.vectorizer import Vectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfTransformer
 from tagging.features import (word_lower, word_istitle, word_isupper,
-                              word_isdigit, prev_tags, NPrevTags, PrevWord)
+                              word_isdigit, prev_tags, NPrevTags, PrevWord,
+                              word_isdate)
 __author__ = 'Ezequiel Medina'
 
 # sent -- the whole sentence.
@@ -31,9 +31,11 @@ class MEMM:
                 self.words.add(x[0])
                 self.tags.add(x[1])
         # Features
+        # Falta PrevWord(n) y prev_tags(n)
         features = [word_lower, word_istitle, word_isupper,
-                    word_isdigit]
-        #prev_tags, NPrevTags, PrevWord
+                    word_isdigit, word_isdate]
+        for i in range(1, 4):
+            features.append(NPrevTags(i))
         histories = self.sents_histories(tagged_sents)
         tags = self.sents_tags(tagged_sents)
         self.vect_clf = Pipeline([('vect', Vectorizer(features)),

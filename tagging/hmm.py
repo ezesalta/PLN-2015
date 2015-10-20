@@ -139,30 +139,53 @@ class ViterbiTagger:
         prev_tags = init.copy()
         self._pi[0][tuple(init)] = (1.0, tagging.copy())
         # Recursive
-        #for i in range(len(self.hmm.dict_trans)):
         for i in range(len(sent)):
             word = sent[i]
             i += 1
-            m = float('-inf')
-            t = ''
+            next_tags = []
             for v in self.hmm.tagset():
+                #print('prev_tags', prev_tags, v, i - 1)
+                #print('pi anterior', self._pi[i - 1])
                 p = self._pi[i - 1][tuple(prev_tags)]
                 q = self.hmm.trans_prob(v, tuple(prev_tags))
                 e = self.hmm.out_prob(word, v)
                 val = p[0] * q * e
-                #print(prev_tags, v, p, q, e, val)
-                if val > m:
-                    m = val
-                    t = v
-            tagging.append(t)
-            # Set next prev_tags
-            if len(prev_tags) == (self.hmm.n - 1) and len(prev_tags) > 0:
-                prev_tags.pop(0)
-            prev_tags.append(t)
-            #print(t, m, prev_tags)
-            self._pi[i][tuple(prev_tags)] = (m, tagging.copy())
+                #print('prev_tags', prev_tags, v, val)
+                if val > 0:
+                    next_tags.append((v, val))
+                else:
+                    # CONSULTAR QUE HACER CON ESTOS
+                    pass
+            mv = float('-inf')
+            tg = []
+            pt = []
+            prev = prev_tags.copy()
+            if len(next_tags) == 0:
+                next_tags.append(('nc', 1.0))
+                #self._pi[i][tuple(prev)] = (1.0, tagging.copy())
+                #print('ENTROOOOOOOOO', prev, i, tagging)
+                #print(self._pi[i][tuple(prev)])
+            #else:
+            for t, val in next_tags:
+                # Set next prev_tags
+                if len(prev) > 0:
+                    prev.pop(0)
+                prev.append(t)
+                #print(t, val, prev)
+                new_tagging = tagging.copy() + [t]
+                self._pi[i][tuple(prev)] = (val, new_tagging.copy())
+                if val > mv:
+                    mv = val
+                    tg = new_tagging.copy()
+                    pt = prev.copy()
+                prev = prev_tags.copy()
+            prev_tags = pt.copy()
+            tagging = tg.copy()
+
+            #print(dict(self._pi))
 
         self._pi = dict(self._pi)
+        #print(*self._pi.items(), sep='\n')
         # CONSULTAR PORQUE TENGO QUE HACER ESTO
         for i in self._pi:
             for t in self._pi[i]:

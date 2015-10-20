@@ -45,6 +45,26 @@ def word_isdigit(h):
     return sent[i].isdigit()
 
 
+def word_isdate(h):
+    """Feature: is the current word a date?
+
+    h -- a history.
+    """
+    out = True
+    sent, i = h.sent, h.i
+    w = sent[i]
+    if '/' in w:
+        w = w.split('/')
+    elif '-' in w:
+        w = w.split('-')
+    else:
+        w = [w]
+    for x in w:
+        out *= x.isdigit()
+
+    return out == 1
+
+
 def prev_tags(h):
     return h.prev_tags
 
@@ -70,7 +90,6 @@ class NPrevTags(Feature):
         else:"""
         out = prev_tags[-n:]
 
-        print(prev_tags, i, n, out)
         return tuple(out)
 
 

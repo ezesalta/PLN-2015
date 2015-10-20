@@ -8,6 +8,7 @@ Options:
   -m <model>    Model to use [default: base]:
                   base: Baseline
                   mlhmm: Maximum Likelihood Hidden Markov Model
+                  memm: Maximum Entropy Markov Model
   -n <n>        Order of the model.
   -o <file>     Output model file.
   -h --help     Show this screen.
@@ -18,11 +19,13 @@ import pickle
 from corpus.ancora import SimpleAncoraCorpusReader
 from tagging.baseline import BaselineTagger
 from tagging.hmm import MLHMM
+from tagging.memm import MEMM
 
 
 models = {
     'base': BaselineTagger,
     'mlhmm': MLHMM,
+    'memm': MEMM,
 }
 
 

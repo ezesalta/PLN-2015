@@ -83,13 +83,13 @@ if __name__ == '__main__':
     print('Accuracy: {:2.2f}%'.format(acc * 100))
     print('Accuracy known: {:2.2f}%'.format(acc_known * 100))
     print('Accuracy unknown: {:2.2f}%'.format(acc_unknown * 100))
-    print('Confusion Matrix:')
     gold_tags = list(confusion_matrix.keys())
     cant_gold = len(confusion_matrix.keys())
     keys = list(confusion_matrix.keys())
     cm = []
     # Print Confusion Matrix in console
-    print('  ', *gold_tags)
+    #print('Confusion Matrix:')
+    #print('  ', *gold_tags)
     for gold_tag in confusion_matrix:
         positions = [0] * len(gold_tags)
         for t, v in confusion_matrix[gold_tag].items():
@@ -98,7 +98,7 @@ if __name__ == '__main__':
                 pos = gold_tags.index(t)
             positions.remove(positions[pos])
             positions.insert(pos, v)
-        print(gold_tag, positions)
+        #print(gold_tag, positions)
         cm.append(positions)
     # Show confusion matrix in a separate window
     gold_tags_str = ' '.join([str(x) for x in gold_tags])
