@@ -107,9 +107,10 @@ class PrevWord(Feature):
 
         h -- the history.
         """
-        out = 0
-        sent, i, f = h.sent, h.i, self.f
-        if i - 1 >= 0:
-            out = f(sent[i - 1])
+        out = 'BOS'
+        sent, prev_tags, i = h.sent, h.prev_tags, h.i
+        if i >= 1:
+            prev_h = History(sent, prev_tags, i - 1)
+            out = self.f(prev_h)
 
-        return out
+        return str(out)

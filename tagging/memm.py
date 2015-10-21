@@ -2,6 +2,8 @@ from collections import namedtuple, defaultdict
 from featureforge.vectorizer import Vectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
 from tagging.features import (word_lower, word_istitle, word_isupper,
                               word_isdigit, prev_tags, NPrevTags, PrevWord,
                               word_isdate)
@@ -34,14 +36,16 @@ class MEMM:
         # Falta PrevWord(n) y prev_tags(n)
         features = [word_lower, word_istitle, word_isupper,
                     word_isdigit, word_isdate]
-        for i in range(1, 4):
-            features.append(NPrevTags(i))
+        prev_words = [PrevWord(f) for f in features]
+        n_prev_tags = [NPrevTags(i) for i in range(1, n)]
+        features.extend(prev_words)
+        features.extend(n_prev_tags)
         histories = self.sents_histories(tagged_sents)
         tags = self.sents_tags(tagged_sents)
         self.vect_clf = Pipeline([('vect', Vectorizer(features)),
-                             ('clf', LogisticRegression())])
+                                  ('clf', LogisticRegression())])
+        #MultinomialNB, LinearSVC
         self.vect_clf.fit(histories, tags)
-
 
     def sents_histories(self, tagged_sents):
         """

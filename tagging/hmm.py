@@ -136,121 +136,33 @@ class ViterbiTagger:
         # Init
         tagging = []
         init = ['<s>'] * (self.hmm.n - 1)
-        prev_tags = init.copy()
-        self._pi[0][tuple(init)] = (1.0, tagging.copy())
-        # Recursive
-        for i in range(len(sent)):
-            word = sent[i]
-            i += 1
-            next_tags = []
-            for v in self.hmm.tagset():
-                #print('prev_tags', prev_tags, v, i - 1)
-                #print('pi anterior', self._pi[i - 1])
-                p = self._pi[i - 1][tuple(prev_tags)]
-                q = self.hmm.trans_prob(v, tuple(prev_tags))
-                e = self.hmm.out_prob(word, v)
-                val = p[0] * q * e
-                #print('prev_tags', prev_tags, v, val)
-                if val > 0:
-                    next_tags.append((v, val))
-                else:
-                    # CONSULTAR QUE HACER CON ESTOS
-                    pass
-            mv = float('-inf')
-            tg = []
-            pt = []
-            prev = prev_tags.copy()
-            if len(next_tags) == 0:
-                next_tags.append(('nc', 1.0))
-                #self._pi[i][tuple(prev)] = (1.0, tagging.copy())
-                #print('ENTROOOOOOOOO', prev, i, tagging)
-                #print(self._pi[i][tuple(prev)])
-            #else:
-            for t, val in next_tags:
-                # Set next prev_tags
-                if len(prev) > 0:
-                    prev.pop(0)
-                prev.append(t)
-                #print(t, val, prev)
-                new_tagging = tagging.copy() + [t]
-                self._pi[i][tuple(prev)] = (val, new_tagging.copy())
-                if val > mv:
-                    mv = val
-                    tg = new_tagging.copy()
-                    pt = prev.copy()
-                prev = prev_tags.copy()
-            prev_tags = pt.copy()
-            tagging = tg.copy()
-
-            #print(dict(self._pi))
-
-        self._pi = dict(self._pi)
-        #print(*self._pi.items(), sep='\n')
-        # CONSULTAR PORQUE TENGO QUE HACER ESTO
-        for i in self._pi:
-            for t in self._pi[i]:
-                v, tg = self._pi[i][t]
-                if v > 0:
-                    self._pi[i][t] = (log(v, 2), tg)
-                else:
-                    self._pi[i][t] = (float('-inf'), tg)
-        # --------------------------------------
-
-        #print('n:', self.hmm.n)
-        #print(*self._pi.items(), sep='\n')
-
-        return tagging
-
-
-class ViterbiTaggerCorregido:
-
-    def __init__(self, hmm):
-        """
-        hmm -- the HMM.
-        """
-        self.hmm = hmm
-        self._pi = defaultdict(dict)
-
-    def tag(self, sent):
-        """Returns the most probable tagging for a sentence.
-
-        sent -- the sentence.
-        """
-        # Init
-        tagging = []
-        init = ['<s>'] * (self.hmm.n - 1)
-        prev_tags = init.copy()
+        #prev_tags = init.copy()
         self._pi[0][tuple(init)] = (0.0, tagging.copy())
         # Recursive
         for i in range(len(sent)):
             word = sent[i]
             i += 1
-            next_tags = []
+            #next_tags = []
             tagset = [(tag, self.hmm.out_prob(word, tag)) for tag in self.hmm.tagset()]
             for v, e in [(v, e) for v, e in tagset if e > 0.0]:
                 for prev, (p, tagging) in self._pi[i - 1].items():
                     q = self.hmm.trans_prob(v, prev)
                     if q > 0.0:
-                        val = p * q * e
+                        #val = p * q * e
                         new_prev = (prev + (v,))[1:]
                         new_p = p + log(e, 2) + log(q, 2)
                         if new_prev not in self._pi[i] or new_p > self._pi[i][new_prev][0]:
                             self._pi[i][new_prev] = (new_p, tagging + [v])
-            #print(dict(self._pi))
-
         self._pi = dict(self._pi)
-        #print('n:', self.hmm.n)
-        #print(*self._pi.items(), sep='\n')
-
+        # print(*self._pi.items(), sep='\n')
         max_val = float('-inf')
         last = list(self._pi.keys())[-1]
         for prev, (p, tagg) in self._pi[last].items():
             if p > max_val:
                 max_val = p
                 tagging = tagg
-        #print(tagging, max_val)
 
-        return result
+        return tagging
 
 
 log2 = lambda x: log(x, 2)
@@ -405,8 +317,12 @@ class MLHMM(HMM):
         out = 0
         c1 = self.count((word, tag))
         c2 = self.tcount((tag,))
-        if c2 > 0:
-            out = c1 / float(c2)
+        v = len(self.words)
+        if self.unknown(word):
+            out = 1.0 / v
+        else:
+            if c2 > 0:
+                out = c1 / float(c2)
 
         return out
 
