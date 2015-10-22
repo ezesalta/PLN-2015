@@ -15,6 +15,7 @@ from collections import defaultdict
 import pickle
 import sys
 from corpus.ancora import SimpleAncoraCorpusReader
+import time
 
 
 def progress(msg, width=None):
@@ -27,6 +28,9 @@ def progress(msg, width=None):
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
+
+    # Init clock
+    init_time = time.clock()
 
     # load the model
     filename = opts['-i']
@@ -87,9 +91,12 @@ if __name__ == '__main__':
     cant_gold = len(confusion_matrix.keys())
     keys = list(confusion_matrix.keys())
     cm = []
+
+    # Stop clock
+    final_time = time.clock()
+    print('Time lapsed: {:.2f}s'.format(final_time - init_time))
+
     # Print Confusion Matrix in console
-    #print('Confusion Matrix:')
-    #print('  ', *gold_tags)
     for gold_tag in confusion_matrix:
         positions = [0] * len(gold_tags)
         for t, v in confusion_matrix[gold_tag].items():
@@ -104,10 +111,12 @@ if __name__ == '__main__':
     gold_tags_str = ' '.join([str(x) for x in gold_tags])
     #plt.matshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     plt.matshow(cm)
+    #plt.matshow(list(conf_matrix.values()))
     plt.xticks(np.arange(len(gold_tags)), tuple(gold_tags), rotation=90)
     plt.yticks(np.arange(len(gold_tags)), tuple(gold_tags))
     plt.title('Confusion matrix')
     plt.colorbar()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+
     plt.show()

@@ -33,7 +33,6 @@ class MEMM:
                 self.words.add(x[0])
                 self.tags.add(x[1])
         # Features
-        # Falta PrevWord(n) y prev_tags(n)
         features = [word_lower, word_istitle, word_isupper,
                     word_isdigit, word_isdate]
         prev_words = [PrevWord(f) for f in features]
@@ -44,7 +43,8 @@ class MEMM:
         tags = self.sents_tags(tagged_sents)
         self.vect_clf = Pipeline([('vect', Vectorizer(features)),
                                   ('clf', LogisticRegression())])
-        #MultinomialNB, LinearSVC
+                                  #('clf', MultinomialNB())])
+                                  #('clf', LinearSVC())])
         self.vect_clf.fit(histories, tags)
 
     def sents_histories(self, tagged_sents):

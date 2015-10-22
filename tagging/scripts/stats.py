@@ -87,7 +87,8 @@ if __name__ == '__main__':
                 # Aqui se podria guardar estas palabras que se pierden
                 # despues del print
                 aux.pop(k)
-        print(pos, tag, frec, float(frec) / cant_occ_tags, wmf)
+        total_per = float(frec) / cant_occ_tags
+        print('{} {} {} {:.2f} {}'.format(pos, tag, frec, total_per, wmf))
     ambiguous = defaultdict(int)
     for x in ambiguity.values():
         cant = len(x)
@@ -110,10 +111,28 @@ if __name__ == '__main__':
         elif cant == 9:
             ambiguous[9] += 1
     ambiguous_list = list(ambiguous.values())
-    print('unambiguous', ambiguous[1])
-    print('ambiguous 2-9', sum(ambiguous_list[1:]))
+    #total_words = sum(ambiguous.values())
+    print('\t\tFrec\t%Total')
+    p = (ambiguous[1] * 100.0) / cant_words
+    print('Unambiguous:\t{}\t{:.2f}%'.format(ambiguous[1], p))
+    p = ((cant_words - ambiguous[1]) * 100.0) / cant_words
+    print('Ambiguous 2-9:\t{}\t{:.2f}%'.format(cant_words - ambiguous[1], p))
+    #print('Ambiguous 2-9', sum(ambiguous_list[1:]))
     for i, x in enumerate(ambiguous_list[1:]):
-        print('\t{} tags: {}'.format(i + 1, x))
+        p = (x * 100.0) / cant_words
+        print('\t{} tags: {}\t{:.2f}%'.format(i + 1, x, p))
+
+    # 5 most freccuent words
+    words_cp = words.copy()
+    wmf = []
+    print('5 words most freccuent:')
+    print('#\tword\tfrec\t%total')
+    for i in range(1, 6):
+        word, val = max_d(words_cp)
+        words_cp.pop(word)
+        wmf.append(tuple([i] + [word]))
+        p = (val * 100.0) / cant_words
+        print('{}\t{}\t{}\t{:.2f}%'.format(i, word, val, p))
 
     final_time = time.clock()
-    print('time lapsed:', final_time - init_time)
+    print('time lapsed: {:.2f}s'.format(final_time - init_time))
