@@ -22,6 +22,7 @@ def max_d(d):
             m = d[key]
     return tuple([k] + [m])
 
+
 def find(val, l):
     out = -1
     try:
@@ -111,13 +112,11 @@ if __name__ == '__main__':
         elif cant == 9:
             ambiguous[9] += 1
     ambiguous_list = list(ambiguous.values())
-    #total_words = sum(ambiguous.values())
     print('\t\tFrec\t%Total')
     p = (ambiguous[1] * 100.0) / cant_words
     print('Unambiguous:\t{}\t{:.2f}%'.format(ambiguous[1], p))
     p = ((cant_words - ambiguous[1]) * 100.0) / cant_words
     print('Ambiguous 2-9:\t{}\t{:.2f}%'.format(cant_words - ambiguous[1], p))
-    #print('Ambiguous 2-9', sum(ambiguous_list[1:]))
     for i, x in enumerate(ambiguous_list[1:]):
         p = (x * 100.0) / cant_words
         print('\t{} tags: {}\t{:.2f}%'.format(i + 1, x, p))

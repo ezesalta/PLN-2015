@@ -83,11 +83,8 @@ class NPrevTags(Feature):
 
         h -- a history.
         """
-        sent, i, n = h.sent, h.i, self.n
+        n = self.n
         prev_tags = list(h.prev_tags)
-        """if i - n >= 0:
-            out = prev_tags[i - n: i]
-        else:"""
         out = prev_tags[-n:]
 
         return tuple(out)

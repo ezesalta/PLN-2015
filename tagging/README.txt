@@ -52,9 +52,19 @@ Time lapsed: 21.31s
 --------------------------------------------------------------------------------
 
 
-Cuando evalue MEMM con MultinomialNB tardo mucho en terminar y ademas
-dio valores muy por debajo del baseline. Los demas valores obtenidos estan
-dentro de lo esperado.
+
+
+RESULTADOS HMMs Y MEMMs
+-----------------------
+
+Se adjuntaron las siguientes matrices de confusión:
+
+Baseline                                ->      tagging/baseline.png
+MLHMM (N=4)                             ->      tagging/mlhmm_4.png
+MEMM con Logistic Regresion (N=4)       ->      tagging/memm_lr_4.png
+MEMM con Multinomial NB (N=4)           ->      tagging/memm_mnb_4.png
+MEMM con Linear SVC (N=4)               ->      tagging/memm_lsvc_4.png
+
 
 BASELINE
 --------

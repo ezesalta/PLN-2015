@@ -15,7 +15,6 @@ Options:
 """
 from docopt import docopt
 import pickle
-
 from corpus.ancora import SimpleAncoraCorpusReader
 from tagging.baseline import BaselineTagger
 from tagging.hmm import MLHMM

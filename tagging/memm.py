@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 from tagging.features import (word_lower, word_istitle, word_isupper,
-                              word_isdigit, prev_tags, NPrevTags, PrevWord,
+                              word_isdigit, NPrevTags, PrevWord,
                               word_isdate)
 __author__ = 'Ezequiel Medina'
 
@@ -43,8 +43,8 @@ class MEMM:
         tags = self.sents_tags(tagged_sents)
         self.vect_clf = Pipeline([('vect', Vectorizer(features)),
                                   ('clf', LogisticRegression())])
-                                  #('clf', MultinomialNB())])
-                                  #('clf', LinearSVC())])
+                                  # ('clf', MultinomialNB())])
+                                  # ('clf', LinearSVC())])
         self.vect_clf.fit(histories, tags)
 
     def sents_histories(self, tagged_sents):

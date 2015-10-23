@@ -20,7 +20,6 @@ class BaselineTagger:
                     self.tagged_words[s[0]][s[1]] = 0
                 self.tagged_words[s[0]][s[1]] += 1
                 words.append(s[0])
-            #self.sents[tuple(sent)] += 1
             self.sents[tuple(words)] += 1
 
     def tag(self, sent):
