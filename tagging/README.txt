@@ -18,6 +18,18 @@ tags: 48
 9   rg      15333       0.03        ['más', 'hoy', 'también', 'ayer', 'ya']
 10  cc      15023       0.03        ['y', 'pero', 'o', 'Pero', 'e']
 
+Descripción:
+nc: Nombre Común                Ej: gato, chico
+sp: Adposición Preposicion      Ej: al, del
+da: Determinante Articulo       Ej: el, los, las
+vm: Verbo Principal.            Ej: cantar, ser
+aq: Adjetivo Calificativo       Ej: alegre, malo
+fc: Puntuacion Coma.            Ej: ,
+np: Nombre Propio.              Ej: Pedro, Juan
+fp: Puntuacion Punto.           Ej: .
+rg: Advervio General.           Ej: despacio, ahora
+cc: Conjuncion Coordinada.      Ej: mas, pero
+
                 Frec    %Total
 Unambiguous:    44109   94.89%
 Ambiguous 2-9:  2373    5.11%
