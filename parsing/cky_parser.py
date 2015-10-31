@@ -52,7 +52,6 @@ class CKYParser:
                                 pi1 = self._pi[i, s][y[0]]
                             if y[1] in self._pi[s + 1, j]:
                                 pi2 = self._pi[s + 1, j][y[1]]
-                            # Create empty sets on _bp
                             if y[0] in self._bp[i, s] and y[1] in self._bp[s + 1, j]:
                                 bp1 = self._bp[i, s][y[0]]
                                 bp2 = self._bp[s + 1, j][y[1]]

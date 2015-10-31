@@ -70,7 +70,10 @@ if __name__ == '__main__':
         total_model += len(model_spans)
 
         # compute unlabeled scores
-        hits_un += sum(x[1:] == y[1:] for x, y in zip(gold_spans, model_spans))
+        #print([x[1:] == y[1:] for x, y in zip(gold_spans, model_spans)])
+        gold_spans_unlabeled = set([x[1:] for x in gold_spans])
+        model_spans_unlabeled = set([x[1:] for x in model_spans])
+        hits_un += len(gold_spans_unlabeled & model_spans_unlabeled)
         prec_un = float(hits_un) / total_model * 100
         rec_un = float(hits_un) / total_gold * 100
         if prec_un + rec_un > 0:
