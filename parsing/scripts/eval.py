@@ -13,7 +13,7 @@ Options:
 from docopt import docopt
 import pickle
 import sys
-
+import time
 from corpus.ancora import SimpleAncoraCorpusReader
 
 from parsing.util import spans
@@ -48,19 +48,25 @@ if __name__ == '__main__':
     n = opts['-n']
     if n is None:
         n = len(parsed_sents)
+    else:
+        n = int(n)
     m = opts['-m']
     if m is None:
         m = 20
+    else:
+        m = int(m)
+    init_time = time.clock()
     format_str = '{:3.1f}% ({}/{}) (P={:2.2f}%, R={:2.2f}%, F1={:2.2f}%)'
     progress(format_str.format(0.0, 0, n, 0.0, 0.0, 0.0))
     for i, gold_parsed_sent in enumerate(parsed_sents):
         tagged_sent = gold_parsed_sent.pos()
         if len(tagged_sent) > m:
             diff += 1
-            n -= 1
             continue
         # parse
+        print('\n', len(tagged_sent), len(model.productions()))
         model_parsed_sent = model.parse(tagged_sent)
+        print('parser done..')
 
         # compute labeled scores
         gold_spans = spans(gold_parsed_sent, unary=False)
@@ -85,7 +91,10 @@ if __name__ == '__main__':
         f1 = 2 * prec * rec / (prec + rec)
 
         progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
+        if i == n:
+            break
 
+    final_time = time.clock()
     print('')
     print('Parsed {} sentences'.format(n))
     print('Labeled')
@@ -96,3 +105,4 @@ if __name__ == '__main__':
     print('  Precision: {:2.2f}% '.format(prec_un))
     print('  Recall: {:2.2f}% '.format(rec_un))
     print('  F1: {:2.2f}% '.format(f1_un))
+    print('Time: {:.2f}s'.format(final_time - init_time))

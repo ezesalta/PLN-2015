@@ -99,6 +99,52 @@ class TestCKYParser(TestCase):
         lp2 = log2(1.0 * 0.6 * 1.0 * 0.9 * 1.0 * 1.0 * 0.4 * 0.1 * 1.0)
         self.assertAlmostEqual(lp, lp2)
 
+    def test_ambiguity(self):
+        grammar = PCFG.fromstring(
+            """
+            S -> NP VP [1.0]
+            NP -> Det N [0.5] | NP PP [0.5]
+            Det -> 'el' [1.0]
+            N -> 'hombre' [0.4] | 'telescopio' [0.3] | 'perro' [0.3]
+            VP -> VP PP [0.1] | V NP [0.7] | V [0.2]
+            V -> 'vio' [1.0]
+            PP -> P NP [1.0]
+            P -> 'con' [1.0]
+            """
+        )
+        grammar_2 = PCFG.fromstring(
+            """
+            S -> NP VP [1.0]
+            NP -> Det N [0.5] | NP PP [0.5]
+            Det -> 'el' [1.0]
+            N -> 'hombre' [0.4] | 'telescopio' [0.3] | 'perro' [0.3]
+            VP -> VP PP [0.8] | V NP [0.1] | V [0.1]
+            V -> 'vio' [1.0]
+            PP -> P NP [1.0]
+            P -> 'con' [1.0]
+            """
+        )
+        tree = Tree.fromstring(
+            """
+            (S
+                (NP (Det el) (N hombre))
+                (VP
+                  (V vio)
+                  (NP
+                    (NP (Det el) (N perro))
+                    (PP (P con) (NP (Det el) (N telescopio)))
+                  )
+                )
+            )
+            """
+        )
+
+        parser = CKYParser(grammar)
+        lp, t = parser.parse('el hombre vio el perro con el telescopio'.split())
+        # t.draw()
+
+        assert t == tree
+
     def assertEqualPi(self, pi1, pi2):
         self.assertEqual(set(pi1.keys()), set(pi2.keys()))
 
@@ -109,3 +155,4 @@ class TestCKYParser(TestCase):
                 prob1 = d1[k2]
                 prob2 = d2[k2]
                 self.assertAlmostEqual(prob1, prob2)
+

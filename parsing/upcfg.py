@@ -18,11 +18,11 @@ class UPCFG:
         self.start = Nonterminal(start)
         self.prods = []
         self.prods_lex = []
+        pcount = defaultdict(int)
+        lcount = defaultdict(int)
         for tree in parsed_sents:
             tree.collapse_unary(collapsePOS=False)
             tree.chomsky_normal_form(horzMarkov=2)
-            pcount = defaultdict(int)
-            lcount = defaultdict(int)
             for x in tree.productions():
                 if x.is_lexical():
                     p = Production(x.lhs(), [str(x.lhs())])
@@ -30,19 +30,24 @@ class UPCFG:
                     pcount[p] += 1
                 else:
                     p = Production(x.lhs(), x.rhs())
+                    #p = Production(x.lhs(), tuple([str(y) for y in x.rhs()]))
                     lcount[p.lhs()] += 1
                     pcount[p] += 1
-            pcount = dict(pcount)
-            lcount = dict(lcount)
-            for x in pcount:
-                prob = float(pcount[x]) / lcount[x.lhs()]
-                p = ProbabilisticProduction(x.lhs(), x.rhs(), prob=prob)
-                self.prods.append(p)
+        pcount = dict(pcount)
+        lcount = dict(lcount)
+        for x in pcount:
+            #if str(x.lhs()) == 'sentence|<fc-sn+grup.nom>':
+                #print(x, pcount[x], lcount[x.lhs()])
+            prob = float(pcount[x]) / lcount[x.lhs()]
+            p = ProbabilisticProduction(x.lhs(), x.rhs(), prob=prob)
+            self.prods.append(p)
+
+        self.grammar = PCFG(self.start, self.prods)
+        self.parser = CKYParser(self.grammar)
 
     def productions(self):
         """Returns the list of UPCFG probabilistic productions.
         """
-        #print(*self.prods, sep='\n')
 
         return self.prods
 
@@ -51,14 +56,14 @@ class UPCFG:
 
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
-        grammar = PCFG(self.start, self.productions())
-        parser = CKYParser(grammar)
-        tup = parser.parse([x[1] for x in tagged_sent])
+        print('entro')
+        tup = self.parser.parse([x[1] for x in tagged_sent])
         if tup is not None:
             lp, t = tup
         else:
             t = Tree(str(self.start), [Tree(x[1], [x[1]]) for x in tagged_sent])
         #t.draw()
+        print('parse.....')
         #tt = Tree('S', [Tree('Det', ['Det']), Tree('Noun', ['Noun'])])
         #self.deslex(tt, [('el', 'Det'), ('gato', 'Noun')])
         tree = self.deslex(t, tagged_sent.copy())
