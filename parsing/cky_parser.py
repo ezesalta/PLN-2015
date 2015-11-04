@@ -69,6 +69,7 @@ class CKYParser:
                     tree.extend([bp1])
                     tree.extend([bp2])
                     self._bp[(i, j)][node] = Tree(node, tree)
+                    #self._bp[(i, j)][node].draw()
 
         """print('Pi')
         print(*self._pi.items(), sep='\n')
@@ -83,9 +84,13 @@ class CKYParser:
         self._pi = dict(self._pi)
         self._bp = dict(self._bp)
 
-        t = self._bp[(1, n)][self.S]
-        lp = self._pi[(1, n)][self.S]
-        return lp, t
+        tup = None
+        if (1, n) in self._bp:
+            if self.S in self._bp[(1, n)]:
+                t = self._bp[(1, n)][self.S]
+                lp = self._pi[(1, n)][self.S]
+                tup = (lp, t)
+        return tup
 
     def get_prod(self, x):
         out = []
