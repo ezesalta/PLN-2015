@@ -11,14 +11,33 @@ class CKYParser:
         grammar -- a binarised NLTK PCFG.
         """
         self.pcfg = grammar
-        self.terminals = [x for x in grammar.productions()]
         self.S = str(self.pcfg.start())
         self._pi = defaultdict(dict)
         self._pi_lp = defaultdict(dict)
         self._bp = defaultdict(dict)
+        self.prods = defaultdict(list)
+        self.probs = defaultdict(dict)
         self.N = set()
+        #print(*grammar.productions(), sep='\n')
         for x in grammar.productions():
             self.N.add(str(x.lhs()))
+            elems = []
+            for y in x.rhs():
+                if type(y) == tuple:
+                    e = tuple([str(z) for z in y])
+                    elems.append(e)
+                    self.probs[str(x.lhs())][e] = x.prob()
+                else:
+                    e = tuple([str(z) for z in x.rhs()])
+                    elems.append(e)
+                    self.probs[str(x.lhs())][e] = x.prob()
+                    break
+            self.prods[str(x.lhs())].extend(elems)
+        """print(*self.prods.items(), sep='\n')
+        print('')
+        print(*grammar.productions(), sep='\n')
+        exit()"""
+
 
     def parse(self, sent):
         """Parse a sequence of terminals.
@@ -94,17 +113,31 @@ class CKYParser:
 
     def get_prod(self, x):
         out = []
+        if x in self.prods:
+            y = self.prods[str(x)]
+            for z in y:
+                if len(z) >= 2:
+                    out.append(z)
+        """print('out 1', out)
+        out = []
         for prod in self.pcfg.productions():
             if str(prod.lhs()) == x:
                 y = prod.rhs()
                 if len(y) == 2:
                     out.append(tuple([str(x) for x in y]))
-
+        print('out 2', out)
+        exit()"""
         return out
 
     def q(self, x, y):
         # x -> y
         # y is a list
+        out = None
+        if x in self.prods:
+            rhs = self.prods[str(x)]
+            if tuple(y) in rhs:
+                out = self.probs[str(x)][tuple(y)]
+        """print(x, tuple(y), out)
         out = None
         for prod in self.pcfg.productions():
             if str(prod.lhs()) == x:
@@ -112,5 +145,6 @@ class CKYParser:
                 if rhs == tuple(y):
                     out = prod.prob()
                     break
+        print(x, tuple(y), out)"""
 
         return out

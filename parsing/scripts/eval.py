@@ -64,9 +64,7 @@ if __name__ == '__main__':
             diff += 1
             continue
         # parse
-        print('\n', len(tagged_sent), len(model.productions()))
         model_parsed_sent = model.parse(tagged_sent)
-        print('parser done..')
 
         # compute labeled scores
         gold_spans = spans(gold_parsed_sent, unary=False)
@@ -91,7 +89,7 @@ if __name__ == '__main__':
         f1 = 2 * prec * rec / (prec + rec)
 
         progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
-        if i == n:
+        if i >= n:
             break
 
     final_time = time.clock()

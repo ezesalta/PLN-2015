@@ -56,14 +56,12 @@ class UPCFG:
 
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
-        print('entro')
         tup = self.parser.parse([x[1] for x in tagged_sent])
         if tup is not None:
             lp, t = tup
         else:
             t = Tree(str(self.start), [Tree(x[1], [x[1]]) for x in tagged_sent])
         #t.draw()
-        print('parse.....')
         #tt = Tree('S', [Tree('Det', ['Det']), Tree('Noun', ['Noun'])])
         #self.deslex(tt, [('el', 'Det'), ('gato', 'Noun')])
         tree = self.deslex(t, tagged_sent.copy())

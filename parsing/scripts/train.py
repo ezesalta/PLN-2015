@@ -5,10 +5,11 @@ Usage:
   train.py -h | --help
 
 Options:
-  -m <model>    Model to use [default: flat]:
+  -m <model>    Model to use [default: upcfg]:
                   flat: Flat trees
                   rbranch: Right branching trees
                   lbranch: Left branching trees
+                  upcfg: Unlexicalize PCFG
   -o <file>     Output model file.
   -h --help     Show this screen.
 """
