@@ -38,6 +38,10 @@ class CKYParser:
         print(*grammar.productions(), sep='\n')
         exit()"""
 
+    def reset(self):
+        self._pi = defaultdict(dict)
+        self._pi_lp = defaultdict(dict)
+        self._bp = defaultdict(dict)
 
     def parse(self, sent):
         """Parse a sequence of terminals.
@@ -84,9 +88,10 @@ class CKYParser:
                     node = str(maxs['x'])
                     self._pi[(i, j)][node] = maxs['val']
                     self._pi_lp[(i, j)][node] = log2(maxs['val'])
-                    tree = []
-                    tree.extend([bp1])
-                    tree.extend([bp2])
+                    tree = [bp1] + [bp2]
+                    #tree = []
+                    #tree.extend([bp1])
+                    #tree.extend([bp2])
                     self._bp[(i, j)][node] = Tree(node, tree)
                     #self._bp[(i, j)][node].draw()
 
@@ -115,9 +120,10 @@ class CKYParser:
         out = []
         if x in self.prods:
             y = self.prods[str(x)]
-            for z in y:
+            out = [z for z in y if len(z) >= 2]
+            """for z in y:
                 if len(z) >= 2:
-                    out.append(z)
+                    out.append(z)"""
         """print('out 1', out)
         out = []
         for prod in self.pcfg.productions():

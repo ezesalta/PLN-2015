@@ -1,16 +1,17 @@
-__author__ = 'Ezequiel Medina'
 from nltk.grammar import Production, ProbabilisticProduction
 from collections import defaultdict
 from nltk.tree import Tree
 from nltk.grammar import PCFG, Nonterminal
 from parsing.cky_parser import CKYParser
+import time
+__author__ = 'Ezequiel Medina'
 
 
 class UPCFG:
     """Unlexicalized PCFG.
     """
 
-    def __init__(self, parsed_sents, start='sentence'):
+    def __init__(self, n, parsed_sents, start='sentence'):
         """
         parsed_sents -- list of training trees.
         """
@@ -22,7 +23,7 @@ class UPCFG:
         lcount = defaultdict(int)
         for tree in parsed_sents:
             tree.collapse_unary(collapsePOS=False)
-            tree.chomsky_normal_form(horzMarkov=2)
+            tree.chomsky_normal_form(horzMarkov=n)
             for x in tree.productions():
                 if x.is_lexical():
                     p = Production(x.lhs(), [str(x.lhs())])
@@ -56,7 +57,11 @@ class UPCFG:
 
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
+        init_time_cky = time.clock()
         tup = self.parser.parse([x[1] for x in tagged_sent])
+        final_time_cky = time.clock()
+        # Para evitar el init del CKY, lo reseteo
+        self.parser.reset()
         if tup is not None:
             lp, t = tup
         else:
@@ -64,8 +69,13 @@ class UPCFG:
         #t.draw()
         #tt = Tree('S', [Tree('Det', ['Det']), Tree('Noun', ['Noun'])])
         #self.deslex(tt, [('el', 'Det'), ('gato', 'Noun')])
+        init_time_deslex = time.clock()
         tree = self.deslex(t, tagged_sent.copy())
+        final_time_deslex = time.clock()
         #tree.draw()
+        print('')
+        print('Time CKY Parser: {:.2f}'.format(final_time_cky - init_time_cky))
+        print('Time Deslex: {:.2f}'.format(final_time_deslex - init_time_deslex))
 
         return tree
 
