@@ -55,6 +55,11 @@ if __name__ == '__main__':
         m = 20
     else:
         m = int(m)
+    """gold_parsed_sents = []
+    for gold_parsed_sent in parsed_sents:
+        tagged_sent = gold_parsed_sent.pos()
+        if len(tagged_sent) > m:
+            gold_parsed_sents.append(gold_parsed_sent)"""
     init_time = time.clock()
     format_str = '{:3.1f}% ({}/{}) (P={:2.2f}%, R={:2.2f}%, F1={:2.2f}%)'
     progress(format_str.format(0.0, 0, n, 0.0, 0.0, 0.0))
@@ -62,33 +67,34 @@ if __name__ == '__main__':
         tagged_sent = gold_parsed_sent.pos()
         if len(tagged_sent) > m:
             diff += 1
-            continue
-        # parse
-        model_parsed_sent = model.parse(tagged_sent)
+        else:
+            # parse
+            model_parsed_sent = model.parse(tagged_sent)
 
-        # compute labeled scores
-        gold_spans = spans(gold_parsed_sent, unary=False)
-        model_spans = spans(model_parsed_sent, unary=False)
-        hits += len(gold_spans & model_spans)
-        total_gold += len(gold_spans)
-        total_model += len(model_spans)
+            # compute labeled scores
+            gold_spans = spans(gold_parsed_sent, unary=False)
+            model_spans = spans(model_parsed_sent, unary=False)
+            hits += len(gold_spans & model_spans)
+            total_gold += len(gold_spans)
+            total_model += len(model_spans)
 
-        # compute unlabeled scores
-        #print([x[1:] == y[1:] for x, y in zip(gold_spans, model_spans)])
-        gold_spans_unlabeled = set([x[1:] for x in gold_spans])
-        model_spans_unlabeled = set([x[1:] for x in model_spans])
-        hits_un += len(gold_spans_unlabeled & model_spans_unlabeled)
-        prec_un = float(hits_un) / total_model * 100
-        rec_un = float(hits_un) / total_gold * 100
-        if prec_un + rec_un > 0:
-            f1_un = 2 * prec_un * rec_un / (prec_un + rec_un)
+            # compute unlabeled scores
+            #print([x[1:] == y[1:] for x, y in zip(gold_spans, model_spans)])
+            gold_spans_unlabeled = set([x[1:] for x in gold_spans])
+            model_spans_unlabeled = set([x[1:] for x in model_spans])
+            hits_un += len(gold_spans_unlabeled & model_spans_unlabeled)
+            prec_un = float(hits_un) / total_model * 100
+            rec_un = float(hits_un) / total_gold * 100
+            if prec_un + rec_un > 0:
+                f1_un = 2 * prec_un * rec_un / (prec_un + rec_un)
 
-        # compute labeled partial results
-        prec = float(hits) / total_model * 100
-        rec = float(hits) / total_gold * 100
-        f1 = 2 * prec * rec / (prec + rec)
+            # compute labeled partial results
+            prec = float(hits) / total_model * 100
+            rec = float(hits) / total_gold * 100
+            f1 = 2 * prec * rec / (prec + rec)
 
-        progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
+            progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
+            #progress(format_str.format(float(i+1-diff) * 100 / (n-diff), i+1, n-diff, prec, rec, f1))
         if i >= n:
             break
 

@@ -11,7 +11,7 @@ class UPCFG:
     """Unlexicalized PCFG.
     """
 
-    def __init__(self, n, parsed_sents, start='sentence'):
+    def __init__(self, parsed_sents, n=2, start='sentence'):
         """
         parsed_sents -- list of training trees.
         """

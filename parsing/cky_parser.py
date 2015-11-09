@@ -16,11 +16,14 @@ class CKYParser:
         self._pi_lp = defaultdict(dict)
         self._bp = defaultdict(dict)
         self.prods = defaultdict(list)
+        self.prods_inv = defaultdict(list)
         self.probs = defaultdict(dict)
         self.N = set()
         #print(*grammar.productions(), sep='\n')
         for x in grammar.productions():
+            # Nonterminals
             self.N.add(str(x.lhs()))
+            # Productions
             elems = []
             for y in x.rhs():
                 if type(y) == tuple:
@@ -33,6 +36,12 @@ class CKYParser:
                     self.probs[str(x.lhs())][e] = x.prob()
                     break
             self.prods[str(x.lhs())].extend(elems)
+            # Productions indexed by rhs
+            e = (str(x.lhs()), x.prob())
+            self.prods_inv[tuple([str(z) for z in x.rhs()])].append(e)
+        #print(*self.prods_inv.items(), sep='\n')
+        #print('')
+
         """print(*self.prods.items(), sep='\n')
         print('')
         print(*grammar.productions(), sep='\n')
@@ -66,7 +75,40 @@ class CKYParser:
                 j = i + l
                 maxs = {'x': '', 'y': (), 'q': float('-inf'), 's': 0,
                         'val': float('-inf')}
-                for x in self.N:
+
+                # fill pi[i, j]
+                for s in range(i, j):
+                    # consider split pi[i, s] + pi[s+1, j]
+                    for a in self._pi[(i, s)]:
+                        pi1 = self._pi[(i, s)][a]
+                        bp1 = Tree('', [])
+                        if a in self._bp[i, s]:
+                            bp1 = self._bp[(i, s)][a]
+                        for b in self._pi[(s + 1, j)]:
+                            pi2 = self._pi[(s + 1, j)][b]
+                            bp2 = Tree('', [])
+                            if b in self._bp[s + 1, j]:
+                                bp2 = self._bp[(s + 1, j)][b]
+                            if (a, b) in self.prods_inv:
+                                for c, q in self.prods_inv[(a, b)]:
+                                    val = pi1 * pi2 * q
+                                    val_lp = log2(q) + log2(pi1) + log2(pi2)
+                                    if c in self._pi[(i, j)]:
+                                        prev_val = self._pi[(i, j)][c]
+                                        if prev_val < val:
+                                            self._pi[(i, j)][c] = val
+                                            self._pi_lp[(i, j)][c] = val_lp
+                                            tree = [bp1] + [bp2]
+                                            self._bp[(i, j)][c] = Tree(c, tree)
+                                        #print('in', (a, b), val, log_val, prev_val)
+                                    else:
+                                        self._pi[(i, j)][c] = val
+                                        self._pi_lp[(i, j)][c] = val_lp
+                                        tree = [bp1] + [bp2]
+                                        self._bp[(i, j)][c] = Tree(c, tree)
+                                        #print('not in', (a, b), val, log_val)
+
+                """for x in self.N:
                     for y in self.get_prod(x):
                         q = self.q(x, y)
                         for s in range(i, j):
@@ -93,20 +135,24 @@ class CKYParser:
                     #tree.extend([bp1])
                     #tree.extend([bp2])
                     self._bp[(i, j)][node] = Tree(node, tree)
-                    #self._bp[(i, j)][node].draw()
+                    #self._bp[(i, j)][node].draw()"""
 
         """print('Pi')
         print(*self._pi.items(), sep='\n')
         print('Pi_lp')
         print(*self._pi_lp.items(), sep='\n')
-        print('\nPi(1, 5, S):', self._pi[(1, 5)][self.S], 'log2:', log2(self._pi[(1, 5)][self.S]))
-        print('\nPi_lp(1, 5, S):', self._pi_lp[(1, 5)][self.S])
         print('\nBack Pointers')
         print(*self._bp.items(), sep='\n')"""
+        """print('\nPi(1, 5, S):', self._pi[(1, 5)][self.S], 'log2:', log2(self._pi[(1, 5)][self.S]))
+        print('\nPi_lp(1, 5, S):', self._pi_lp[(1, 5)][self.S])
+        """
 
+        # add empty dicts to back pointers dict
+        l = [self._bp[x] for x, y in self._pi.items() if y == {}]
         self._pi.update(self._pi_lp)
         self._pi = dict(self._pi)
         self._bp = dict(self._bp)
+
 
         tup = None
         if (1, n) in self._bp:

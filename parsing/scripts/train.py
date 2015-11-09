@@ -46,7 +46,7 @@ if __name__ == '__main__':
         n = int(n)
     m = opts['-m']
     if m is None or m == 'upcfg':
-        model = models[m](n, corpus.parsed_sents())
+        model = models[m](corpus.parsed_sents(), n)
     else:
         model = models[m](corpus.parsed_sents())
 

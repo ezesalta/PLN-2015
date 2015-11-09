@@ -141,7 +141,8 @@ class TestCKYParser(TestCase):
 
         parser = CKYParser(grammar)
         lp, t = parser.parse('el hombre vio el perro con el telescopio'.split())
-        # t.draw()
+        #tree.draw()
+        #t.draw()
 
         assert t == tree
 
