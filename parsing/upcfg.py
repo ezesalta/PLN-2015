@@ -11,7 +11,7 @@ class UPCFG:
     """Unlexicalized PCFG.
     """
 
-    def __init__(self, parsed_sents, n=2, start='sentence'):
+    def __init__(self, parsed_sents, horzMarkov=2, start='sentence'):
         """
         parsed_sents -- list of training trees.
         """
@@ -22,8 +22,8 @@ class UPCFG:
         pcount = defaultdict(int)
         lcount = defaultdict(int)
         for tree in parsed_sents:
-            tree.collapse_unary(collapsePOS=False)
-            tree.chomsky_normal_form(horzMarkov=n)
+            tree.collapse_unary(collapsePOS=True)
+            tree.chomsky_normal_form(horzMarkov=horzMarkov)
             for x in tree.productions():
                 if x.is_lexical():
                     p = Production(x.lhs(), [str(x.lhs())])
@@ -37,8 +37,6 @@ class UPCFG:
         pcount = dict(pcount)
         lcount = dict(lcount)
         for x in pcount:
-            #if str(x.lhs()) == 'sentence|<fc-sn+grup.nom>':
-                #print(x, pcount[x], lcount[x.lhs()])
             prob = float(pcount[x]) / lcount[x.lhs()]
             p = ProbabilisticProduction(x.lhs(), x.rhs(), prob=prob)
             self.prods.append(p)
@@ -57,9 +55,7 @@ class UPCFG:
 
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
-        init_time_cky = time.clock()
         tup = self.parser.parse([x[1] for x in tagged_sent])
-        final_time_cky = time.clock()
         # Para evitar el init del CKY, lo reseteo
         self.parser.reset()
         if tup is not None:
@@ -69,13 +65,8 @@ class UPCFG:
         #t.draw()
         #tt = Tree('S', [Tree('Det', ['Det']), Tree('Noun', ['Noun'])])
         #self.deslex(tt, [('el', 'Det'), ('gato', 'Noun')])
-        init_time_deslex = time.clock()
         tree = self.deslex(t, tagged_sent.copy())
-        final_time_deslex = time.clock()
         #tree.draw()
-        print('')
-        print('Time CKY Parser: {:.2f}'.format(final_time_cky - init_time_cky))
-        print('Time Deslex: {:.2f}'.format(final_time_deslex - init_time_deslex))
 
         return tree
 

@@ -61,6 +61,8 @@ if __name__ == '__main__':
         if len(tagged_sent) > m:
             gold_parsed_sents.append(gold_parsed_sent)"""
     init_time = time.clock()
+    prec, rec, f1 = 0.0, 0.0, 0.0
+    cky = 0.0
     format_str = '{:3.1f}% ({}/{}) (P={:2.2f}%, R={:2.2f}%, F1={:2.2f}%)'
     progress(format_str.format(0.0, 0, n, 0.0, 0.0, 0.0))
     for i, gold_parsed_sent in enumerate(parsed_sents):
@@ -69,7 +71,10 @@ if __name__ == '__main__':
             diff += 1
         else:
             # parse
+            init_time_cky = time.clock()
             model_parsed_sent = model.parse(tagged_sent)
+            final_time_cky = time.clock()
+            cky += final_time_cky - init_time_cky
 
             # compute labeled scores
             gold_spans = spans(gold_parsed_sent, unary=False)
@@ -93,20 +98,22 @@ if __name__ == '__main__':
             rec = float(hits) / total_gold * 100
             f1 = 2 * prec * rec / (prec + rec)
 
-            progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
-            #progress(format_str.format(float(i+1-diff) * 100 / (n-diff), i+1, n-diff, prec, rec, f1))
+        #progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
+        progress(format_str.format(float(i) * 100 / n, i, n, prec, rec, f1))
         if i >= n:
             break
 
     final_time = time.clock()
     print('')
-    print('Parsed {} sentences'.format(n))
+    print('Parsed {} sentences'.format(n-diff))
+    print('Discarded {} sentences'.format(diff))
     print('Labeled')
-    print('  Precision: {:2.2f}% '.format(prec))
-    print('  Recall: {:2.2f}% '.format(rec))
-    print('  F1: {:2.2f}% '.format(f1))
+    print('    Precision: {:2.2f}% '.format(prec))
+    print('    Recall: {:2.2f}% '.format(rec))
+    print('    F1: {:2.2f}% '.format(f1))
     print('Unlabeled')
-    print('  Precision: {:2.2f}% '.format(prec_un))
-    print('  Recall: {:2.2f}% '.format(rec_un))
-    print('  F1: {:2.2f}% '.format(f1_un))
+    print('    Precision: {:2.2f}% '.format(prec_un))
+    print('    Recall: {:2.2f}% '.format(rec_un))
+    print('    F1: {:2.2f}% '.format(f1_un))
     print('Time: {:.2f}s'.format(final_time - init_time))
+    print('Averge time CKY parser: {:.2f}'.format(float(cky) / (n-diff+1)))

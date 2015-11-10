@@ -1,6 +1,7 @@
 from collections import defaultdict
 from math import log2
 from nltk.tree import Tree
+import time
 __author__ = 'Ezequiel Medina'
 
 
@@ -71,40 +72,32 @@ class CKYParser:
         # Recursive
         for l in range(1, n):
             for i in range(1, n - l + 1):
-                wi = sent[i - 1]
                 j = i + l
-                maxs = {'x': '', 'y': (), 'q': float('-inf'), 's': 0,
-                        'val': float('-inf')}
-
                 # fill pi[i, j]
                 for s in range(i, j):
                     # consider split pi[i, s] + pi[s+1, j]
                     for a in self._pi[(i, s)]:
                         pi1 = self._pi[(i, s)][a]
-                        bp1 = Tree('', [])
-                        if a in self._bp[i, s]:
-                            bp1 = self._bp[(i, s)][a]
                         for b in self._pi[(s + 1, j)]:
                             pi2 = self._pi[(s + 1, j)][b]
-                            bp2 = Tree('', [])
-                            if b in self._bp[s + 1, j]:
-                                bp2 = self._bp[(s + 1, j)][b]
                             if (a, b) in self.prods_inv:
                                 for c, q in self.prods_inv[(a, b)]:
                                     val = pi1 * pi2 * q
                                     val_lp = log2(q) + log2(pi1) + log2(pi2)
+                                    bp1 = self._bp[(i, s)][a]
+                                    bp2 = self._bp[(s + 1, j)][b]
+                                    tree = [bp1] + [bp2]
                                     if c in self._pi[(i, j)]:
                                         prev_val = self._pi[(i, j)][c]
                                         if prev_val < val:
                                             self._pi[(i, j)][c] = val
                                             self._pi_lp[(i, j)][c] = val_lp
-                                            tree = [bp1] + [bp2]
+
                                             self._bp[(i, j)][c] = Tree(c, tree)
                                         #print('in', (a, b), val, log_val, prev_val)
                                     else:
                                         self._pi[(i, j)][c] = val
                                         self._pi_lp[(i, j)][c] = val_lp
-                                        tree = [bp1] + [bp2]
                                         self._bp[(i, j)][c] = Tree(c, tree)
                                         #print('not in', (a, b), val, log_val)
 
@@ -153,7 +146,6 @@ class CKYParser:
         self._pi = dict(self._pi)
         self._bp = dict(self._bp)
 
-
         tup = None
         if (1, n) in self._bp:
             if self.S in self._bp[(1, n)]:
@@ -167,18 +159,7 @@ class CKYParser:
         if x in self.prods:
             y = self.prods[str(x)]
             out = [z for z in y if len(z) >= 2]
-            """for z in y:
-                if len(z) >= 2:
-                    out.append(z)"""
-        """print('out 1', out)
-        out = []
-        for prod in self.pcfg.productions():
-            if str(prod.lhs()) == x:
-                y = prod.rhs()
-                if len(y) == 2:
-                    out.append(tuple([str(x) for x in y]))
-        print('out 2', out)
-        exit()"""
+
         return out
 
     def q(self, x, y):
@@ -189,14 +170,5 @@ class CKYParser:
             rhs = self.prods[str(x)]
             if tuple(y) in rhs:
                 out = self.probs[str(x)][tuple(y)]
-        """print(x, tuple(y), out)
-        out = None
-        for prod in self.pcfg.productions():
-            if str(prod.lhs()) == x:
-                rhs = tuple([str(x) for x in prod.rhs()])
-                if rhs == tuple(y):
-                    out = prod.prob()
-                    break
-        print(x, tuple(y), out)"""
 
         return out

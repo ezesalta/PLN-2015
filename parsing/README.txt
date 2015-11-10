@@ -12,36 +12,39 @@ Training time: 69.78s
 horzMarkov = 2
 --------------
 Training Time: 70.49s
-
-Parsed 41.4% (1444/3492) of sentences
-Labeled
-    Precision: 95.88%
-    Recall: 14.58%
-    F1: 25.31%
-Unlabeled
-    Precision: 96.28%
-    Recall: 14.64%
-    F1: 25.42%
-
-Total Time: 22515.77s = 375.26m = 6.25h
-Cicle Time: 30.3s
-
 -----
+con collapsePOS=False
 
-
-Parsed 3492 sentences
+100.0% (3491/3492) (P=41.10%, R=67.56%, F1=51.11%)
+Parsed 1444 sentences
+Discarded 2048 sentences
 Labeled
-  Precision: 11.92%
-  Recall: 19.59%
-  F1: 14.82%
+    Precision: 41.10%
+    Recall: 67.56%
+    F1: 51.11%
 Unlabeled
-  Precision: 16.04%
-  Recall: 26.37%
-  F1: 19.95%
-Time: 7897.05s
+    Precision: 46.74%
+    Recall: 76.84%
+    F1: 58.12%
+Time: 36542.78s = 609.05m = 10.15h
+Averge time CKY parser: 25.29
+--------------
 
------
- 11.2% (392/3492) (P=41.23%, R=67.42%, F1=51.17%)
+con collapsePOS=True
+Parsing...                                                                                                 100.0% (3491/3492) (P=96.53%, R=14.62%, F1=25.39%)
+Parsed 1444 sentences
+Discarded 2048 sentences
+Labeled
+    Precision: 96.53%
+    Recall: 14.62%
+    F1: 25.39%
+Unlabeled
+    Precision: 97.00%
+    Recall: 14.69%
+    F1: 25.52%
+Time: 169.48s
+Averge time CKY parser: 0.12
+
 
 
 
