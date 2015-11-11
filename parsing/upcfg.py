@@ -1,8 +1,9 @@
 from nltk.grammar import Production, ProbabilisticProduction
 from collections import defaultdict
 from nltk.tree import Tree
-from nltk.grammar import PCFG, Nonterminal
+from nltk.grammar import PCFG, Nonterminal, induce_pcfg
 from parsing.cky_parser import CKYParser
+from parsing.util import lexicalize, unlexicalize
 import time
 __author__ = 'Ezequiel Medina'
 
@@ -11,38 +12,38 @@ class UPCFG:
     """Unlexicalized PCFG.
     """
 
-    def __init__(self, parsed_sents, horzMarkov=2, start='sentence'):
+    def __init__(self, parsed_sents, horzMarkov=None, start='sentence'):
         """
         parsed_sents -- list of training trees.
         """
         self.nonterm = []
         self.start = Nonterminal(start)
         self.prods = []
-        self.prods_lex = []
+        self.prods_lex = defaultdict(list)
+        self.horzMarkov = horzMarkov
         pcount = defaultdict(int)
         lcount = defaultdict(int)
-        for tree in parsed_sents:
-            tree.collapse_unary(collapsePOS=True)
-            tree.chomsky_normal_form(horzMarkov=horzMarkov)
-            for x in tree.productions():
-                if x.is_lexical():
-                    p = Production(x.lhs(), [str(x.lhs())])
-                    lcount[p.lhs()] += 1
-                    pcount[p] += 1
-                else:
-                    p = Production(x.lhs(), x.rhs())
-                    #p = Production(x.lhs(), tuple([str(y) for y in x.rhs()]))
-                    lcount[p.lhs()] += 1
-                    pcount[p] += 1
-        pcount = dict(pcount)
-        lcount = dict(lcount)
-        for x in pcount:
-            prob = float(pcount[x]) / lcount[x.lhs()]
-            p = ProbabilisticProduction(x.lhs(), x.rhs(), prob=prob)
-            self.prods.append(p)
 
-        self.grammar = PCFG(self.start, self.prods)
+        prods = []
+        for tree in parsed_sents:
+            t = tree.copy(deep=True)
+            # Unlexicalize productions
+            t = unlexicalize(t)
+            if horzMarkov is None:
+                t.chomsky_normal_form()
+            else:
+                t.chomsky_normal_form(horzMarkov=horzMarkov)
+            t.collapse_unary(collapsePOS=True)
+
+            prods.extend(t.productions())
+
+        self.grammar = induce_pcfg(self.start, prods)
+        self.prods = self.grammar.productions()
         self.parser = CKYParser(self.grammar)
+        """print(*self.prods, sep='\n')
+        print('')
+        print(*self.prods_lex.items(), sep='\n')"""
+
 
     def productions(self):
         """Returns the list of UPCFG probabilistic productions.
@@ -55,40 +56,36 @@ class UPCFG:
 
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
-        tup = self.parser.parse([x[1] for x in tagged_sent])
+        words, tags = [], []
+        for word, tag in tagged_sent:
+            words.append(word)
+            tags.append(tag)
+        tup = self.parser.parse(tags)
         # Para evitar el init del CKY, lo reseteo
         self.parser.reset()
         if tup is not None:
             lp, t = tup
         else:
-            t = Tree(str(self.start), [Tree(x[1], [x[1]]) for x in tagged_sent])
+            t = Tree(str(self.start), [Tree(x, [x]) for x in tags])
         #t.draw()
         #tt = Tree('S', [Tree('Det', ['Det']), Tree('Noun', ['Noun'])])
         #self.deslex(tt, [('el', 'Det'), ('gato', 'Noun')])
-        tree = self.deslex(t, tagged_sent.copy())
+        #print(*self.prods_lex.items(), sep='\n')
+        #tree = self.deslex(t, tagged_sent.copy())
+        tree = t.copy(deep=True)
+        tree.un_chomsky_normal_form()
+        tree = lexicalize(tree, words)
         #tree.draw()
 
         return tree
 
-    def deslex(self, tree, tagged_sent):
-        new_tree = Tree(tree.label(), [])
-        if tree.height() <= 3:
-            for prod in tree.productions():
-                if prod.is_lexical():
-                    for word, tag in tagged_sent:
-                        if prod.rhs()[0] == tag:
-                            t = Tree(str(prod.lhs()), [word])
-                            if tree.height() == 2:
-                                new_tree.extend(t)
-                            else:
-                                new_tree.append(t)
-                            tagged_sent.remove((word, tag))
-                            break
-                else:
-                    pass
-        elif tree.height() > 3:
-            for st in tree:
-                t = self.deslex(st, tagged_sent)
-                new_tree.append(t)
+    def my_lexicalize(self, tree, tagged_sent):
+        t = tree.copy(deep=True)
+        for pos in t.treepositions('leaves'):
+            for word, tag in tagged_sent:
+                if tag == str(t[pos]):
+                    t[pos] = word
+                    tagged_sent.remove((word, tag))
+                    break
 
-        return new_tree
+        return t

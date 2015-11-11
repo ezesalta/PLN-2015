@@ -104,6 +104,7 @@ if __name__ == '__main__':
             break
 
     final_time = time.clock()
+    eval_time = final_time - init_time
     print('')
     print('Parsed {} sentences'.format(n-diff))
     print('Discarded {} sentences'.format(diff))
@@ -115,5 +116,5 @@ if __name__ == '__main__':
     print('    Precision: {:2.2f}% '.format(prec_un))
     print('    Recall: {:2.2f}% '.format(rec_un))
     print('    F1: {:2.2f}% '.format(f1_un))
-    print('Time: {:.2f}s'.format(final_time - init_time))
-    print('Averge time CKY parser: {:.2f}'.format(float(cky) / (n-diff+1)))
+    print('Time: {:.2f}m'.format(eval_time / 60.0))
+    print('Average time CKY parser: {:.2f}s'.format(float(cky) / (n-diff+1)))

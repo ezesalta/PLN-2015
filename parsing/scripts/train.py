@@ -18,15 +18,16 @@ from docopt import docopt
 import pickle
 import time
 from corpus.ancora import SimpleAncoraCorpusReader
-from parsing.baselines import Flat, RBranch#, LBranch
+from parsing.baselines import Flat, RBranch
 from parsing.upcfg import UPCFG
+# from parsing.baselines import LBranch
 
 
 models = {
     'upcfg': UPCFG,
     'flat': Flat,
     'rbranch': RBranch,
-    #'lbranch': LBranch,
+    # 'lbranch': LBranch,
 }
 
 
@@ -40,9 +41,7 @@ if __name__ == '__main__':
 
     print('Training model...')
     n = opts['-n']
-    if n is None:
-        n = 2
-    else:
+    if n is not None:
         n = int(n)
     m = opts['-m']
     if m is None or m == 'upcfg':
@@ -56,4 +55,5 @@ if __name__ == '__main__':
     pickle.dump(model, f)
     f.close()
     final_time = time.clock()
-    print('Time: {:.2f}s'.format(final_time - init_time))
+    train_time = final_time - init_time
+    print('Time: {:.2f}m'.format(train_time / 60.0))
