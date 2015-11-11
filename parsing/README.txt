@@ -1,57 +1,18 @@
 Resultados
 ----------
-horzMarkov = 0
---------------
-Training time: 66.92s
 
-
-horzMarkov = 1
---------------
-Training time: 69.78s
-
-horzMarkov = 2
---------------
-Training Time: 70.49s
------
-con collapsePOS=False
-
-100.0% (3491/3492) (P=41.10%, R=67.56%, F1=51.11%)
-Parsed 1444 sentences
-Discarded 2048 sentences
+horzMarkov              None        0           1           2           3           4
+Training time           1.67m       1.44m       1.44m       1.49m       1.51m       1.59m
+Parsed sentences        1444        1444        1444        1444        1444        1444
+Discarded sentences     2048        2048        2048        2048        2048        2048
 Labeled
-    Precision: 41.10%
-    Recall: 67.56%
-    F1: 51.11%
+    Precision           73.13%      70.20%      74.58%      74.67%      74.00%      73.35%
+    Recall              72.83%      69.97%      74.49%      74.16%      73.36%      72.93%
+    F1                  72.98%      70.08%      74.53%      74.42%      73.68%      73.14%
 Unlabeled
-    Precision: 46.74%
-    Recall: 76.84%
-    F1: 58.12%
-Time: 36542.78s = 609.05m = 10.15h
-Averge time CKY parser: 25.29
---------------
+    Precision           75.23%      72.06%      76.45%      76.59%      76.15%      75.47%
+    Recall              74.92%      71.83%      76.35%      76.06%      75.49%      75.04%
+    F1                  75.07%      71.95%      76.40%      76.32%      75.82%      75.26%
+Eval Time               10.47m      2.85m       3.54m       5.62m       7.74m       9.21m
+Avg time CKY parser     0.43s       0.12s       0.15s       0.23s       0.32s       0.38s
 
-con collapsePOS=True
-Parsing...                                                                                                 100.0% (3491/3492) (P=96.53%, R=14.62%, F1=25.39%)
-Parsed 1444 sentences
-Discarded 2048 sentences
-Labeled
-    Precision: 96.53%
-    Recall: 14.62%
-    F1: 25.39%
-Unlabeled
-    Precision: 97.00%
-    Recall: 14.69%
-    F1: 25.52%
-Time: 169.48s
-Averge time CKY parser: 0.12
-
-
-
-
-
-horzMarkov = 3
---------------
-Training Time: 73.91s
-
-horzMarkov = 4
---------------

@@ -112,18 +112,7 @@ class TestCKYParser(TestCase):
             P -> 'con' [1.0]
             """
         )
-        grammar_2 = PCFG.fromstring(
-            """
-            S -> NP VP [1.0]
-            NP -> Det N [0.5] | NP PP [0.5]
-            Det -> 'el' [1.0]
-            N -> 'hombre' [0.4] | 'telescopio' [0.3] | 'perro' [0.3]
-            VP -> VP PP [0.8] | V NP [0.1] | V [0.1]
-            V -> 'vio' [1.0]
-            PP -> P NP [1.0]
-            P -> 'con' [1.0]
-            """
-        )
+
         tree = Tree.fromstring(
             """
             (S
@@ -141,8 +130,8 @@ class TestCKYParser(TestCase):
 
         parser = CKYParser(grammar)
         lp, t = parser.parse('el hombre vio el perro con el telescopio'.split())
-        #tree.draw()
-        #t.draw()
+        # tree.draw()
+        # t.draw()
 
         assert t == tree
 
@@ -156,4 +145,3 @@ class TestCKYParser(TestCase):
                 prob1 = d1[k2]
                 prob2 = d2[k2]
                 self.assertAlmostEqual(prob1, prob2)
-

@@ -84,7 +84,6 @@ if __name__ == '__main__':
             total_model += len(model_spans)
 
             # compute unlabeled scores
-            #print([x[1:] == y[1:] for x, y in zip(gold_spans, model_spans)])
             gold_spans_unlabeled = set([x[1:] for x in gold_spans])
             model_spans_unlabeled = set([x[1:] for x in model_spans])
             hits_un += len(gold_spans_unlabeled & model_spans_unlabeled)
@@ -98,7 +97,6 @@ if __name__ == '__main__':
             rec = float(hits) / total_gold * 100
             f1 = 2 * prec * rec / (prec + rec)
 
-        #progress(format_str.format(float(i+1-diff) * 100 / n, i+1-diff, n, prec, rec, f1))
         progress(format_str.format(float(i) * 100 / n, i, n, prec, rec, f1))
         if i >= n:
             break
