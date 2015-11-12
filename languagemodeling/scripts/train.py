@@ -1,9 +1,7 @@
 """Train an n-gram model.
-
 Usage:
   train.py -n <n> -o <file>
   train.py -h | --help
-
 Options:
   -n <n>        Order of the model.
   -o <file>     Output model file.
