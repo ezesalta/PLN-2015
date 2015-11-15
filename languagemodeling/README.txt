@@ -65,6 +65,6 @@ Evaluación de Modelos de Lenguaje:
 Resultados Perplexity
 n                1         2          3           4
 AddOne           756.21    2315.84    14550.81    29730.97
-Interpolation    699.10    327.19     442.12      443.48
+Interpolation    756.66    327.19     442.12      443.48
 Back-off         756.66    251.64     232.74      236.23
 

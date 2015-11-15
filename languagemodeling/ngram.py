@@ -286,11 +286,9 @@ class InterpolatedNGram(NGram):
         assert n > 0
         self.n = n
         self.counts = defaultdict(int)
-        self.words = []
+        self.words = set()
         self.lambdas = {}
         self.addone = addone
-        self.sents_addone = sents.copy()
-        self.addone_ngram = None
         self.nonzero_words = defaultdict(set)
 
         if gamma is not None:
@@ -298,13 +296,8 @@ class InterpolatedNGram(NGram):
         if gamma is None:
             # Split sents
             p = math.floor(len(sents) * 0.9)
-            held_out = sents[p:].copy()
+            held_out = sents[p:]
             sents = sents[:p]
-            self.sents_addone = sents.copy()
-            if addone and self.addone_ngram is None:
-                self.addone_ngram = AddOneNGram(1, self.sents_addone)
-            # Calculate gamma
-            self.gamma = self.calculate_gamma(held_out)
         my_counts = defaultdict(int)
         m = 1
         while m <= n:
@@ -314,9 +307,8 @@ class InterpolatedNGram(NGram):
                 sents = [['<s>']+x for x in sents]
             for sent in sents:
                 if m == n:
-                    for s in sent:
-                        if s not in self.words:
-                            self.words.append(s)
+                    for word in sent:
+                        self.words.add(word)
                 for i in range(len(sent) - m + 1):
                     ngram = tuple(sent[i: i + m])
                     my_counts[ngram] += 1
@@ -327,8 +319,9 @@ class InterpolatedNGram(NGram):
             my_counts.clear()
             m += 1
         self.nonzero_words = dict(self.nonzero_words)
-        if addone and self.addone_ngram is None:
-            self.addone_ngram = AddOneNGram(1, self.sents_addone)
+        if gamma is None:
+            # Calculate gamma
+            self.gamma = self.calculate_gamma(held_out)
 
     def calculate_gamma(self, held_out):
         best_gamma = 1.0
@@ -341,15 +334,6 @@ class InterpolatedNGram(NGram):
                 val = p
         return best_gamma
 
-    def count(self, tokens):
-        out = 0
-        if self.n == 1 and self.addone:
-            out = self.addone_ngram.count(tokens)
-        else:
-            if tokens in self.counts:
-                out = self.counts[tokens]
-        return out
-
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
 
@@ -359,20 +343,19 @@ class InterpolatedNGram(NGram):
         if prev_tokens is None:
             prev_tokens = []
         out = 0
-        if self.n == 1:
+        if len(prev_tokens) == 0:
             if self.addone:
-                out = self.addone_ngram.cond_prob(token, prev_tokens)
+                Ci = self.count((token,))
+                N = self.count(())
+                V = len(self.words)
+                out = (Ci + 1) / (N + V)
             else:
                 out = self.q_ml(token)
-        elif self.n > 1 and len(prev_tokens) > 0:
+        else:
             for i in range(self.n):
-                c = 0
-                c1 = self.count(tuple(prev_tokens + [token]))
+                c = self.q_ml(token, prev_tokens)
                 c2 = self.count(tuple(prev_tokens))
-                if len(prev_tokens) > 0 and i > 0:
-                    prev_tokens.pop(0)
-                if c2 != 0:
-                    c = c1 / float(c2)
+                prev_tokens = prev_tokens[i:]
                 sum_lambdas = 0.0
                 for j in range(i):
                     sum_lambdas += self.lambdas[j]
@@ -380,7 +363,10 @@ class InterpolatedNGram(NGram):
                 if i+1 == self.n:
                     self.lambdas[i] = 1.0 - sum([x for x in list(self.lambdas.values())[0:-1]])
                     if self.addone:
-                        c = self.addone_ngram.cond_prob(token, prev_tokens)
+                        Ci = self.count((token,))
+                        N = self.count(())
+                        V = len(self.words)
+                        c = float(Ci + 1) / (N + V)
                     else:
                         c = self.q_ml(token)
                 out += self.lambdas[i] * c
@@ -466,7 +452,7 @@ class BackOffNGram(NGram):
                 Ci = self.count((token,))
                 N = self.count(())
                 V = len(self.words)
-                out = (Ci + 1) / (N + V)
+                out = float(Ci + 1) / (N + V)
             else:
                 out = self.q_ml(token)
         else:
@@ -511,8 +497,6 @@ class BackOffNGram(NGram):
         if tokens in self.alpha_dict:
             out = self.alpha_dict[tokens]
         else:
-            #self.calculate_alpha(tokens)
-            #out = self.alpha_dict[tokens]
             self.alpha_dict[tokens] = out
 
         return out
@@ -527,42 +511,24 @@ class BackOffNGram(NGram):
             out = self.denom_dict[tokens]
         else:
             self.denom_dict[tokens] = out
-        """else:
-            self.calculate_denom(tokens)
-            out = self.denom_dict[tokens]"""
 
         return out
 
     def calculate_alpha(self):
         print('Calculating alpha...')
-        #init_time = time.clock()
         for tokens in self.nonzero_words:
             out = 0.0
-            #for w in self.nonzero_words:
             for w in self.A(tokens):
-                #c = self.count(tuple(list(tokens) + list(w)))
                 c = self.count(tuple(list(tokens) + [w]))
                 cc = self.count(tokens)
                 if c > 0 and cc > 0:
                     val = (c - self.beta) / float(cc)
                     out += val
-                #print(tokens, [w], out)
+                # print(tokens, [w], out)
             self.alpha_dict[tokens] = 1.0 - out
-        #print(*self.alpha_dict.items(), sep='\n')
-        """out = 0.0
-        for w in self.nonzero_words:
-            c = self.count(tuple(list(tokens) + list(w)))
-            cc = self.count(tokens)
-            if c > 0 and cc > 0:
-                val = (c - self.beta) / float(cc)
-                out += val
-        self.alpha_dict[tokens] = 1.0 - out"""
-        #final_time = time.clock()
-        #print('Time: {:.2f}s'.format(final_time - init_time))
 
     def calculate_denom(self):
         print('Calculating denom...')
-        #init_time = time.clock()
         for tokens in self.nonzero_words:
             q = 0.0
             for x in self.nonzero_words[tokens]:
@@ -570,19 +536,9 @@ class BackOffNGram(NGram):
                 l.pop(0)
                 q += self.cond_prob(x, l)
             self.denom_dict[tokens] = 1.0 - q
-        #final_time = time.clock()
-        #print('Time: {:.2f}s'.format(final_time - init_time))
-        """out = 0
-        if tokens in self.nonzero_words:
-            for x in self.nonzero_words[tokens]:
-                l = list(tokens)
-                l.pop(0)
-                out += self.cond_prob(x, l)
-        self.denom_dict[tokens] = 1.0 - out"""
 
     def calculate_beta(self, held_out):
         print('Calculating beta...')
-        #init_time = time.clock()
         best_beta = 0.8
         val = float('inf')
         for b in [x/10.0 for x in range(11)]:
@@ -592,8 +548,6 @@ class BackOffNGram(NGram):
             if p < val and p > 0.0:
                 best_beta = b
                 val = p
-        #final_time = time.clock()
-        #print('Time: {:.2f}s'.format(final_time - init_time))
         print('best beta:', best_beta)
 
         return best_beta
