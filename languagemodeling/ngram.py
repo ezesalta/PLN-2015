@@ -461,7 +461,6 @@ class BackOffNGram(NGram):
         out = 0
         if prev_tokens is None:
             prev_tokens = []
-        #if self.n == 1:
         if len(prev_tokens) == 0:
             if self.addone:
                 Ci = self.count((token,))
@@ -589,10 +588,12 @@ class BackOffNGram(NGram):
         for b in [x/10.0 for x in range(11)]:
             self.beta = b
             p = self.perplexity(held_out)
-            if p < val:
+            print('beta {}: {}'.format(b, p))
+            if p < val and p > 0.0:
                 best_beta = b
                 val = p
         #final_time = time.clock()
         #print('Time: {:.2f}s'.format(final_time - init_time))
+        print('best beta:', best_beta)
 
         return best_beta
