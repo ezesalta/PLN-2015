@@ -16,6 +16,7 @@ Options:
 """
 from docopt import docopt
 import pickle
+import time
 from nltk.corpus import gutenberg
 from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram, BackOffNGram
 from languagemodeling.MyCorpus import MyCorpus
@@ -24,6 +25,7 @@ from languagemodeling.MyCorpus import MyCorpus
 if __name__ == '__main__':
     opts = docopt(__doc__)
 
+    init_time = time.clock()
     # load the data
     # sents = gutenberg.sents('austen-emma.txt')
     corpus = MyCorpus()
@@ -46,3 +48,5 @@ if __name__ == '__main__':
     f = open(filename, 'wb')
     pickle.dump(model, f)
     f.close()
+    final_time = time.clock()
+    print('Time: {:.2f}m'.format((final_time - init_time) / 60.0))

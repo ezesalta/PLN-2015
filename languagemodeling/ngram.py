@@ -3,6 +3,7 @@ from collections import defaultdict
 from math import log
 import random
 import math
+import time
 
 
 class NGram(object):
@@ -134,11 +135,21 @@ class NGram(object):
         return out
 
     def perplexity(self, test):
-        out = 0
-        log_prob = sum([self.sent_log_prob(sent) for sent in test])
-        m = sum([len(x) for x in test]) + len(test)
-        cross_entropy = log_prob * (-1.0 / m)
-        out = 2.0 ** cross_entropy
+        out = float('-inf')
+        #log_prob = sum([self.sent_log_prob(sent) for sent in test])
+        # Log prob
+        log_prob = 0.0
+        for sent in test:
+            val = self.sent_log_prob(sent)
+            if val == float('-inf'):
+                log_prob = float('-inf')
+                break
+            log_prob += val
+        if log_prob > float('-inf'):
+            m = sum([len(x) for x in test]) + len(test)
+            cross_entropy = log_prob * (-1.0 / m)
+            out = 2.0 ** cross_entropy
+
         return out
 
 
@@ -395,13 +406,11 @@ class BackOffNGram(NGram):
         assert n > 0
         self.n = n
         self.counts = defaultdict(int)
-        self.words = []
+        self.words = set()
         self.nonzero_words = defaultdict(set)
         self.alpha_dict = {}
         self.denom_dict = {}
         self.addone = addone
-        self.addone_ngram = None
-        self.sents_addone = []
 
         if beta is not None:
             self.beta = beta
@@ -409,9 +418,6 @@ class BackOffNGram(NGram):
             p = math.floor(len(sents) * 0.9)
             held_out = sents[p:]
             sents = sents[:p]
-            self.sents_addone = sents.copy()
-            if addone and self.addone_ngram is None:
-                self.addone_ngram = AddOneNGram(1, self.sents_addone)
         # Counts
         my_counts = defaultdict(int)
         m = 1
@@ -430,19 +436,21 @@ class BackOffNGram(NGram):
                         self.nonzero_words[ngram[:-1]].add(ngram[-1])
                 if m == n:
                     # Count words
-                    for s in sent:
-                        if s not in self.words:
-                            self.words.append(s)
+                    for word in sent:
+                        self.words.add(word)
             self.counts.update(my_counts)
             my_counts.clear()
             m += 1
         # Add empty set for eol
         self.nonzero_words[('</s>',)] = set()
         self.nonzero_words = dict(self.nonzero_words)
+        # Calculate beta
         if beta is None:
             self.beta = self.calculate_beta(held_out)
-        if addone and self.addone_ngram is None:
-            self.addone_ngram = AddOneNGram(1, sents)
+        # Calculate alpha
+        self.calculate_alpha()
+        # Calculate denom
+        self.calculate_denom()
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -453,12 +461,16 @@ class BackOffNGram(NGram):
         out = 0
         if prev_tokens is None:
             prev_tokens = []
-        if self.n == 1:
+        #if self.n == 1:
+        if len(prev_tokens) == 0:
             if self.addone:
-                out = self.addone_ngram.cond_prob(token, prev_tokens)
+                Ci = self.count((token,))
+                N = self.count(())
+                V = len(self.words)
+                out = (Ci + 1) / (N + V)
             else:
                 out = self.q_ml(token)
-        elif self.n > 1:
+        else:
             A = self.A(tuple(prev_tokens))
             if A is None:
                 A = []
@@ -467,20 +479,14 @@ class BackOffNGram(NGram):
                 p_star = float(c_star) / self.count(tuple(prev_tokens))
                 out = p_star
             else:
-                if len(prev_tokens) > 0:
-                    a = self.alpha(tuple(prev_tokens))
-                    prev = prev_tokens.copy()
-                    prev.pop(0)
-                    q_d = self.cond_prob(token, prev)
-                    denom = self.denom(tuple(prev_tokens))
-                    if denom != 0:
-                        p_katz = float(q_d) / denom
-                    else:
-                        p_katz = float(q_d)
-                    out = a * p_katz
+                a = self.alpha(tuple(prev_tokens))
+                q_d = self.cond_prob(token, prev_tokens[1:])
+                denom = self.denom(tuple(prev_tokens))
+                if denom != 0:
+                    p_katz = float(q_d) / denom
                 else:
-                    # prev_tokens = []
-                    out = self.q_ml(token)
+                    p_katz = float(q_d)
+                out = a * p_katz
         # if out < 0:
             # print('cond_prob', token, prev_tokens, out)
 
@@ -502,12 +508,13 @@ class BackOffNGram(NGram):
 
         tokens -- the k-gram tuple.
         """
-        out = 0
+        out = 1.0
         if tokens in self.alpha_dict:
             out = self.alpha_dict[tokens]
         else:
-            self.calculate_alpha(tokens)
-            out = self.alpha_dict[tokens]
+            #self.calculate_alpha(tokens)
+            #out = self.alpha_dict[tokens]
+            self.alpha_dict[tokens] = out
 
         return out
 
@@ -516,35 +523,67 @@ class BackOffNGram(NGram):
 
         tokens -- the k-gram tuple.
         """
-        out = 0
+        out = 1.0
         if tokens in self.denom_dict:
             out = self.denom_dict[tokens]
         else:
+            self.denom_dict[tokens] = out
+        """else:
             self.calculate_denom(tokens)
-            out = self.denom_dict[tokens]
+            out = self.denom_dict[tokens]"""
 
         return out
 
-    def calculate_alpha(self, tokens):
-        out = 0
+    def calculate_alpha(self):
+        print('Calculating alpha...')
+        #init_time = time.clock()
+        for tokens in self.nonzero_words:
+            out = 0.0
+            #for w in self.nonzero_words:
+            for w in self.A(tokens):
+                #c = self.count(tuple(list(tokens) + list(w)))
+                c = self.count(tuple(list(tokens) + [w]))
+                cc = self.count(tokens)
+                if c > 0 and cc > 0:
+                    val = (c - self.beta) / float(cc)
+                    out += val
+                #print(tokens, [w], out)
+            self.alpha_dict[tokens] = 1.0 - out
+        #print(*self.alpha_dict.items(), sep='\n')
+        """out = 0.0
         for w in self.nonzero_words:
             c = self.count(tuple(list(tokens) + list(w)))
             cc = self.count(tokens)
             if c > 0 and cc > 0:
                 val = (c - self.beta) / float(cc)
                 out += val
-        self.alpha_dict[tokens] = 1.0 - out
+        self.alpha_dict[tokens] = 1.0 - out"""
+        #final_time = time.clock()
+        #print('Time: {:.2f}s'.format(final_time - init_time))
 
-    def calculate_denom(self, tokens):
-        out = 0
+    def calculate_denom(self):
+        print('Calculating denom...')
+        #init_time = time.clock()
+        for tokens in self.nonzero_words:
+            q = 0.0
+            for x in self.nonzero_words[tokens]:
+                l = list(tokens)
+                l.pop(0)
+                q += self.cond_prob(x, l)
+            self.denom_dict[tokens] = 1.0 - q
+        #final_time = time.clock()
+        #print('Time: {:.2f}s'.format(final_time - init_time))
+        """out = 0
         if tokens in self.nonzero_words:
             for x in self.nonzero_words[tokens]:
                 l = list(tokens)
                 l.pop(0)
                 out += self.cond_prob(x, l)
-        self.denom_dict[tokens] = 1.0 - out
+        self.denom_dict[tokens] = 1.0 - out"""
 
     def calculate_beta(self, held_out):
+        print('Calculating beta...')
+        #init_time = time.clock()
         best_beta = 0.8
         val = float('inf')
         for b in [x/10.0 for x in range(11)]:
@@ -553,5 +592,7 @@ class BackOffNGram(NGram):
             if p < val:
                 best_beta = b
                 val = p
+        #final_time = time.clock()
+        #print('Time: {:.2f}s'.format(final_time - init_time))
 
         return best_beta

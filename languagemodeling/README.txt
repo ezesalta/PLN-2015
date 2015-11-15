@@ -63,14 +63,8 @@ oraciones con unigramas y cuatrigramas y son todas muy parecidas, bastante larga
 Evaluación de Modelos de Lenguaje:
 
 Resultados Perplexity
-n               |       1            |       2           |       3            |       4
-AddOne          | 756.2122431514837  | 2315.836399041006 | 14550.806335145406 | 29730.972152043785
-Interpolation   | 699.099521447562   | 327.193472545306  | 442.118093330896   | 443.48049425779266
-Back-off        | 756.6594355395407  | inf               | inf                | inf
+n                1         2          3           4
+AddOne           756.21    2315.84    14550.81    29730.97
+Interpolation    699.10    327.19     442.12      443.48
+Back-off         756.66    251.64     232.74      236.23
 
-
-Suavizado por Back-Off con Discounting:
-
-Tuve problemas con este punto a pesar de que pasa todos los test, no veo claramente donde puede estar el error,
-algunas probabilidades condicionales me dan negativas, por eso la perplexity me da inf.
-Lo parche devolviendo 10**-3 en los casos donde la probabilidad condicional me da negativa.
