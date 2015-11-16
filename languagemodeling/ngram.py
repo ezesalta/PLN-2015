@@ -432,7 +432,7 @@ class BackOffNGram(NGram):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         out = 0
-        if prev_tokens is None:
+        if prev_tokens is None or self.n == 1:
             prev_tokens = []
         if len(prev_tokens) == 0:
             if self.addone:

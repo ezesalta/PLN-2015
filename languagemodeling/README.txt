@@ -1,70 +1,85 @@
-Corpus:
+Corpus
+------
 El corpus lo saque de http://www.lllf.uam.es/ESP/Corlec.html
-basicamente son conversaciones en distintos ambientes y originalmente tiene
+básicamente son conversaciones en distintos ambientes y originalmente tiene
 muchos archivos por carpeta, cada carpeta representa el ambiente de la
 charla (por ej: Administrativas).
 Yo junte todas las charlas en un solo archivo (corpus.txt) por problemas
 con el PlaintextCorpusReader para leer multiples archivos :/
 
-Modelo de n-gramas:
-pass
-
-Generación de Texto:
-
-Unigramas:
-    ['hogares', 'drama', 'Mikel', 'auge', 'tipificar', 'creativas', 'virado',
-    'cóctel', 'parabrisas', 'parlamentarias', 'fuer', 'perderán', 'fijaban',
-    'videntes', 'Abadi', 'sufre', 'lamentos', 'define', 'cerrando', 'incidirían',
-    'reducidas', 'espectacular', 'Corto', 'ingenia', 'exportadora', 'prosa', 'Viviane',
-    'nombraron', 'campeó', 'modernizarse', 'Hídrica', 'atenuar', 'cuele', 'revertir',
-    'cuáles', 'afiliados', 'extraía', 'Rockboer', 'sorprendidos', 'baldío', 'favorito',
-    'mosquito', 'parcialidad', 'equinoterapia', 'Seeber', 'altísimo', 'vitalidad', 'Colapsado',
-    'anteproyecto', 'resolverlo', '334', 'involucrada', 'impreso', 'Presupuestarios', 'UEPC',
-    'curso', 'idénticas', 'Azar', 'funcionando', 'inexorable', 'relativa', 'mayoritariamente',
-    'molesto', 'venia', 'Calamuchitana', 'cunden', 'conozco', 'espacial', 'suena', 'lotes',
-    'lesionado', 'Prematuro', 'catarata', '159', '0800', 'gamma', 'Britos', 'albergar',
-    'estrépito', 'interpretamos', 'semen', 'imaginaron', 'Moyano', 'Vidal', 'acólitos', '2010',
-    'zarpazo', 'transponen', 'recurrir', 'pontificado', 'exclusivamente', 'concejal', 'stands',
-    'galpón', 'estudié', 'indocumentados', 'escuden', 'narrativas', 'Acosta', 'imponga']
-
-Bigramas:
-    ['un', 'discurso', 'insistiendo', 'una', 'cama', ',', 'repetimos', ',', 'místico', ',',
-    'dejadle', 'a', 'llamarle', 'imbécil', 'no', 'se', 'funciona', 'muy', 'razonable']
-
-    ['se', 'encienden', ',', 'predomina', 'la', 'opinión', 'pública']
-
-    ['en', 'español', 'publicado', ',', 'intestino', 'irritable', ',', 'aguantando', 'bola',
-    'vaya', 'recogiendo']
-
-Trigramas:
-    ['a', 'la', 'derecha', 'y', 'su', 'discurso', 'insistiendo', 'una', 'vez', 'más']
-
-    [':', 'Déjale', ',', 'no', 'pediste', 'un', 'a', 'una', 'cosa', 'política', 'de', 'Íñigo',
-    'Cavero', 'ha', 'tenido', 'intención', 'de', 'voto']
-
-Cuatrigramas:
-    ['se', 'ilustrar', 'eja', 'ríodos', 'convienen', 'necesite', 'vasallaje', 'pronunciamiento',
-    'rgar', 'diferenciar', 'moderando', 'debiera', 'hojaldre', 'esclavitud', '325', 'modernizar',
-    'evita', 'encontrasen', 'micrófonos', 'Estadística', 'gerente', 'micro', 'contemplado', 'prefabricadas',
-    'áeme', 'Época', 'científicas', 'Comunidad', 'complico', 'alfabético', 'enfermedades', 'rgas', 'cortársela',
-    'identificando', 'desembolsar', 'úblico', 'comportamos', 'experimentó', 'derrumba', 'urgentemente', 'plátano',
-    'riodista', 'desapareciera', 'desempaquetar', 'neutralizaciones', 'sillita', 'aportarle', 'comprendemos',
-    'mandéis', 'instalar', 'arrugas', 'negros', 'campamento', 'guarros', 'Sofia', 'dedicarle', 'bipolar', 'puerro',
-    'tuercas', 'scientos', 'Opinas', 'marcial', 'reflejo', 'afecte', 'erpo', 'Mejía', 'Quién', 'contén', 'amoniaco',
-    'estudiaba', 'ccon019a', 'prolegómenos', 'protocolarias', 'despues', 'Parroquia', 'encalado', 'cdeb001b',
-    'lventa', 'define', 'máximos', 'dijimos', 'etiene', 'encontraron', 'estrés', 'nen', 'corpúsculo', 'Pone',
-    'labor', 'aprende', 'genotipos', 'sentarnos', 'ofrecimiento', 'Brevemente', 'diciembre', 'julio', 'encauzada',
-    'lapamiento', 'asientos', 'Existía']
-
-Se puede ver que las oraciones que tienen mas sentido son las de los bigramas y trigramas, he generado muchas
-oraciones con unigramas y cuatrigramas y son todas muy parecidas, bastante largas y sin sentido.
 
 
-Evaluación de Modelos de Lenguaje:
+Generación de Texto
+-------------------
+
+Unigramas
+---------
+    ngram:
+        1: 'sabedor constitucionales impuestos esfuercen planetas hacerme ignorantes
+           Definimos colgar ponte servidor somatiza reivindicaré idénticos teléfono'
+    addone:
+        1: 'recordaré locos magníficos restituírsela rescatarse fantásticas R mojé
+            convergencia Demuestra ELE Juego aprobado Paseo asociales'
+    interpolated:
+        1: 'produciría Ecce prestadas Fraguas tubería influido Kea laurel Fanta
+            ingresarlas actas mira deseaban Barragán fumadora'
+    backoff:
+        1: 'ganancia astronautas sincera renueven plasma galerías Toros biscuit
+            dale pulsando meneadas Morton Véndelas navajita Gandía'
+
+Bigramas
+--------
+    ngram:
+        1: 'Atención , orientales ... estable ... allí le haya sucedido es'
+    addone:
+        1: 'Llamen ustedes los caballeros y efectivamente cuando se vayan
+            creciendo etcétera etcétera y lleguen a'
+    interpolated:
+        1: 'Todas las dimensiones de tomar las chicas ... vigente todavía
+            te iba con pesetas'
+    backoff:
+        1: 'Acaba el tiempo ya les diré lo que pasa un besito , Sálix alba ,'
+
+Trigramas
+---------
+    ngram:
+        1: 'Pues a. . . recibirte al aeropuerto , se formó ese comité , luego cayó'
+    addone:
+        1: 'Sí hombre Sí , está enterrado en la realidad , no libré ningún domingo ,'
+    interpolated:
+        1: 'Presión extenuante de los presupuestos que ,'
+    backoff:
+        1: 'Incapaz de beber de una ocasión me dijo , pero inevitablemente'
+
+Cuatrigramas
+------------
+    ngram:
+        1: 'Pero no ha requerido aquí previamente al representante legal ?'
+    addone:
+        1: 'Es testigo de crear maraña , directa o indirectamente , Almudena
+            ha dicho que es'
+    interpolated:
+        1: 'cuando la veías en el cine ese de Juan Bravo , no'
+        2: 'Veintitantas le ha costado , en el caso que yo tengo visto es eh ...'
+    backoff:
+        1: 'es imposible , si nadie me filmó en vídeo , nunca'
+        2: 'no puedo , éticamente , no me lo han dicho ya'
+        3: 'Gran fábrica de muebles " Franmobel "'
+        4: 'Venían de Madrid . Y digo pero porqué va a tenerlo ?'
+
+
+Se puede ver una evidente mejora en las oraciones generadas a medida que
+incrementa el N, las oraciones más interesantes fueron conseguidas con el modelo
+backoff con N=4.
+
+
+Evaluación de Modelos de Lenguaje
+---------------------------------
 
 Resultados Perplexity
+---------------------
 n                1         2          3           4
-AddOne           756.21    2315.84    14550.81    29730.97
-Interpolation    756.66    327.19     442.12      443.48
-Back-off         756.66    251.64     232.74      236.23
+AddOne           778.04    2368.47    16453.33    32007.21
+Interpolation    777.79    373.61     519.19      483.34
+Back-off         777.79    287.37     272.12      266.60
 
