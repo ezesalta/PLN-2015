@@ -14,10 +14,10 @@ Options:
   -o <file>     Output model file.
   -h --help     Show this screen.
 """
+# from nltk.corpus import gutenberg
 from docopt import docopt
 import pickle
 import time
-from nltk.corpus import gutenberg
 from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram, BackOffNGram
 from languagemodeling.MyCorpus import MyCorpus
 

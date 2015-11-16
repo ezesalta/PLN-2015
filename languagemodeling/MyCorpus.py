@@ -2,7 +2,6 @@ __author__ = 'Ezequiel Medina'
 
 from nltk.corpus import PlaintextCorpusReader
 from nltk.tokenize import RegexpTokenizer
-import re
 import math
 
 
@@ -14,13 +13,13 @@ class MyCorpus:
                   (sr\.|sra\.)
                   | ([A-Z]\.)+        # abbreviations, e.g. U.S.A.
                   | \w+(-\w+)*        # words with optional internal hyphens
-                  | \$?\d+(\.\d+)?%?  # currency and percentages, e.g. $12.40, 82%
+                  | \$?\d+(\.\d+)?%?  # currency and percentages,e.g. $12.40,8%
                   | \.\.\.            # ellipsis
-                  | [][.,;"'?():-_`]  # these are separate tokens; includes ], [
+                  | [][.,;"'?():-_`]  # these are separate tokens; includes ],[
                   '''
         my_sent_tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
-        self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'corpus.txt',sent_tokenizer=my_sent_tokenizer)
-        # self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'LAVOZ/lavoz.txt',sent_tokenizer=my_sent_tokenizer)
+        self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'corpus.txt',
+                                            sent_tokenizer=my_sent_tokenizer)
         self.reader = self.filter(self.corpus.raw())
         self.n = len(self.reader)
         n1 = math.floor(self.n*0.9)
