@@ -3,7 +3,6 @@ from collections import defaultdict
 from math import log
 import random
 import math
-import time
 
 
 class NGram(object):
@@ -16,14 +15,13 @@ class NGram(object):
         assert n > 0
         self.n = n
         self.counts = counts = defaultdict(int)
-        self.words = []
+        self.words = set()
         self.init_words = []
         self.nonzero_words = defaultdict(set)
 
         for sent in sents:
-            for s in sent:
-                if s not in self.words:
-                    self.words.append(s)
+            for word in sent:
+                self.words.add(word)
             if n > 1:
                 sent.insert(0, '<s>')
             sent.append('</s>')
@@ -35,7 +33,7 @@ class NGram(object):
                     self.nonzero_words[ngram[:-1]].add(ngram[-1])
                 if '<s>' in ngram:
                     self.init_words.append(tuple(sent[i+1: i+n]))
-        self.words.append('</s>')
+        self.words.add('</s>')
         self.nonzero_words = dict(self.nonzero_words)
 
     def prob(self, token, prev_tokens=None):
@@ -122,8 +120,6 @@ class NGram(object):
                     else:
                         # sent unseen
                         out = float('-inf')
-                        # print(sent[i], l1[-self.n+1:], self.cond_prob(sent[i], l1[-self.n+1:]))
-                        # exit()
                 else:
                     aux = ['<s>'] * ((self.n-1)-len(l1))
                     value = self.cond_prob(sent[i], aux+l1)
@@ -136,7 +132,6 @@ class NGram(object):
 
     def perplexity(self, test):
         out = float('-inf')
-        #log_prob = sum([self.sent_log_prob(sent) for sent in test])
         # Log prob
         log_prob = 0.0
         for sent in test:
@@ -180,22 +175,18 @@ class NGramGenerator:
     def generate_sent(self):
         """Randomly generate a sentence."""
         sent = []
+        prev_tokens = []
         if self.model.n > 1:
             prev_tokens = ['<s>'] * (self.model.n - 1)
-        else:
-            prev_tokens = None
-        i = 0
-        token = self.generate_token(prev_tokens)
-        if self.model.n > 1:
-            prev_tokens.pop(0)
-            prev_tokens.append(token)
-        while token != '</s>' and i < 100:
-            sent.append(token)
+        token = '<s>'
+        for i in range(15):
             token = self.generate_token(prev_tokens)
-            if self.model.n > 1:
-                prev_tokens.pop(0)
-                prev_tokens.append(token)
-            i += 1
+            if token == '</s>':
+                break
+            sent.append(token)
+            if len(prev_tokens) > 0:
+                prev_tokens = prev_tokens[1:] + [token]
+
         return sent
 
     def generate_token(self, prev_tokens=None):
@@ -204,37 +195,33 @@ class NGramGenerator:
 
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-        token = ''
-        if self.model.n > 1 and prev_tokens is not None:
+        words = list(self.model.words)
+        if prev_tokens is None:
+            prev_tokens = []
+        if len(prev_tokens) == 0:
+            token = random.choice(words)
+        else:
             if tuple(prev_tokens) in self.sorted_probs:
                 probs = self.sorted_probs[tuple(prev_tokens)]
-                if len(probs) > 0:
-                    max_probs = []
-                    for p in probs:
-                        if p[1] >= probs[-1][1]:
-                            max_probs.append(p)
-                    if len(max_probs) > 1:
-                        rand = random.randint(0, len(max_probs)-1)
-                        selected = max_probs[rand]
-                        token = selected[0]
-                    elif len(max_probs) == 1:
-                        token = max_probs[0][0]
+                max_probs = []
+                for w, p in probs:
+                    if p >= probs[-1][1]:
+                        max_probs.append(w)
+                if len(max_probs) == 1:
+                    token = max_probs[0]
                 else:
-                    # print('random word :(')
-                    rand = random.randint(0, len(self.model.words)-1)
-                    token = self.model.words[rand]
+                    token = random.choice(max_probs)
             else:
                 if prev_tokens[-1] == '<s>':
-                    rand = random.randint(0, len(self.model.init_words)-1)
-                    selected = self.model.init_words[rand]
-                    token = selected[0]
+                    token = random.choice(self.model.init_words)[0]
                 else:
                     # print('random word :(')
-                    rand = random.randint(0, len(self.model.words)-1)
-                    token = self.model.words[rand]
-        else:
-            rand = random.randint(0, len(self.model.words)-1)
-            token = self.model.words[rand]
+                    token = random.choice(words)
+                    for x in self.sorted_probs:
+                        if x[0] == prev_tokens[-1]:
+                            if len(x) > 1:
+                                token = x[1]
+                                break
 
         return token
 
@@ -252,17 +239,17 @@ class AddOneNGram(NGram):
             prev_tokens = []
         if self.n > 1 and len(prev_tokens) > 0:
             token_n_1 = prev_tokens + [token]
-            Ci = float(self.count(tuple(token_n_1)))
-            N = float(self.count(tuple(prev_tokens)))
-            V = float(self.V())
+            Ci = self.count(tuple(token_n_1))
+            N = self.count(tuple(prev_tokens))
+            V = self.V()
             # out = (Ci + 1) * (N / float(N + V))
-            out = (Ci + 1) / (N + V)
+            out = float(Ci + 1) / (N + V)
         else:
-            Ci = float(self.count((token,)))
-            N = float(self.count(()))
-            V = float(self.V())
+            Ci = self.count((token,))
+            N = self.count(())
+            V = self.V()
             # out = ((Ci + 1) * N) / float(N + V)
-            out = (Ci + 1) / (N + V)
+            out = float(Ci + 1) / (N + V)
         return out
 
     def V(self):

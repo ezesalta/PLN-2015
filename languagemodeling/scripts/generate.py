@@ -20,14 +20,17 @@ import pickle
 
 def generate(ngram, n):
     generator = NGramGenerator(ngram)
-    out = [generator.generate_sent() for x in range(n)]
-    print(out)
+    for i in range(n):
+        sent = ' '.join(generator.generate_sent())
+        print('{}: {}\n'.format(i + 1, sent))
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
     file = opts['-i']
     n = int(opts['-n'])
+    print('Loading model...')
     f = open(file, 'rb')
     ngram = pickle.load(f)
     f.close()
+    print('Generating...')
     generate(ngram, n)

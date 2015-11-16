@@ -21,49 +21,35 @@ class MyCorpus:
         my_sent_tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
         self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'corpus.txt',sent_tokenizer=my_sent_tokenizer)
         # self.corpus = PlaintextCorpusReader('./CORPUS_ESP', 'LAVOZ/lavoz.txt',sent_tokenizer=my_sent_tokenizer)
-        self.reader = self.corpus.raw().split('.')
+        self.reader = self.filter(self.corpus.raw())
         self.n = len(self.reader)
         n1 = math.floor(self.n*0.9)
         # n2 = self.n-n1
         self.train = self.reader[:n1]
         self.test = self.reader[n1:]
 
-    def sents(self):
-        out = []
+    def filter(self, raw):
+        data = []
         tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
-        for s in self.reader:
-            if len(s) > 0:
-                if s[0] != '#':
-                    s = s[3:]
-                    if s.find('[') != -1:
-                        rep = re.sub('\[.+\]','',s)
-                        s = rep
-                    out.append(tokenizer.tokenize(s))
-                    #yield tokenizer.tokenize(s)
-        return out
+        for line in raw.split('\n'):
+            if line != '':
+                if line[0] != '#' and line[0] != '[':
+                    line = line[3:]
+                    loop = True
+                    while loop:
+                        init = line.find('[')
+                        final = line.find(']')
+                        if init != -1 and final != -1:
+                            inter = line[init: final + 1]
+                            line = line.replace(inter, '')
+                        else:
+                            loop = False
+                    data.append(tokenizer.tokenize(line + '\n'))
+
+        return data
 
     def sents_train(self):
-        out = []
-        tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
-        for s in self.train:
-            if len(s) > 0:
-                if s[0] != '#':
-                    s = s[3:]
-                    if s.find('[') != -1:
-                        rep = re.sub('\[.+\]','',s)
-                        s = rep
-                    out.append(tokenizer.tokenize(s))
-        return out
+        return self.train
 
     def sents_test(self):
-        out = []
-        tokenizer = RegexpTokenizer(self.pattern, discard_empty=True)
-        for s in self.test:
-            if len(s) > 0:
-                if s[0] != '#':
-                    s = s[3:]
-                    if s.find('[') != -1:
-                        rep = re.sub('\[.+\]','',s)
-                        s = rep
-                    out.append(tokenizer.tokenize(s))
-        return out
+        return self.test
