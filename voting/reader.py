@@ -24,6 +24,7 @@ if __name__ == '__main__':
     f.close()
 
     plain_data = ''.join(data)
+    plain_data = plain_data.replace('\n', ' ')
     f = open(out_file, 'w')
     f.write(repr(plain_data))
     f.close()

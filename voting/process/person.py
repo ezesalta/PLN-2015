@@ -14,10 +14,11 @@ class PersonNERRunner(RegExpNERRunner):
         #surname_re = upperletters_re('surname')
         #surnames_re = u'(?P<<surname>><{}*\s{}*>)'.format(upperletter, upperletter)
 
-        #extras = u'(?P<<extras>>\\n\\n)'
-        extras = u'(?P<<extras>>.*|\\n*)'
+        take_votes = u'(?P<<votes>>(?!<AFIRMATIVO>|<NEGATIVO>|<ABSTENCION>|<AUSENTE>))'
 
-        surname_re = u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>{1,3})'
+        #take_group = u'(?P<<votes>>(?!<AFIRMATIVO>))'
+
+        surname_re = take_votes + u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>{1,3})'
         #surname_re = u'<' + extras + '(?P<<surname>>[A-ZÁÉÍÓÚÑ]*>{1,3})'
         #surname_re = u'<[A-ZÁÉÍÓÚÑ]*>{1,3}'
 
@@ -26,7 +27,6 @@ class PersonNERRunner(RegExpNERRunner):
         #name_re = u'<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>{1,3}'
 
         regexp = u'(?P<<fullname>>' + surname_re + u'<,>' + name_re + ')'
-        #regexp = u'(?P<<fullname>>' + extras + surname_re + u'<,>' + name_re + ')'
         #regexp = surname_re + u'<,>' + name_re
         #regexp = u'(?P<<name>><DOMINGUEZ>)'
 
@@ -36,6 +36,8 @@ class PersonNERRunner(RegExpNERRunner):
         #surname = ' '.join(match.group('surname'))
         #name = ' '.join(match.group('name'))
         full_name = ' '.join(match.group('fullname'))
+        #full_name = full_name.split('\\n')[-1]
+
         #full_name = surname + ',' + name
         kind = self.label
         offset, offset_end = match.span()

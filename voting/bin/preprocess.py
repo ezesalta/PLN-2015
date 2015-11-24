@@ -27,6 +27,7 @@ from iepy.preprocess.segmenter import SyntacticSegmenterRunner
 
 from voting.process.person import PersonNERRunner
 from voting.process.date import DateNERRunner
+from voting.process.vote import VoteNERRunner
 from iepy.preprocess.tokenizer import TokenizeSentencerRunner
 from iepy.preprocess.ner.combiner import CombinedNERRunner
 
@@ -48,6 +49,7 @@ def start_preprocess(docs, increment_ner):
         TokenizeSentencerRunner(increment_ner),
         CombinedNERRunner([
             #DateNERRunner(),
+            VoteNERRunner(),
             PersonNERRunner(),
         ], override=True)
     ], docs)
