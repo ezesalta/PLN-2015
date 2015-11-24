@@ -1,5 +1,7 @@
 import codecs
+
 from iepy.data.models import Entity, EntityOccurrence
+
 from voting.process.regexp_ner import RegExpNERRunner, options_re, options_file_re,\
     upperletters_re, lowerletters_re, tokenized_re
 
@@ -8,30 +10,36 @@ class PersonNERRunner(RegExpNERRunner):
 
     def __init__(self, override=False):
         # TODO: write this regexp!
-        print('holas')
 
         #surname_re = upperletters_re('surname')
-        surname_re = u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>)'
         #surnames_re = u'(?P<<surname>><{}*\s{}*>)'.format(upperletter, upperletter)
 
-        #name_re = lowerletters_re('name')
-        name_re = u'(?P<<name>><[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>)'
+        #extras = u'(?P<<extras>>\\n\\n)'
+        extras = u'(?P<<extras>>.*|\\n*)'
 
-        regexp = surname_re + u'<,>' + name_re
+        surname_re = u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>{1,3})'
+        #surname_re = u'<' + extras + '(?P<<surname>>[A-ZÁÉÍÓÚÑ]*>{1,3})'
+        #surname_re = u'<[A-ZÁÉÍÓÚÑ]*>{1,3}'
+
+        #name_re = lowerletters_re('name')
+        name_re = u'(?P<<name>><[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>{1,3})'
+        #name_re = u'<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>{1,3}'
+
+        regexp = u'(?P<<fullname>>' + surname_re + u'<,>' + name_re + ')'
+        #regexp = u'(?P<<fullname>>' + extras + surname_re + u'<,>' + name_re + ')'
+        #regexp = surname_re + u'<,>' + name_re
+        #regexp = u'(?P<<name>><DOMINGUEZ>)'
 
         super(PersonNERRunner, self).__init__('person', regexp, override)
 
     def process_match(self, match):
         #surname = ' '.join(match.group('surname'))
-        name = ' '.join(match.group('name'))
-        #complete_name = name + ' ' + surname
+        #name = ' '.join(match.group('name'))
+        full_name = ' '.join(match.group('fullname'))
+        #full_name = surname + ',' + name
         kind = self.label
-        entity, created = Entity.objects.get_or_create(key=name, kind=kind,
-                                                       defaults={'canonical_form': name})
         offset, offset_end = match.span()
-        entity_oc = EntityOccurrence(entity=entity, offset=offset, offset_end=offset_end)
+        #entity_oc = self.build_occurrence(name, kind, name, offset, offset_end)
+        entity_oc = self.build_occurrence(full_name, kind, full_name, offset, offset_end)
 
         return entity_oc
-
-    def run_ner(self, doc):
-        RegExpNERRunner

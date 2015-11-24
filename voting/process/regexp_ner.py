@@ -3,13 +3,11 @@ import codecs
 
 from nltk.text import TokenSearcher as NLTKTokenSearcher
 
-from iepy.preprocess.pipeline import PreProcessSteps
 from iepy.data.models import Entity, EntityOccurrence
-from iepy.preprocess.pipeline import BasePreProcessStepRunner
+from iepy.preprocess.ner.base import BaseNERRunner
 
 
-class RegExpNERRunner(BasePreProcessStepRunner):
-    step = PreProcessSteps.ner
+class RegExpNERRunner(BaseNERRunner):
 
     def __init__(self, label, regexp, override=False):
         self.label = label
@@ -17,13 +15,7 @@ class RegExpNERRunner(BasePreProcessStepRunner):
 
         super(RegExpNERRunner, self).__init__(override)
 
-    def __call__(self, doc):
-        # this step does not requires PreProcessSteps.tagging:
-        if not doc.was_preprocess_done(PreProcessSteps.sentencer):
-            return
-        if not self.override and doc.was_preprocess_done(PreProcessSteps.ner):
-            return
-
+    def run_ner(self, doc):
         entities = []
         tokens = doc.tokens
         searcher = TokenSearcher(tokens)
@@ -31,16 +23,13 @@ class RegExpNERRunner(BasePreProcessStepRunner):
             entity_oc = self.process_match(match)
             entities.append(entity_oc)
 
-        doc.set_preprocess_result(PreProcessSteps.ner, entities)
-        doc.save()
+        return entities
 
     def process_match(self, match):
         name = ' '.join(match.group())
         kind = self.label
-        entity, created = Entity.objects.get_or_create(key=name, kind=kind,
-                defaults={'canonical_form': name})
         offset, offset_end = match.span()
-        entity_oc = EntityOccurrence(entity=entity, offset=offset, offset_end=offset_end)
+        entity_oc = self.build_occurrence(name, kind, name, offset, offset_end)
 
         return entity_oc
 
@@ -62,7 +51,7 @@ class TokenSearcher(NLTKTokenSearcher):
         #token_start, token_end = 0, 0
         while True:
             try:
-                m = i.next()
+                m = next(i)
                 start, end = m.span()
                 # FIXME: do not count from the beggining
                 #token_start = token_start  + self._raw[last_start:start].count('><')
@@ -71,7 +60,7 @@ class TokenSearcher(NLTKTokenSearcher):
                 token_start = self._raw[:start].count('><')
                 token_end = self._raw[:end].count('><')
                 yield MatchObject(m, token_start, token_end)
-            except:
+            except StopIteration:
                 return
 
 
