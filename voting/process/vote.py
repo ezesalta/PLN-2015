@@ -12,10 +12,11 @@ class VoteNERRunner(RegExpNERRunner):
     def __init__(self, override=False):
         # TODO: write this regexp!
 
-        #extras = u'(?P<<extras>>\\n\\n)'
-        extras = u'(?P<<extras>>.*|\\n*)'
-
-        regexp = u'(?P<<votes>><AFIRMATIVO>|<NEGATIVO>|<ABSTENCION>|<AUSENTE>)'
+        self.regexp = regexp = u'(?P<<votes>>' \
+                               u'<AFIRMATIVO>|' \
+                               u'<NEGATIVO>|' \
+                               u'<ABSTENCION>|' \
+                               u'<AUSENTE>)'
 
         super(VoteNERRunner, self).__init__('vote', regexp, override)
 
