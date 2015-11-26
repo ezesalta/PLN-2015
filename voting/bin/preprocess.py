@@ -50,8 +50,8 @@ def start_preprocess(docs, increment_ner):
         TokenizeSentencerRunner(increment_ner),
         CombinedNERRunner([
             #DateNERRunner(),
-            #VoteNERRunner(),
-            #GroupNERRunner(),
+            VoteNERRunner(),
+            GroupNERRunner(),
             PersonNERRunner(),
         ], override=True)
     ], docs)
