@@ -23,8 +23,8 @@ class PersonNERRunner(RegExpNERRunner):
         group = GroupNERRunner()
         group_words = set()
         for g in group.groups:
-            for x in g.split(' '):
-                group_words.add('<' + x + '>')
+            x = g.split(' ')[0]
+            group_words.add('<' + x + '>')
         #take_groups = u'(?!' + group.regexp + u')'
         take_groups = u'(?!' + '|'.join(group_words) + u')'
 
@@ -40,6 +40,7 @@ class PersonNERRunner(RegExpNERRunner):
         #name_re = take_groups + u'(?P<<name>><[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>{1,3})'
         #name_re = u'<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>{1,3}'
         #name_re = u'((?!<Frente>)<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>){1,3}'
+
         name_re = u'(' + take_groups + take_extras + '<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>){1,3}'
 
         self.regexp = regexp = u'(?P<<fullname>>' + surname_re + u'<,>' + name_re + ')'

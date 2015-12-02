@@ -7,17 +7,17 @@ from voting.process.regexp_ner import RegExpNERRunner, options_re, options_file_
     upperletters_re, lowerletters_re, tokenized_re
 
 
-class DateNERRunner(RegExpNERRunner):
+class FileNERRunner(RegExpNERRunner):
 
     def __init__(self, override=False):
         # TODO: write this regexp!
 
-        self.regexp = regexp = u'(?P<<date>><[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}>)'
+        self.regexp = regexp = u'(?P<<file>><[0-9]{1,4}-[A-Z]{1,4}-[0-9]{2,4}>)'
 
-        super(DateNERRunner, self).__init__('date', regexp, override)
+        super(FileNERRunner, self).__init__('file', regexp, override)
 
     def process_match(self, match):
-        votes = ' '.join(match.group('date'))
+        votes = ' '.join(match.group('file'))
 
         kind = self.label
         offset, offset_end = match.span()

@@ -29,8 +29,9 @@ from voting.process.person import PersonNERRunner
 from voting.process.date import DateNERRunner
 from voting.process.vote import VoteNERRunner
 from voting.process.group import GroupNERRunner
+from voting.process.file import FileNERRunner
 from iepy.preprocess.tokenizer import TokenizeSentencerRunner
-from iepy.preprocess.ner.combiner import CombinedNERRunner
+from iepy.preprocess.ner.combiner import CombinedNERRunner, NoOverlapCombinedNERRunner
 
 
 class ParallelDocManager(DocumentManager):
@@ -47,12 +48,13 @@ def start_preprocess(docs, increment_ner):
         SyntacticSegmenterRunner(increment=True)
     ], docs)"""
     pipeline = PreProcessPipeline([
-        TokenizeSentencerRunner(increment_ner),
+        TokenizeSentencerRunner(),
         CombinedNERRunner([
-            #DateNERRunner(),
+            DateNERRunner(),
             VoteNERRunner(),
             GroupNERRunner(),
             PersonNERRunner(),
+            FileNERRunner(),
         ], override=True)
     ], docs)
     pipeline.process_everything()
