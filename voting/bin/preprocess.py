@@ -33,6 +33,8 @@ from voting.process.file import FileNERRunner
 #from iepy.preprocess.tokenizer import TokenizeSentencerRunner
 from voting.process.tokenizer import TokenizeRunner
 from voting.process.sentencer import SentencerRunner
+from voting.process.lemmatizer import LemmatizeRunner
+from voting.process.tagger import TaggerRunner
 from iepy.preprocess.ner.combiner import CombinedNERRunner, NoOverlapCombinedNERRunner
 
 
@@ -52,6 +54,8 @@ def start_preprocess(docs, increment_ner):
     pipeline = PreProcessPipeline([
         TokenizeRunner(override=True),
         SentencerRunner(override=True),
+        LemmatizeRunner(override=True),
+        TaggerRunner(override=True),
         CombinedNERRunner([
             DateNERRunner(),
             VoteNERRunner(),

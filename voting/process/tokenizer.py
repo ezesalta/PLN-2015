@@ -19,8 +19,8 @@ class TokenizeRunner(BasePreProcessStepRunner):
 
     def __init__(self, override=False, increment=False, lang='en'):
         if lang != 'en':
-            # We are right now only providing english tokenization
-            # and segmentation. But if you need something else, this
+            # We are right now only providing english tokenization.
+            # But if you need something else, this
             # is a good place to do it.
             raise NotImplemented
         self.lang = lang
