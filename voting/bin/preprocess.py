@@ -28,8 +28,8 @@ from iepy.preprocess.segmenter import SyntacticSegmenterRunner
 from voting.process.person import PersonNERRunner
 from voting.process.date import DateNERRunner
 from voting.process.vote import VoteNERRunner
-from voting.process.group import GroupNERRunner
-from voting.process.file import FileNERRunner
+from voting.process.party import PartyNERRunner
+from voting.process.expedient import ExpedientNERRunner
 #from iepy.preprocess.tokenizer import TokenizeSentencerRunner
 from voting.process.tokenizer import TokenizeRunner
 from voting.process.sentencer import SentencerRunner
@@ -59,9 +59,9 @@ def start_preprocess(docs, increment_ner):
         CombinedNERRunner([
             DateNERRunner(),
             VoteNERRunner(),
-            GroupNERRunner(),
+            PartyNERRunner(),
             PersonNERRunner(),
-            FileNERRunner(),
+            ExpedientNERRunner(),
         ], override=True)
     ], docs)
     pipeline.process_everything()

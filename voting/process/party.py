@@ -7,11 +7,11 @@ from voting.process.regexp_ner import RegExpNERRunner, options_re, options_file_
     upperletters_re, lowerletters_re, tokenized_re
 
 
-class GroupNERRunner(RegExpNERRunner):
+class PartyNERRunner(RegExpNERRunner):
 
     def __init__(self, override=False):
         # TODO: write this regexp!
-        groups = ['Frente Cívico por Santiago',
+        parties = ['Frente Cívico por Santiago',
                   'Frente para la Victoria - PJ',
                   'Unión Cívica Radical',
                   'Compromiso Federal',
@@ -49,17 +49,17 @@ class GroupNERRunner(RegExpNERRunner):
                   'Fe',
                   'Frente Cívico - Córdoba'
                  ]
-        self.groups = groups
-        tagged_groups = ['<' + x.replace(' ', '><') + '>' for x in groups]
-        self.regexp = regexp = u'(?P<<group>>' + '|'.join(tagged_groups) + ')'
+        self.parties = parties
+        tagged_parties = ['<' + x.replace(' ', '><') + '>' for x in parties]
+        self.regexp = regexp = u'(?P<<party>>' + '|'.join(tagged_parties) + ')'
 
-        super(GroupNERRunner, self).__init__('group', regexp, override)
+        super(PartyNERRunner, self).__init__('party', regexp, override)
 
     def process_match(self, match):
-        group = ' '.join(match.group('group'))
+        party = ' '.join(match.group('party'))
 
         kind = self.label
         offset, offset_end = match.span()
-        entity_oc = self.build_occurrence(group, kind, group, offset, offset_end)
+        entity_oc = self.build_occurrence(party, kind, party, offset, offset_end)
 
         return entity_oc
