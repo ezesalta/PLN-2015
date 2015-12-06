@@ -34,7 +34,9 @@ from voting.process.expedient import ExpedientNERRunner
 from voting.process.tokenizer import TokenizeRunner
 from voting.process.sentencer import SentencerRunner
 from voting.process.lemmatizer import LemmatizeRunner
+from voting.process.segmenter import SegmenterRunner
 from voting.process.tagger import TaggerRunner
+from voting.process.parser import ParserRunner
 from iepy.preprocess.ner.combiner import CombinedNERRunner, NoOverlapCombinedNERRunner
 
 
@@ -62,7 +64,10 @@ def start_preprocess(docs, increment_ner):
             PartyNERRunner(),
             PersonNERRunner(),
             ExpedientNERRunner(),
-        ], override=True)
+        ], override=True),
+        ParserRunner(override=True),
+        #SegmenterRunner(override=True)
+        SyntacticSegmenterRunner(increment=True)
     ], docs)
     pipeline.process_everything()
 

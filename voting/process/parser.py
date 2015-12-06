@@ -1,10 +1,11 @@
 from iepy.preprocess.pipeline import BasePreProcessStepRunner, PreProcessSteps
+from nltk.tree import Tree
 
 __author__ = 'Ezequiel Medina'
 
 
-class LemmatizeRunner(BasePreProcessStepRunner):
-    """Does Lemmatization over IEDocuments.
+class ParserRunner(BasePreProcessStepRunner):
+    """Does Parsing over IEDocuments.
 
     - If override=True, no matter if are already computed or not, will do
     and store them on the doc.
@@ -21,20 +22,26 @@ class LemmatizeRunner(BasePreProcessStepRunner):
         self.lang = lang
         self.override = override
         self.increment = increment
-        self.step = PreProcessSteps.lemmatization
+        self.step = PreProcessSteps.syntactic_parsing
 
     def __call__(self, doc):
-        lemm_done = doc.was_preprocess_step_done(self.step)
-        if self.override or not lemm_done:
+        par_done = doc.was_preprocess_step_done(self.step)
+        if self.override or not par_done:
             # Ok, let's do it
-            result = lemmatizer(doc.tokens)
-            doc.set_lemmatization_result(result['lemmas'])
+            result = parsing(doc)
+            doc.set_syntactic_parsing_result(result['tree'])
             doc.save()
 
 
-def lemmatizer(tokens):
-    lemmas = tokens
-    #for token in tokens:
-        #lemmas.append(token)
+def parsing(doc):
+    sentences = doc.sentences
+    tokens = doc.tokens
+    tree = Tree('S', [])
+    for i, s in enumerate(sentences):
+        if i < len(sentences) - 1:
+            terminals = tokens[s: sentences[i+1]]
+            t = Tree(str(s), terminals)
+            tree.append(t)
+    # tree.draw()
 
-    return {'lemmas': lemmas}
+    return {'tree': tree}

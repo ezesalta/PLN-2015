@@ -1,9 +1,11 @@
 from iepy.preprocess.pipeline import BasePreProcessStepRunner, PreProcessSteps
-
+from collections import namedtuple
 __author__ = 'Ezequiel Medina'
 
+# Representation of Segments that a Segmenter found
+RawSegment = namedtuple('RawSegment', 'offset offset_end entity_occurrences')
 
-class SentencerRunner(BasePreProcessStepRunner):
+class SegmenterRunner(BasePreProcessStepRunner):
     """Does Segmentation over IEDocuments.
 
     - If override=True, no matter if are already computed or not, will do
@@ -11,7 +13,6 @@ class SentencerRunner(BasePreProcessStepRunner):
     - If override=False and the step are done on the document, will
     do nothing.
     """
-    step = PreProcessSteps.sentencer
 
     def __init__(self, override=False, increment=False, lang='en'):
         if lang != 'en':
@@ -22,23 +23,22 @@ class SentencerRunner(BasePreProcessStepRunner):
         self.lang = lang
         self.override = override
         self.increment = increment
-        self.snt_step = PreProcessSteps.sentencer
+        self.step = PreProcessSteps.segmentation
 
     def __call__(self, doc):
-        snt_done = doc.was_preprocess_step_done(self.snt_step)
-        if self.override or not snt_done:
+        seg_done = doc.was_preprocess_step_done(self.step)
+        if self.override or not seg_done:
             # Ok, let's do it
-            result = sentencer(doc.tokens)
-            doc.set_sentencer_result(result['sentences'])
+            result = segmentation(doc)
+            doc.set_segmentation_result(result['segments'])
             doc.save()
 
 
-def sentencer(tokens):
-    sentences = [0]
-    for j, token in enumerate(tokens):
-        if token == 'AFIRMATIVO':
-            sentences.append(j + 1)
-    if len(sentences) == 1:
-        sentences.append(len(tokens))
+def segmentation(doc):
+    sentences = doc.sentences
+    tokens = doc.tokens
+    segments = []
+    entity_occs = list(doc.get_entity_occurrences())
+    segments.append(RawSegment(sentences[0], sentences[-1], entity_occs))
 
-    return {'sentences': sentences}
+    return {'segments': segments}

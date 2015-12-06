@@ -34,8 +34,8 @@ class TaggerRunner(BasePreProcessStepRunner):
 
 
 def tagging(tokens):
-    tags = []
-    for token in tokens:
-        tags.append('X')
+    tags = ['X'] * len(tokens)
+    #for token in tokens:
+        #tags.append('X')
 
     return {'tags': tags}

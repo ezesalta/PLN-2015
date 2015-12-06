@@ -10,4 +10,3 @@ ARCHIVOS EDITADOS
 -----------------
 iepy/preprocess/pipeline.py
 iepy/preprocess/tokenize.py
-iepy/data/models.py
