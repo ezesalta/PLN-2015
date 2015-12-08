@@ -1,0 +1,24 @@
+{% extends "webapp/base.html" %}
+
+{% block title %}
+Tituloooo!
+{% endblock %}
+
+{% block content %}
+<div style="background:blue; color:white">
+    Documentos
+</div>
+<div style="background:lightblue">
+    {% for doc in docs %}
+        <div>
+            {{ doc.id }}
+            -
+            {{ doc.human_identifier }}
+            <!--{{ evidence.id }}
+            {{ evidence.left_entity_occurrence }}
+            {{ evidence.right_entity_occurrence }}
+            {{ evidence.labels.first.label }}-->
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -22,3 +22,17 @@ DATABASES = {
         'NAME': '/home/ezequiel/Documentos/lenguaje_natural/pln-2015/voting/voting_db.sqlite',
     }
 }
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'djangular',
+    'corpus',
+    'relatives',
+    'relatedwidget',
+    'voting.webapp',
+)

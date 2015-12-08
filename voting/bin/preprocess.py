@@ -59,7 +59,7 @@ def start_preprocess(docs, increment_ner):
         LemmatizeRunner(override=True),
         TaggerRunner(override=True),
         CombinedNERRunner([
-            DateNERRunner(),
+            #DateNERRunner(),
             VoteNERRunner(),
             PartyNERRunner(),
             PersonNERRunner(),
