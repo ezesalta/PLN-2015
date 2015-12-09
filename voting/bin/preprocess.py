@@ -30,6 +30,7 @@ from voting.process.date import DateNERRunner
 from voting.process.vote import VoteNERRunner
 from voting.process.party import PartyNERRunner
 from voting.process.expedient import ExpedientNERRunner
+from voting.process.law import LawNERRunner
 #from iepy.preprocess.tokenizer import TokenizeSentencerRunner
 from voting.process.tokenizer import TokenizeRunner
 from voting.process.sentencer import SentencerRunner
@@ -64,6 +65,7 @@ def start_preprocess(docs, increment_ner):
             PartyNERRunner(),
             PersonNERRunner(),
             ExpedientNERRunner(),
+            LawNERRunner(),
         ], override=True),
         ParserRunner(override=True),
         #SegmenterRunner(override=True)

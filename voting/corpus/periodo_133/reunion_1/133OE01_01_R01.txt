@@ -1,3 +1,4 @@
+
 Página
 
 Votación Nominal
@@ -313,6 +314,7 @@ Unión Cívica Radical
 Formosa
 
 AFIRMATIVO
+
 
 Página
 
@@ -631,6 +633,7 @@ Buenos Aires
 
 AFIRMATIVO
 
+
 Página
 
 Votación Nominal
@@ -947,6 +950,7 @@ Frente para la Victoria - PJ
 Buenos Aires
 
 AFIRMATIVO
+
 
 Página
 
@@ -1265,6 +1269,7 @@ Buenos Aires
 
 AFIRMATIVO
 
+
 Página
 
 Votación Nominal
@@ -1581,6 +1586,7 @@ Frente para la Victoria - PJ
 Buenos Aires
 
 AFIRMATIVO
+
 
 Página
 
@@ -1899,6 +1905,7 @@ Chaco
 
 AFIRMATIVO
 
+
 Página
 
 Votación Nominal
@@ -2072,6 +2079,7 @@ Misiones
 
 AFIRMATIVO
 
+
 Página
 
 Votación Nominal
@@ -2140,6 +2148,7 @@ Fte. de Izquierda y de los Trabajadores
 Buenos Aires
 
 NEGATIVO
+
 
 Página
 
@@ -2233,6 +2242,7 @@ GEN
 Buenos Aires
 
 ABSTENCION
+
 
 Página 10 de 11
 
@@ -2444,6 +2454,7 @@ San Juan
 
 AUSENTE
 
+
 Página 11 de 11
 
 Votación Nominal
@@ -2490,4 +2501,5 @@ interés público nacional y como objetivo prioritario de la República Argentin
 Estado. Dictamen de Mayoría.
 
 Modificación realizada el 09/04/2015 a las 02:19
+
 

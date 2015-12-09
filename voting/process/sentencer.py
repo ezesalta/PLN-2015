@@ -38,7 +38,7 @@ def sentencer(tokens):
     for j, token in enumerate(tokens):
         if token == 'AFIRMATIVO':
             sentences.append(j + 1)
-    if len(sentences) == 1:
+    if sentences[-1] != len(tokens):
         sentences.append(len(tokens))
 
     return {'sentences': sentences}

@@ -25,5 +25,12 @@ def get_evidence(request, id):
     for evidence in evidences:
         if evidence.segment_id in segments_id:
             res.append(evidence)
-    context = {'evidences': res}
+    expedients = set()
+    for eo in doc.get_entity_occurrences():
+        e = eo.entity
+        if e.kind.name == 'LAW':
+            law = e.key
+        elif e.kind.name == 'EXPEDIENT':
+            expedients.add(e.key)
+    context = {'doc': doc, 'expedients': expedients, 'law': law, 'evidences': res}
     return render(request, 'webapp/evidences.html', context)

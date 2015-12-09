@@ -5,17 +5,25 @@ Tituloooo!
 {% endblock %}
 
 {% block content %}
-<div style="background:blue; color:white">
-    Evidencias
+<div style="background:black; color:white">
+    Evidencias de: {{ doc.human_identifier }}
 </div>
-<div style="background:lightblue">
+<div style="background:gray; color:white">
+    Expedientes:<br />
+    {% for exp in expedients %}
+    {{ exp }}
+    <br />
+    {% endfor %}
+    Ley: {{ law }}
+</div>
+<div style="background:lightgray">
     {% for evidence in evidences %}
-        <div>
-            {{ evidence.id }}
-            {{ evidence.left_entity_occurrence.alias }}
-            {{ evidence.right_entity_occurrence.alias }}
-            {{ evidence.labels.first.label }}
-        </div>
+    <div>
+        {{ evidence.id }}
+        {{ evidence.left_entity_occurrence.alias }}
+        {{ evidence.right_entity_occurrence.alias }}
+        {{ evidence.labels.first.label }}
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
