@@ -11,9 +11,11 @@ Tituloooo!
 <div style="background:lightblue">
     {% for doc in docs %}
         <div>
+            <a href="evidences/{{ doc.id }}">
             {{ doc.id }}
             -
             {{ doc.human_identifier }}
+            </a>
         </div>
     {% endfor %}
 </div>

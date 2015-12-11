@@ -1,0 +1,31 @@
+{% extends "webapp/base.html" %}
+
+{% block title %}
+Responde una pregunta
+{% endblock %}
+
+{% block content %}
+<div style="background:black; color:white">
+    Responde una pregunta para saber quien piensa como vos
+</div>
+<div style="background:gray; color:white">
+    Que pensas a cerca del siguiente proyecto de ley:
+</div>
+<div style="background:lightgray">
+    {{ question }}
+</div>
+<div style="background:lightgray">
+    <form method="post" action="/webapp/choice/">
+        {% csrf_token %}
+        <input name="id_question" type="hidden" value="{{ question.id }}" />
+        <input name="choice" type="radio" value="1" />A FAVOR
+        <input name="choice" type="radio" value="0" />EN CONTRA
+        <input name="choice" type="radio" value="-1" checked />INDIFERENTE
+        <br />
+        <input type="submit" value="Responder" />
+        <!--<input type="reset" value="Cancelar" />-->
+    </form>
+</div>
+<p><a href="/webapp/">Resultados</a></p>
+<p><a href="/webapp/">Atras</a></p>
+{% endblock %}
