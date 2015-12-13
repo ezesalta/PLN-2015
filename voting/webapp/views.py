@@ -64,8 +64,52 @@ def results(request):
     if not request.user.is_authenticated():
         return HttpResponse('Necesitas estar loggeado.')
     counts = defaultdict(int)
+    counts_party = defaultdict(int)
+    person_party = {}
     user = User.objects.get(id=request.user.id)
-    laws = Law.objects.all()
+    docs = IEDocument.objects.all()
+    cant_laws = 0
+    for doc in docs:
+        cant_laws += 1
+        evidences = EvidenceCandidate.objects.all()
+        segments_id = [x.id for x in doc.get_text_segments()]
+
+        # Collect data from iepy models
+        law = None
+        expedient = None
+        for eo in doc.get_entity_occurrences():
+            e = eo.entity
+            if law is None and e.kind.name == 'LAW':
+                law = e
+            elif expedient is None and e.kind.name == 'EXPEDIENT':
+                expedient = e
+            if law is not None and expedient is not None:
+                break
+        assert law is not None and expedient is not None
+
+        for evidence in evidences:
+            first_label = evidence.labels.first()
+            if evidence.segment_id in segments_id and first_label.label == 'YE':
+                question = Question.objects.filter(law=law)
+                choice = Choice.objects.filter(user=user, question=question)
+                if len(choice) > 0:
+                    choice = choice[0]
+                    leo = evidence.left_entity_occurrence
+                    reo = evidence.right_entity_occurrence
+                    if first_label.relation.name == 'voted':
+                        if reo.alias != 'AFIRMATIVO' and reo.alias != 'NEGATIVO':
+                            vote = Vote.objects.get(vote='INDIFERENTE')
+                        else:
+                            vote = Vote.objects.get(vote=reo.alias)
+                        counts[leo.alias] += 0
+                        if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
+                            counts[leo.alias] += 1
+                    elif first_label.relation.name == 'party':
+                        person_party[leo.alias] = reo.alias
+                else:
+                    print('Caso donde el usuario no respondio ninguna pregunta')
+                    return HttpResponse('Debes responder alguna pregunta antes.')
+    """laws = Law.objects.all()
     cant = len(laws)
     for law in laws:
         partys = []
@@ -81,9 +125,49 @@ def results(request):
     results_by_person = []
     for x in counts:
         results_by_person.append((x.key, counts[x]/cant * 100.0))
-
-    context = {'results_by_person': results_by_person}
+    """
+    results_by_person = []
+    results_by_party = []
+    for person in counts:
+        results_by_person.append((person, counts[person]/cant_laws * 100.0))
+        party = person_party[person]
+        counts_party[party] += counts[person]/cant_laws
+    for party in counts_party:
+        cant_persons = len([x for x in person_party if person_party[x] == party])
+        results_by_party.append((party, counts_party[party]/cant_persons * 100.0))
+    context = {'results_by_person': results_by_person, 'results_by_party': results_by_party}
     return render(request, 'webapp/results.html', context)
+
+
+def init(request):
+    logs = []
+    law_kind = EntityKind.objects.get(name='LAW')
+    laws = Entity.objects.filter(kind=law_kind)
+    for law in laws:
+        q = Question()
+        q.law = law
+        q.question = law.key #Falta hacer
+        q.save()
+        logs.append('Creacion de Pregunta: ' + law.key)
+
+    # Create votes
+    if len(Vote.objects.filter(vote='AFIRMATIVO')) == 0:
+        vo = Vote()
+        vo.vote = 'AFIRMATIVO'
+        vo.save()
+        logs.append('Creacion de Voto: ' + vo.vote)
+    if len(Vote.objects.filter(vote='NEGATIVO')) == 0:
+        vo = Vote()
+        vo.vote = 'NEGATIVO'
+        vo.save()
+        logs.append('Creacion de Voto: ' + vo.vote)
+    if len(Vote.objects.filter(vote='INDIFERENTE')) == 0:
+        vo = Vote()
+        vo.vote = 'INDIFERENTE'
+        vo.save()
+        logs.append('Creacion de Voto: ' + vo.vote)
+
+    return HttpResponse('<br /><br />'.join(logs))
 
 
 def get_evidence(request, id):
@@ -170,11 +254,11 @@ def load_laws(request):
             if evidence.segment_id in segments_id and first_label.label == 'YE':
                     person = evidence.left_entity_occurrence.entity
                     if evidence.right_entity_occurrence.alias == 'AFIRMATIVO':
-                        vote = Vote.objects.filter(vote='AFIRMATIVO')[0]
+                        vote = Vote.objects.get(vote='AFIRMATIVO')
                     elif evidence.right_entity_occurrence.alias == 'NEGATIVO':
-                        vote = Vote.objects.filter(vote='NEGATIVO')[0]
+                        vote = Vote.objects.get(vote='NEGATIVO')
                     else:
-                        vote = Vote.objects.filter(vote='INDIFERENTE')[0]
+                        vote = Vote.objects.get(vote='INDIFERENTE')
 
                     # Save Voting model
                     if ok and len(Voting.objects.filter(person=person, law=l)) == 0:

@@ -15,9 +15,15 @@ Resultados
     {{ question }}
 </div>
 <div style="background:lightgray">
-    Por partido
+    <strong>Por Diputado</strong>
     <br />
     {% for res in results_by_person %}
+    <div>
+        {{ res.0 }}: {{ res.1 }}%
+    </div>
+    {% endfor %}
+    <strong>Por Partido</strong>
+    {% for res in results_by_party %}
     <div>
         {{ res.0 }}: {{ res.1 }}%
     </div>

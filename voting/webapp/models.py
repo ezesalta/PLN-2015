@@ -5,22 +5,9 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class Law(models.Model):
-    id = models.AutoField(primary_key=True)
-    expedient = models.CharField(max_length=20)
-    #expedient = models.ForeignKey(Entity, on_delete=models.CASCADE, unique=True)
-    #law = models.TextField(max_length=300, unique=True)
-    law = models.ForeignKey(Entity, on_delete=models.CASCADE, unique=True)
-    status = models.BooleanField(default=0)
-    date = models.DateTimeField(default=timezone.now())
-
-    def __str__(self):
-        return self.law.key
-
-
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
-    law = models.ForeignKey(Law, on_delete=models.CASCADE)
+    law = models.ForeignKey(Entity, on_delete=models.CASCADE)
     question = models.TextField(max_length=300)
     date = models.DateTimeField(default=timezone.now())
 
@@ -44,16 +31,25 @@ class Choice(models.Model):
     date = models.DateTimeField(default=timezone.now())
 
 
+"""class Law(models.Model):
+    id = models.AutoField(primary_key=True)
+    expedient = models.CharField(max_length=20)
+    #expedient = models.ForeignKey(Entity, on_delete=models.CASCADE, unique=True)
+    #law = models.TextField(max_length=300, unique=True)
+    law = models.ForeignKey(Entity, on_delete=models.CASCADE, unique=True)
+    status = models.BooleanField(default=0)
+    date = models.DateTimeField(default=timezone.now())
+
+    def __str__(self):
+        return self.law.key
+
+
 class Voting(models.Model):
     id = models.AutoField(primary_key=True)
     law = models.ForeignKey(Law, on_delete=models.CASCADE)
     person = models.ForeignKey(Entity, on_delete=models.CASCADE)
     vote = models.ForeignKey(Vote, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=timezone.now())
-
-
-class LawAdmin(admin.ModelAdmin):
-    pass
+    date = models.DateTimeField(default=timezone.now())"""
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -68,8 +64,12 @@ class ChoiceAdmin(admin.ModelAdmin):
     pass
 
 
-class VotingAdmin(admin.ModelAdmin):
+"""class LawAdmin(admin.ModelAdmin):
     pass
+
+
+class VotingAdmin(admin.ModelAdmin):
+    pass"""
 
 admin.site.register(Law, LawAdmin)
 admin.site.register(Question, QuestionAdmin)
