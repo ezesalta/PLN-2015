@@ -108,7 +108,6 @@ def results(request):
                         person_party[leo.alias] = reo.alias
                 else:
                     print('Caso donde el usuario no respondio ninguna pregunta')
-                    return HttpResponse('Debes responder alguna pregunta antes.')
     """laws = Law.objects.all()
     cant = len(laws)
     for law in laws:
@@ -135,6 +134,8 @@ def results(request):
     for party in counts_party:
         cant_persons = len([x for x in person_party if person_party[x] == party])
         results_by_party.append((party, counts_party[party]/cant_persons * 100.0))
+    if len(results_by_person) == 0:
+        return HttpResponse('Debes responder alguna pregunta antes.')
     context = {'results_by_person': results_by_person, 'results_by_party': results_by_party}
     return render(request, 'webapp/results.html', context)
 

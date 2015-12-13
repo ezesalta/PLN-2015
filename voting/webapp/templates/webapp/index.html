@@ -1,11 +1,10 @@
 {% extends "webapp/base.html" %}
 
-{% block title %}
-Tituloooo!
-{% endblock %}
+{% block title %}Inicio{% endblock %}
+{% block header %}Inicio{% endblock %}
 
 {% block content %}
-<div style="background:blue; color:white">
+<!--<div style="background:blue; color:white">
     Documentos
 </div>
 <div style="background:lightblue">
@@ -18,12 +17,12 @@ Tituloooo!
             </a>
         </div>
     {% endfor %}
-</div>
-<div>
-    <a href="/webapp/question">Responder preguntas</a>
-</div>
-<div>
-    <a href="/webapp/results">Resultados</a>
-</div>
+</div>-->
+<p>Bienvenido a Voting, el sistema que te guia para votar correctamente.</p>
+<p>Para ver el porcentaje de coincidencia con los diputados y partidos usted debe:</p>
+<ul>
+    <li>Responder algunas preguntas</li>
+    <li>Ver los resultados</li>
+</ul>
 
 {% endblock %}

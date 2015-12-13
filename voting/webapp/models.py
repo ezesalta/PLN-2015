@@ -71,8 +71,8 @@ class ChoiceAdmin(admin.ModelAdmin):
 class VotingAdmin(admin.ModelAdmin):
     pass"""
 
-admin.site.register(Law, LawAdmin)
+#admin.site.register(Law, LawAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Choice, ChoiceAdmin)
-admin.site.register(Voting, VotingAdmin)
+#admin.site.register(Voting, VotingAdmin)

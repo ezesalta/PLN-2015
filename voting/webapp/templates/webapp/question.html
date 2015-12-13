@@ -1,31 +1,21 @@
 {% extends "webapp/base.html" %}
 
-{% block title %}
-Responde una pregunta
-{% endblock %}
+{% block title %}Preguntas{% endblock %}
+{% block header %}Preguntas{% endblock %}
 
 {% block content %}
-<div style="background:black; color:white">
-    Responde una pregunta para saber quien piensa como vos
-</div>
-<div style="background:gray; color:white">
-    Que pensas a cerca del siguiente proyecto de ley:
-</div>
-<div style="background:lightgray">
-    {{ question }}
-</div>
-<div style="background:lightgray">
+<h5>Que pensas a cerca del siguiente proyecto de ley:</h5>
+<p>{{ question }}</p>
+<div>
     <form method="post" action="/webapp/choice/">
         {% csrf_token %}
         <input name="id_question" type="hidden" value="{{ question.id }}" />
-        <input name="choice" type="radio" value="1" />A FAVOR
-        <input name="choice" type="radio" value="0" />EN CONTRA
-        <input name="choice" type="radio" value="-1" checked />INDIFERENTE
+        <p><input name="choice" type="radio" value="1" />A FAVOR</p>
+        <p><input name="choice" type="radio" value="0" />EN CONTRA</p>
+        <p><input name="choice" type="radio" value="-1" checked />INDIFERENTE</p>
         <br />
-        <input type="submit" value="Responder" />
-        <!--<input type="reset" value="Cancelar" />-->
+        <input class="btn btn-primary" type="submit" value="Responder" />
     </form>
 </div>
-<p><a href="/webapp/">Resultados</a></p>
-<p><a href="/webapp/">Atras</a></p>
+
 {% endblock %}

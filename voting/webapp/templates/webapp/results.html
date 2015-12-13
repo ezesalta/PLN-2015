@@ -1,20 +1,16 @@
 {% extends "webapp/base.html" %}
 
-{% block title %}
-Resultados
-{% endblock %}
+{% block title %}Resultados{% endblock %}
+{% block header %}Resultados{% endblock %}
 
 {% block content %}
-<div style="background:black; color:white">
-    Resultados
-</div>
-<div style="background:gray; color:white">
+<div>
     Porcentajes de coincidencia
 </div>
-<div style="background:lightgray">
+<div>
     {{ question }}
 </div>
-<div style="background:lightgray">
+<div>
     <strong>Por Diputado</strong>
     <br />
     {% for res in results_by_person %}
