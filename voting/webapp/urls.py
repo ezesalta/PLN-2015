@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^load_laws/$', views.load_laws, name='load_laws'),
     url(r'^question/$', views.question, name='question'),
     url(r'^choice/$', views.save_choice, name='choice'),
+    url(r'^results/$', views.results, name='results'),
 ]

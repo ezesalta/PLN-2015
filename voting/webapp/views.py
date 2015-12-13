@@ -20,7 +20,7 @@ def question(request):
         return HttpResponse('Necesitas estar loggeado.')
 
     # generar la pregunta y llamar a save_choice
-    user = User.objects.filter(id=request.user.id)
+    user = User.objects.get(id=request.user.id)
     choices = Choice.objects.filter(user=user)
     questions_ans = [x.question for x in choices]
     questions = [x for x in Question.objects.all() if x not in questions_ans]
@@ -41,14 +41,14 @@ def save_choice(request):
     if request.method == 'POST':
         # guardar las Choices con lo que responda el usuario
         id_question = request.POST['id_question']
-        question = Question.objects.filter(id=id_question)[0]
+        question = Question.objects.get(id=id_question)
         choice = request.POST['choice']
         if choice == '1':
-            vote = Vote.objects.filter(vote='AFIRMATIVO')[0]
+            vote = Vote.objects.get(vote='AFIRMATIVO')
         elif choice == '0':
-            vote = Vote.objects.filter(vote='NEGATIVO')[0]
+            vote = Vote.objects.get(vote='NEGATIVO')
         else:
-            vote = Vote.objects.filter(vote='INDIFERENTE')[0]
+            vote = Vote.objects.get(vote='INDIFERENTE')
 
         ch = Choice()
         ch.user = user
@@ -61,7 +61,29 @@ def save_choice(request):
 
 
 def results(request):
-    pass
+    if not request.user.is_authenticated():
+        return HttpResponse('Necesitas estar loggeado.')
+    counts = defaultdict(int)
+    user = User.objects.get(id=request.user.id)
+    laws = Law.objects.all()
+    cant = len(laws)
+    for law in laws:
+        partys = []
+        question = Question.objects.filter(law=law)
+        votes = Voting.objects.filter(law=law)
+        choice = Choice.objects.filter(user=user, question=question)
+        if len(choice) > 0:
+            choice = choice[0]
+            for vote in votes:
+                counts[vote.person] += 0
+                if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote.vote:
+                    counts[vote.person] += 1
+    results_by_person = []
+    for x in counts:
+        results_by_person.append((x.key, counts[x]/cant * 100.0))
+
+    context = {'results_by_person': results_by_person}
+    return render(request, 'webapp/results.html', context)
 
 
 def get_evidence(request, id):
