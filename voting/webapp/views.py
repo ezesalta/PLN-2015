@@ -73,7 +73,7 @@ def save_choice(request):
         return render(request, 'webapp/message.html', {'title': title, 'msg': msg, 'links': links})
 
     title = 'Acceso ilegal'
-    msg = 'Debes iniciar sesion con para poder ver esta página.'
+    msg = 'No tienes permiso para ver esta página.'
     return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
 
 
@@ -127,32 +127,20 @@ def results(request):
                         person_party[leo.alias] = reo.alias
                 else:
                     print('Caso donde el usuario no respondio ninguna pregunta')
-    """laws = Law.objects.all()
-    cant = len(laws)
-    for law in laws:
-        partys = []
-        question = Question.objects.filter(law=law)
-        votes = Voting.objects.filter(law=law)
-        choice = Choice.objects.filter(user=user, question=question)
-        if len(choice) > 0:
-            choice = choice[0]
-            for vote in votes:
-                counts[vote.person] += 0
-                if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote.vote:
-                    counts[vote.person] += 1
-    results_by_person = []
-    for x in counts:
-        results_by_person.append((x.key, counts[x]/cant * 100.0))
-    """
     results_by_person = []
     results_by_party = []
     for person in counts:
-        results_by_person.append((person, counts[person]/cant_laws * 100.0))
+        val = counts[person]/cant_laws * 100.0
+        #results_by_person.append((person, val))
+        results_by_person.append((val, person))
         party = person_party[person]
         counts_party[party] += counts[person]/cant_laws
     for party in counts_party:
         cant_persons = len([x for x in person_party if person_party[x] == party])
-        results_by_party.append((party, counts_party[party]/cant_persons * 100.0))
+        val = counts_party[party]/cant_persons * 100.0
+        results_by_party.append((val, party))
+    results_by_person = sorted(results_by_person, reverse=True)
+    results_by_party = sorted(results_by_party, reverse=True)
     if len(results_by_person) == 0:
         title = 'No se pueden mostrar los resultados'
         msg = 'Debes responder alguna pregunta antes.'
@@ -297,3 +285,23 @@ def get_evidence(request, id):
                         v.save()
 
     return HttpResponse('Done!')"""
+
+"""
+results viejo
+laws = Law.objects.all()
+    cant = len(laws)
+    for law in laws:
+        partys = []
+        question = Question.objects.filter(law=law)
+        votes = Voting.objects.filter(law=law)
+        choice = Choice.objects.filter(user=user, question=question)
+        if len(choice) > 0:
+            choice = choice[0]
+            for vote in votes:
+                counts[vote.person] += 0
+                if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote.vote:
+                    counts[vote.person] += 1
+    results_by_person = []
+    for x in counts:
+        results_by_person.append((x.key, counts[x]/cant * 100.0))
+"""

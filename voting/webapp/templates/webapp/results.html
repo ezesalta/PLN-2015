@@ -4,32 +4,56 @@
 {% block header %}Resultados{% endblock %}
 
 {% block content %}
-<div>
-    Porcentajes de coincidencia
+<h5>Porcentajes de coincidencia</h5>
+<div class="row">
+    <div class="col-xs-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Por Diputado</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover ">
+                    <tbody>
+                        {% for res in results_by_person %}
+                        <tr>
+                            <td>{{ res.1 }}</td>
+                            <td style="width:50%">
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-success" style="width: {{ res.0 }}%"></div>
+                                </div>
+                            </td>
+                            <td>{{ res.0 }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Por Partido</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover ">
+                    <tbody>
+                        {% for res in results_by_party %}
+                        <tr>
+                            <td>{{ res.1 }}</td>
+                            <td style="width:50%">
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-warning" style="width: {{ res.0 }}%"></div>
+                                </div>
+                            </td>
+                            <td>{{ res.0 }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    {{ question }}
-</div>
-<div>
-    <strong>Por Diputado</strong>
-    <br />
-    {% for res in results_by_person %}
-    <div>
-        {{ res.0 }}: {{ res.1 }}%
-    </div>
-    <div class="progress progress-striped active" style="width:30%">
-        <div class="progress-bar" style="width: {{ res.1 }}%"></div>
-    </div>
-    {% endfor %}
-    <strong>Por Partido</strong>
-    {% for res in results_by_party %}
-    <div>
-        {{ res.0 }}: {{ res.1 }}%
-    </div>
-    <div class="progress progress-striped active" style="width:30%">
-        <div class="progress-bar" style="width: {{ res.1 }}%"></div>
-    </div>
-    {% endfor %}
-</div>
-<p><a href="/webapp/">Atras</a></p>
+
 {% endblock %}
