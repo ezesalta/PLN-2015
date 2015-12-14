@@ -17,11 +17,17 @@
     <div>
         {{ res.0 }}: {{ res.1 }}%
     </div>
+    <div class="progress progress-striped active" style="width:30%">
+        <div class="progress-bar" style="width: {{ res.1 }}%"></div>
+    </div>
     {% endfor %}
     <strong>Por Partido</strong>
     {% for res in results_by_party %}
     <div>
         {{ res.0 }}: {{ res.1 }}%
+    </div>
+    <div class="progress progress-striped active" style="width:30%">
+        <div class="progress-bar" style="width: {{ res.1 }}%"></div>
     </div>
     {% endfor %}
 </div>

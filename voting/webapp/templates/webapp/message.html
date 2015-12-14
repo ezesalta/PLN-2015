@@ -1,0 +1,12 @@
+{% extends "webapp/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header %}{{ title }}{% endblock %}
+
+{% block content %}
+<p>{{ msg }}</p>
+{% for link in links %}
+    <p><a href="{{ link.1 }}">{{ link.0 }}</a></p>
+{% endfor %}
+
+{% endblock %}

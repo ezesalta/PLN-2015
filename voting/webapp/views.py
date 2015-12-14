@@ -17,7 +17,10 @@ def index(request):
 
 def question(request):
     if not request.user.is_authenticated():
-        return HttpResponse('Necesitas estar loggeado.')
+        #return HttpResponse('Necesitas estar loggeado.')
+        title = 'Acceso ilegal'
+        msg = 'Debes iniciar sesion para poder ver esta página.'
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
 
     # generar la pregunta y llamar a save_choice
     user = User.objects.get(id=request.user.id)
@@ -25,7 +28,11 @@ def question(request):
     questions_ans = [x.question for x in choices]
     questions = [x for x in Question.objects.all() if x not in questions_ans]
     if len(questions) <= 0:
-        return HttpResponse('Ya respondiste todas las preguntas.')
+        #return HttpResponse('Ya respondiste todas las preguntas.')
+        title = 'Respondiste a todas las preguntas'
+        msg = 'Quieres ver los resultados?'
+        links = [('Resultados', '/webapp/results')]
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg, 'links': links})
 
     selected = random.choice(questions)
 
@@ -35,7 +42,9 @@ def question(request):
 
 def save_choice(request):
     if not request.user.is_authenticated():
-        return HttpResponse('Necesitas estar loggeado.')
+        title = 'Acceso ilegal'
+        msg = 'Debes iniciar sesion para poder ver esta página.'
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
 
     user = User.objects.filter(id=request.user.id)[0]
     if request.method == 'POST':
@@ -50,19 +59,29 @@ def save_choice(request):
         else:
             vote = Vote.objects.get(vote='INDIFERENTE')
 
-        ch = Choice()
-        ch.user = user
-        ch.question = question
-        ch.choice = vote
-        ch.save()
-        return redirect('/webapp/question')
+        if len(Choice.objects.filter(user=user, question=question)) == 0:
+            ch = Choice()
+            ch.user = user
+            ch.question = question
+            ch.choice = vote
+            ch.save()
+        #return redirect('/webapp/question')
+        title = 'Guardada exitosamente!'
+        msg = 'Quieres responder otra pregunta para que los resultados sean mas precisos?'
+        links = [('Responder otra pregunta', '/webapp/question')]
+        links.append(('Ver los resultados parciales', '/webapp/results'))
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg, 'links': links})
 
-    return HttpResponse('Acceso ilegal')
+    title = 'Acceso ilegal'
+    msg = 'Debes iniciar sesion con para poder ver esta página.'
+    return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
 
 
 def results(request):
     if not request.user.is_authenticated():
-        return HttpResponse('Necesitas estar loggeado.')
+        title = 'Acceso ilegal'
+        msg = 'Debes iniciar sesion para poder ver esta página.'
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
     counts = defaultdict(int)
     counts_party = defaultdict(int)
     person_party = {}
@@ -135,21 +154,28 @@ def results(request):
         cant_persons = len([x for x in person_party if person_party[x] == party])
         results_by_party.append((party, counts_party[party]/cant_persons * 100.0))
     if len(results_by_person) == 0:
-        return HttpResponse('Debes responder alguna pregunta antes.')
+        title = 'No se pueden mostrar los resultados'
+        msg = 'Debes responder alguna pregunta antes.'
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
     context = {'results_by_person': results_by_person, 'results_by_party': results_by_party}
     return render(request, 'webapp/results.html', context)
 
 
 def init(request):
+    if not request.user.is_authenticated():
+        title = 'Acceso ilegal'
+        msg = 'Debes iniciar sesion para poder ver esta página.'
+        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
     logs = []
     law_kind = EntityKind.objects.get(name='LAW')
     laws = Entity.objects.filter(kind=law_kind)
     for law in laws:
-        q = Question()
-        q.law = law
-        q.question = law.key #Falta hacer
-        q.save()
-        logs.append('Creacion de Pregunta: ' + law.key)
+        if len(Question.objects.filter(law=law)) == 0:
+            q = Question()
+            q.law = law
+            q.question = law.key #Falta hacer
+            q.save()
+            logs.append('Creacion de Pregunta: ' + law.key)
 
     # Create votes
     if len(Vote.objects.filter(vote='AFIRMATIVO')) == 0:
@@ -167,6 +193,7 @@ def init(request):
         vo.vote = 'INDIFERENTE'
         vo.save()
         logs.append('Creacion de Voto: ' + vo.vote)
+    logs.append('Done!')
 
     return HttpResponse('<br /><br />'.join(logs))
 
@@ -195,7 +222,7 @@ def get_evidence(request, id):
     return render(request, 'webapp/evidences.html', context)
 
 
-def load_laws(request):
+"""def load_laws(request):
     if not request.user.is_authenticated():
         return HttpResponse('Necesitas estar loggeado.')
 
@@ -230,7 +257,7 @@ def load_laws(request):
         #if ok and len(Question.objects.filter(law=l)) == 0:
         if ok:
             q = Question()
-            q.law = l
+            #q.law = l
             q.question = law.key #Falta hacer
             q.save()
             ok = True
@@ -269,4 +296,4 @@ def load_laws(request):
                         v.vote = vote
                         v.save()
 
-    return HttpResponse('Done!')
+    return HttpResponse('Done!')"""
