@@ -3,14 +3,16 @@ Página
 
 Votación Nominal
 
-1 de 11
+1 de
 
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
+9
 
-Acta Nº 1
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
 
-Fecha: 09/04/2015
+Acta Nº 7
+
+Fecha: 29/04/2015
 
 Ult.Mod.Ver 2
 
@@ -20,7 +22,7 @@ Tipo de Mayoría: Más de la mitad
 
 Miembros del cuerpo: 257
 
-Hora: 2:15
+Hora: 19:12
 
 Tipo de Quorum: Más de la mitad
 
@@ -34,7 +36,7 @@ Presentes
 Ausentes
 
 Identificados
-235
+201
 
 Sin Identificar
 0
@@ -42,18 +44,18 @@ Sin Identificar
 Apellido y Nombre
 
 Total
-235
-22
+201
+56
 
 Diputados Presidente
 Votos Afirmativos
-223
+190
 0
 Votos Negativos
-4
+0
 0
 Abstenciones
-7
+10
 0
 
 Bloque político
@@ -63,9 +65,9 @@ Desempate
 0
 
 Total
-223
-4
-7
+190
+0
+10
 
 Provincia
 
@@ -83,35 +85,11 @@ Mendoza
 
 AFIRMATIVO
 
-AGUAD, Oscar Raúl
-
-Unión Cívica Radical
-
-Córdoba
-
-AFIRMATIVO
-
-AGUILAR, Lino Walter
-
-Compromiso Federal
-
-San Luis
-
-AFIRMATIVO
-
 ALFONSIN, Ricardo
 
 Unión Cívica Radical
 
 Buenos Aires
-
-AFIRMATIVO
-
-ALONSO, Laura
-
-Unión PRO
-
-Cdad. Aut. Bs. As.
 
 AFIRMATIVO
 
@@ -155,11 +133,11 @@ Buenos Aires
 
 AFIRMATIVO
 
-BALDASSI, Héctor Walter
+BARCHETTA, Omar Segundo
 
-Unión PRO
+Partido Socialista
 
-Córdoba
+Santa Fe
 
 AFIRMATIVO
 
@@ -168,14 +146,6 @@ BARDEGGIA, Luis Maria
 Frente para la Victoria - PJ
 
 Rio Negro
-
-AFIRMATIVO
-
-BARLETTA, Mario Domingo
-
-Unión Cívica Radical
-
-Santa Fe
 
 AFIRMATIVO
 
@@ -251,14 +221,6 @@ Salta
 
 AFIRMATIVO
 
-BINNER, Hermes Juan
-
-Partido Socialista
-
-Santa Fe
-
-AFIRMATIVO
-
 BOYADJIAN, Graciela Eunice
 
 Movimiento Popular Fueguino
@@ -270,30 +232,6 @@ AFIRMATIVO
 BRAWER, Mara
 
 Frente para la Victoria - PJ
-
-Cdad. Aut. Bs. As.
-
-AFIRMATIVO
-
-BRIZUELA DEL MORAL, Eduardo Segundo
-
-Fte. Cívico y Social de Catamarca
-
-Catamarca
-
-AFIRMATIVO
-
-BROMBERG, Isaac Benjamín
-
-Frente para la Victoria - PJ
-
-Tucumán
-
-AFIRMATIVO
-
-BULLRICH, Patricia
-
-Unión PRO
 
 Cdad. Aut. Bs. As.
 
@@ -315,44 +253,6 @@ Formosa
 
 AFIRMATIVO
 
-
-Página
-
-Votación Nominal
-
-2 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
-
 CABANDIE, Juan
 
 Frente para la Victoria - PJ
@@ -372,14 +272,6 @@ AFIRMATIVO
 CALCAGNO Y MAILLMANN, Eric
 
 Frente para la Victoria - PJ
-
-Buenos Aires
-
-AFIRMATIVO
-
-CAMAÑO, Graciela
-
-Frente Renovador
 
 Buenos Aires
 
@@ -425,13 +317,43 @@ Tucumán
 
 AFIRMATIVO
 
-CARRIO, Elisa María Avelina
 
-Coalición Cívica - ARI - UNEN
+Página
 
-Cdad. Aut. Bs. As.
+Votación Nominal
+
+2 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
 
 AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
 
 CARRIZO, Ana Carla
 
@@ -462,22 +384,6 @@ CASAÑAS, Juan Francisco
 Unión Cívica Radical
 
 Tucumán
-
-AFIRMATIVO
-
-CASELLES, Graciela María
-
-Frente para la Victoria - PJ
-
-San Juan
-
-AFIRMATIVO
-
-CASERIO, Carlos Alberto
-
-Unión por Córdoba
-
-Córdoba
 
 AFIRMATIVO
 
@@ -553,6 +459,14 @@ Buenos Aires
 
 AFIRMATIVO
 
+CONTRERA, Mónica Graciela
+
+Frente para la Victoria - PJ
+
+Chubut
+
+AFIRMATIVO
+
 CORTINA, Roy
 
 Partido Socialista
@@ -561,43 +475,11 @@ Cdad. Aut. Bs. As.
 
 AFIRMATIVO
 
-COSTA, Eduardo Raúl
-
-Unión Cívica Radical
-
-Santa Cruz
-
-AFIRMATIVO
-
-CREMER DE BUSTI, María Cristina
-
-Unión por Entre Ríos
-
-Entre Ríos
-
-AFIRMATIVO
-
-CUCCOVILLO, Ricardo Oscar
-
-Partido Socialista
-
-Buenos Aires
-
-AFIRMATIVO
-
 D'AGOSTINO, Jorge Marcelo
 
 Unión Cívica Radical
 
 Entre Ríos
-
-AFIRMATIVO
-
-D'ALESSANDRO, Marcelo Silvio
-
-Frente Renovador
-
-Buenos Aires
 
 AFIRMATIVO
 
@@ -617,65 +499,19 @@ Tucumán
 
 AFIRMATIVO
 
-DE MENDIGUREN, José Ignacio
+DE FERRARI RUEDA, Patricia
 
-Frente Renovador
+Unión Cívica Radical
 
-Buenos Aires
-
-AFIRMATIVO
-
-DE NARVAEZ, Francisco
-
-Unión Celeste y Blanco
-
-Buenos Aires
+Córdoba
 
 AFIRMATIVO
 
+DEL CAÑO, Nicolás
 
-Página
+PTS - Frente de Izquierda
 
-Votación Nominal
-
-3 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
-
-DEPETRI, Edgardo Fernando
-
-Frente para la Victoria - PJ
-
-Buenos Aires
+Mendoza
 
 AFIRMATIVO
 
@@ -703,6 +539,14 @@ Formosa
 
 AFIRMATIVO
 
+DONDA PEREZ, Victoria Analía
+
+Libres del Sur
+
+Buenos Aires
+
+AFIRMATIVO
+
 DONKIN, Carlos Guillermo
 
 Frente para la Victoria - PJ
@@ -711,17 +555,9 @@ Formosa
 
 AFIRMATIVO
 
-DURAND CORNEJO, Guillermo Mario
+DUCLOS, Omar Arnaldo
 
-Conservador Popular
-
-Salta
-
-AFIRMATIVO
-
-EHCOSOR, María Azucena
-
-Frente Renovador
+GEN
 
 Buenos Aires
 
@@ -798,6 +634,46 @@ Frente para la Victoria - PJ
 Córdoba
 
 AFIRMATIVO
+
+9
+
+
+Página
+
+Votación Nominal
+
+3 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
+
+AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
 
 GAGLIARDI, Josué
 
@@ -887,19 +763,19 @@ Córdoba
 
 AFIRMATIVO
 
+GIMENEZ, Patricia Viviana
+
+Unión Cívica Radical
+
+Mendoza
+
+AFIRMATIVO
+
 GIUBERGIA, Miguel Angel
 
 Unión Cívica Radical
 
 Jujuy
-
-AFIRMATIVO
-
-GIUSTOZZI, Rubén Darío
-
-Frente Renovador
-
-Buenos Aires
 
 AFIRMATIVO
 
@@ -927,14 +803,6 @@ Santa Fe
 
 AFIRMATIVO
 
-GONZALEZ, Juan Dante
-
-Frente para la Victoria - PJ
-
-Mendoza
-
-AFIRMATIVO
-
 GONZALEZ, Verónica Evangelina
 
 Frente para la Victoria - PJ
@@ -946,52 +814,6 @@ AFIRMATIVO
 GRANADOS, Dulce
 
 Frente para la Victoria - PJ
-
-Buenos Aires
-
-AFIRMATIVO
-
-
-Página
-
-Votación Nominal
-
-4 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
-
-GRIBAUDO, Christian Alejandro
-
-Unión PRO
 
 Buenos Aires
 
@@ -1133,6 +955,46 @@ Chubut
 
 AFIRMATIVO
 
+9
+
+
+Página
+
+Votación Nominal
+
+4 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
+
+AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
+
 LANDAU, Jorge Alberto
 
 Frente para la Victoria - PJ
@@ -1149,19 +1011,27 @@ Cdad. Aut. Bs. As.
 
 AFIRMATIVO
 
-LASPINA, Luciano Andres
-
-Unión PRO
-
-Santa Fe
-
-AFIRMATIVO
-
 LEVERBERG, Stella Maris
 
 Fte. Renov. de la Conc. Misiones - FPV-PJ
 
 Misiones
+
+AFIRMATIVO
+
+LINARES, María Virginia
+
+GEN
+
+Buenos Aires
+
+AFIRMATIVO
+
+LOPEZ, Pablo Sebastián
+
+Fte. de Izquierda y de los Trabajadores
+
+Salta
 
 AFIRMATIVO
 
@@ -1176,6 +1046,14 @@ AFIRMATIVO
 LOUSTEAU, Martín
 
 SUMA + UNEN
+
+Cdad. Aut. Bs. As.
+
+AFIRMATIVO
+
+LOZANO, Claudio Raúl
+
+Unidad Popular
 
 Cdad. Aut. Bs. As.
 
@@ -1205,22 +1083,6 @@ Buenos Aires
 
 AFIRMATIVO
 
-MAJDALANI, Silvia Cristina
-
-Unión PRO
-
-Cdad. Aut. Bs. As.
-
-AFIRMATIVO
-
-MALDONADO, Victor Hugo
-
-Unión Cívica Radical
-
-Chaco
-
-AFIRMATIVO
-
 MARCOPULOS, Juan Fernando
 
 Frente para la Victoria - PJ
@@ -1237,14 +1099,6 @@ Chaco
 
 AFIRMATIVO
 
-MARTINEZ, Julio César
-
-Unión Cívica Radical
-
-La Rioja
-
-AFIRMATIVO
-
 MARTINEZ, Oscar Anselmo
 
 Movimiento Solidario Popular
@@ -1252,60 +1106,6 @@ Movimiento Solidario Popular
 Tierra del Fuego
 
 AFIRMATIVO
-
-MARTINEZ, Soledad
-
-Unión PRO
-
-Buenos Aires
-
-AFIRMATIVO
-
-MASSA, Sergio Tomás
-
-Frente Renovador
-
-Buenos Aires
-
-AFIRMATIVO
-
-
-Página
-
-Votación Nominal
-
-5 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
 
 MAZURE, Liliana Amalia
 
@@ -1379,14 +1179,6 @@ Buenos Aires
 
 AFIRMATIVO
 
-MULLER, Edgar Raúl
-
-Compromiso Federal
-
-Córdoba
-
-AFIRMATIVO
-
 NAVARRO, Graciela
 
 Frente Cívico por Santiago
@@ -1411,14 +1203,6 @@ Santiago del Estero
 
 AFIRMATIVO
 
-OLIVARES, Hector Enrique
-
-Unión Cívica Radical
-
-La Rioja
-
-AFIRMATIVO
-
 OPORTO, Mario Néstor
 
 Frente para la Victoria - PJ
@@ -1432,6 +1216,14 @@ ORTIZ CORREA, Marcia Sara María
 Frente para la Victoria - PJ
 
 Catamarca
+
+AFIRMATIVO
+
+ORTIZ, Mariela
+
+Frente para la Victoria - PJ
+
+Jujuy
 
 AFIRMATIVO
 
@@ -1483,13 +1275,45 @@ Chaco
 
 AFIRMATIVO
 
-PEREZ, Adrián
+9
 
-Frente Renovador
 
-Buenos Aires
+Página
+
+Votación Nominal
+
+5 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
 
 AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
 
 PEREZ, Martín Alejandro
 
@@ -1504,14 +1328,6 @@ PERIE, Julia Argentina
 Frente para la Victoria - PJ
 
 Misiones
-
-AFIRMATIVO
-
-PEROTTI, Omar Angel
-
-Frente para la Victoria - PJ
-
-Santa Fe
 
 AFIRMATIVO
 
@@ -1539,11 +1355,11 @@ Buenos Aires
 
 AFIRMATIVO
 
-PINEDO, Federico
+PITROLA, Néstor Antonio
 
-Unión PRO
+Fte. de Izquierda y de los Trabajadores
 
-Cdad. Aut. Bs. As.
+Buenos Aires
 
 AFIRMATIVO
 
@@ -1552,22 +1368,6 @@ PLAINI, Francisco Omar
 Cultura, Educación y Trabajo
 
 Buenos Aires
-
-AFIRMATIVO
-
-PORTELA, Agustín Alberto
-
-Unión Cívica Radical
-
-Corrientes
-
-AFIRMATIVO
-
-PRADINES, Roberto Arturo
-
-Demócrata de Mendoza
-
-Mendoza
 
 AFIRMATIVO
 
@@ -1586,44 +1386,6 @@ Frente para la Victoria - PJ
 Buenos Aires
 
 AFIRMATIVO
-
-
-Página
-
-Votación Nominal
-
-6 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
 
 RAIMUNDI, Carlos
 
@@ -1689,17 +1451,9 @@ Misiones
 
 AFIRMATIVO
 
-RIVAROLA, Rubén Armando
+RIVAS, Jorge
 
 Frente para la Victoria - PJ
-
-Jujuy
-
-AFIRMATIVO
-
-ROBERTI, Alberto Oscar
-
-Frente Renovador
 
 Buenos Aires
 
@@ -1710,14 +1464,6 @@ ROGEL, Fabián Dulio
 Unión Cívica Radical
 
 Entre Ríos
-
-AFIRMATIVO
-
-ROMERO, Oscar Alberto
-
-Frente para la Victoria - PJ
-
-Buenos Aires
 
 AFIRMATIVO
 
@@ -1753,14 +1499,6 @@ Tucumán
 
 AFIRMATIVO
 
-SAN MARTIN, Adrián
-
-Movimiento Popular Neuquino
-
-Neuquén
-
-AFIRMATIVO
-
 SANCHEZ, Fernando
 
 Coalición Cívica - ARI - UNEN
@@ -1785,14 +1523,6 @@ Buenos Aires
 
 AFIRMATIVO
 
-SCAGLIA, Gisela
-
-Unión PRO
-
-Santa Fe
-
-AFIRMATIVO
-
 SCHIARETTI, Juan
 
 Unión por Córdoba
@@ -1801,35 +1531,19 @@ Córdoba
 
 AFIRMATIVO
 
-SCHMIDT-LIERMANN, Cornelia
-
-Unión PRO
-
-Cdad. Aut. Bs. As.
-
-AFIRMATIVO
-
-SCHWINDT, María Liliana
-
-Frente Renovador
-
-Buenos Aires
-
-AFIRMATIVO
-
-SCIUTTO, Rubén Darío
-
-Peronismo mas al Sur
-
-Tierra del Fuego
-
-AFIRMATIVO
-
 SEGARRA, Adela Rosa
 
 Frente para la Victoria - PJ
 
 Buenos Aires
+
+AFIRMATIVO
+
+SEMHAN, María de las Mercedes
+
+Unión Cívica Radical
+
+Corrientes
 
 AFIRMATIVO
 
@@ -1846,6 +1560,14 @@ SIMONCINI, Silvia Rosa
 Frente para la Victoria - PJ
 
 Santa Fe
+
+AFIRMATIVO
+
+SOLA, Felipe Carlos
+
+Frente Renovador
+
+Buenos Aires
 
 AFIRMATIVO
 
@@ -1873,6 +1595,46 @@ Chaco
 
 AFIRMATIVO
 
+9
+
+
+Página
+
+Votación Nominal
+
+6 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
+
+AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
+
 SPINOZZI, Ricardo Adrián
 
 Unión PRO
@@ -1896,52 +1658,6 @@ Frente para la Victoria - PJ
 Jujuy
 
 AFIRMATIVO
-
-TERADA, Alicia
-
-Coalición Cívica - ARI - UNEN
-
-Chaco
-
-AFIRMATIVO
-
-
-Página
-
-Votación Nominal
-
-7 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
 
 TOLEDO, Susana María
 
@@ -1967,27 +1683,11 @@ Catamarca
 
 AFIRMATIVO
 
-TONELLI, Pablo Gabriel
-
-Unión PRO
-
-Cdad. Aut. Bs. As.
-
-AFIRMATIVO
-
 TORROBA, Francisco Javier
 
 Unión Cívica Radical
 
 La Pampa
-
-AFIRMATIVO
-
-TRIACA, Alberto Jorge
-
-Unión PRO
-
-Cdad. Aut. Bs. As.
 
 AFIRMATIVO
 
@@ -1999,19 +1699,27 @@ Buenos Aires
 
 AFIRMATIVO
 
-TUNDIS, Mirta
-
-Frente Renovador
-
-Buenos Aires
-
-AFIRMATIVO
-
 UÑAC, José Rubén
 
 Frente para la Victoria - PJ
 
 San Juan
+
+AFIRMATIVO
+
+VALDES, Gustavo Adolfo
+
+Unión Cívica Radical
+
+Corrientes
+
+AFIRMATIVO
+
+VALINOTTO, Jorge Anselmo
+
+Frente Cívico - Córdoba
+
+Córdoba
 
 AFIRMATIVO
 
@@ -2031,19 +1739,19 @@ Salta
 
 AFIRMATIVO
 
+VILLA, José Antonio
+
+Frente para la Victoria - PJ
+
+San Juan
+
+AFIRMATIVO
+
 VILLAR MOLINA, María Inés
 
 Movimiento Popular Neuquino
 
 Neuquén
-
-AFIRMATIVO
-
-VILLATA, Graciela Susana
-
-Frente Cívico - Córdoba
-
-Córdoba
 
 AFIRMATIVO
 
@@ -2079,19 +1787,21 @@ Misiones
 
 AFIRMATIVO
 
+9
+
 
 Página
 
 Votación Nominal
 
-8 de 11
+7 de
 
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
 
-Acta Nº 1
+Acta Nº 7
 
-Fecha: 09/04/2015
+Fecha: 29/04/2015
 
 Ult.Mod.Ver 2
 
@@ -2101,7 +1811,7 @@ Tipo de Mayoría: Más de la mitad
 
 Miembros del cuerpo: 257
 
-Hora: 2:15
+Hora: 19:12
 
 Tipo de Quorum: Más de la mitad
 
@@ -2117,142 +1827,101 @@ Bloque político
 
 Provincia
 
-DEL CAÑO, Nicolás
+ALONSO, Laura
 
-PTS - Frente de Izquierda
+Unión PRO
 
-Mendoza
+Cdad. Aut. Bs. As.
 
-NEGATIVO
+ABSTENCION
 
-DONDA PEREZ, Victoria Analía
+BALDASSI, Héctor Walter
 
-Libres del Sur
+Unión PRO
 
-Buenos Aires
+Córdoba
 
-NEGATIVO
+ABSTENCION
 
-LOPEZ, Pablo Sebastián
+BULLRICH, Patricia
 
-Fte. de Izquierda y de los Trabajadores
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+ABSTENCION
+
+DURAND CORNEJO, Guillermo Mario
+
+Conservador Popular
 
 Salta
 
-NEGATIVO
-
-PITROLA, Néstor Antonio
-
-Fte. de Izquierda y de los Trabajadores
-
-Buenos Aires
-
-NEGATIVO
-
-
-Página
-
-Votación Nominal
-
-9 de 11
-
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Apellido y Nombre
-
-Bloque político
-
-Provincia
-
-ARGUMEDO, Alcira Susana
-
-Proyecto Sur
-
-Cdad. Aut. Bs. As.
-
 ABSTENCION
 
-DUCLOS, Omar Arnaldo
+LASPINA, Luciano Andres
 
-GEN
-
-Buenos Aires
-
-ABSTENCION
-
-GARRIDO, Manuel
-
-Unión Cívica Radical
-
-Cdad. Aut. Bs. As.
-
-ABSTENCION
-
-LINARES, María Virginia
-
-GEN
-
-Buenos Aires
-
-ABSTENCION
-
-LOZANO, Claudio Raúl
-
-Unidad Popular
-
-Cdad. Aut. Bs. As.
-
-ABSTENCION
-
-PERALTA, Fabián Francisco
-
-GEN
+Unión PRO
 
 Santa Fe
 
 ABSTENCION
 
-STOLBIZER, Margarita Rosa
+MARTINEZ, Soledad
 
-GEN
+Unión PRO
 
 Buenos Aires
 
 ABSTENCION
 
+PRADINES, Roberto Arturo
 
-Página 10 de 11
+Demócrata de Mendoza
+
+Mendoza
+
+ABSTENCION
+
+SCHMIDT-LIERMANN, Cornelia
+
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+ABSTENCION
+
+TONELLI, Pablo Gabriel
+
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+ABSTENCION
+
+TRIACA, Alberto Jorge
+
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+ABSTENCION
+
+9
+
+
+Página
 
 Votación Nominal
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
 
-Acta Nº 1
+8 de
 
-Fecha: 09/04/2015
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
 
 Ult.Mod.Ver 2
 
@@ -2262,7 +1931,7 @@ Tipo de Mayoría: Más de la mitad
 
 Miembros del cuerpo: 257
 
-Hora: 2:15
+Hora: 19:12
 
 Tipo de Quorum: Más de la mitad
 
@@ -2277,12 +1946,36 @@ Apellido y Nombre
 Bloque político
 
 Provincia
+
+AGUAD, Oscar Raúl
+
+Unión Cívica Radical
+
+Córdoba
+
+AUSENTE
+
+AGUILAR, Lino Walter
+
+Compromiso Federal
+
+San Luis
+
+AUSENTE
 
 ALEGRE, Oscar Gilberto
 
 Frente Renovador
 
 Buenos Aires
+
+AUSENTE
+
+ARGUMEDO, Alcira Susana
+
+Proyecto Sur
+
+Cdad. Aut. Bs. As.
 
 AUSENTE
 
@@ -2294,9 +1987,9 @@ Buenos Aires
 
 AUSENTE
 
-BARCHETTA, Omar Segundo
+BARLETTA, Mario Domingo
 
-Partido Socialista
+Unión Cívica Radical
 
 Santa Fe
 
@@ -2310,6 +2003,30 @@ San Luis
 
 AUSENTE
 
+BINNER, Hermes Juan
+
+Partido Socialista
+
+Santa Fe
+
+AUSENTE
+
+BRIZUELA DEL MORAL, Eduardo Segundo
+
+Fte. Cívico y Social de Catamarca
+
+Catamarca
+
+AUSENTE
+
+BROMBERG, Isaac Benjamín
+
+Frente para la Victoria - PJ
+
+Tucumán
+
+AUSENTE
+
 BROWN, Carlos Ramón
 
 Fe
@@ -2318,11 +2035,67 @@ Buenos Aires
 
 AUSENTE
 
-CONTRERA, Mónica Graciela
+CAMAÑO, Graciela
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+CARRIO, Elisa María Avelina
+
+Coalición Cívica - ARI - UNEN
+
+Cdad. Aut. Bs. As.
+
+AUSENTE
+
+CASELLES, Graciela María
 
 Frente para la Victoria - PJ
 
-Chubut
+San Juan
+
+AUSENTE
+
+CASERIO, Carlos Alberto
+
+Unión por Córdoba
+
+Córdoba
+
+AUSENTE
+
+COSTA, Eduardo Raúl
+
+Unión Cívica Radical
+
+Santa Cruz
+
+AUSENTE
+
+CREMER DE BUSTI, María Cristina
+
+Unión por Entre Ríos
+
+Entre Ríos
+
+AUSENTE
+
+CUCCOVILLO, Ricardo Oscar
+
+Partido Socialista
+
+Buenos Aires
+
+AUSENTE
+
+D'ALESSANDRO, Marcelo Silvio
+
+Frente Renovador
+
+Buenos Aires
 
 AUSENTE
 
@@ -2334,14 +2107,6 @@ Chubut
 
 AUSENTE
 
-DE FERRARI RUEDA, Patricia
-
-Unión Cívica Radical
-
-Córdoba
-
-AUSENTE
-
 DE GENNARO, Victor Norberto
 
 Unidad Popular
@@ -2350,11 +2115,67 @@ Buenos Aires
 
 AUSENTE
 
-GIMENEZ, Patricia Viviana
+DE MENDIGUREN, José Ignacio
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+DE NARVAEZ, Francisco
+
+Unión Celeste y Blanco
+
+Buenos Aires
+
+AUSENTE
+
+DEPETRI, Edgardo Fernando
+
+Frente para la Victoria - PJ
+
+Buenos Aires
+
+AUSENTE
+
+EHCOSOR, María Azucena
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+GARRIDO, Manuel
 
 Unión Cívica Radical
 
+Cdad. Aut. Bs. As.
+
+AUSENTE
+
+GIUSTOZZI, Rubén Darío
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+GONZALEZ, Juan Dante
+
+Frente para la Victoria - PJ
+
 Mendoza
+
+AUSENTE
+
+GRIBAUDO, Christian Alejandro
+
+Unión PRO
+
+Buenos Aires
 
 AUSENTE
 
@@ -2374,6 +2195,70 @@ Buenos Aires
 
 AUSENTE
 
+MAJDALANI, Silvia Cristina
+
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+AUSENTE
+
+MALDONADO, Victor Hugo
+
+Unión Cívica Radical
+
+Chaco
+
+AUSENTE
+
+MARTINEZ, Julio César
+
+Unión Cívica Radical
+
+La Rioja
+
+AUSENTE
+
+9
+
+
+Página
+
+Votación Nominal
+
+9 de
+
+133 Período Ordinario - 2ª Sesión de Tablas - 2º Reunión
+Votación en General y Particular de Proyectos de Ley.
+
+Acta Nº 7
+
+Fecha: 29/04/2015
+
+Ult.Mod.Ver 2
+
+Base Mayoría: Votos Emitidos
+
+Tipo de Mayoría: Más de la mitad
+
+Miembros del cuerpo: 257
+
+Hora: 19:12
+
+Tipo de Quorum: Más de la mitad
+
+Resultado de la Votación:
+
+AFIRMATIVO
+
+Presidente: DOMINGUEZ, Julián Andrés
+
+Apellido y Nombre
+
+Bloque político
+
+Provincia
+
 MARTINEZ, Oscar Ariel
 
 Frente Renovador
@@ -2382,7 +2267,71 @@ Santa Fe
 
 AUSENTE
 
-ORTIZ, Mariela
+MASSA, Sergio Tomás
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+MULLER, Edgar Raúl
+
+Compromiso Federal
+
+Córdoba
+
+AUSENTE
+
+OLIVARES, Hector Enrique
+
+Unión Cívica Radical
+
+La Rioja
+
+AUSENTE
+
+PERALTA, Fabián Francisco
+
+GEN
+
+Santa Fe
+
+AUSENTE
+
+PEREZ, Adrián
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+PEROTTI, Omar Angel
+
+Frente para la Victoria - PJ
+
+Santa Fe
+
+AUSENTE
+
+PINEDO, Federico
+
+Unión PRO
+
+Cdad. Aut. Bs. As.
+
+AUSENTE
+
+PORTELA, Agustín Alberto
+
+Unión Cívica Radical
+
+Corrientes
+
+AUSENTE
+
+RIVAROLA, Rubén Armando
 
 Frente para la Victoria - PJ
 
@@ -2390,7 +2339,15 @@ Jujuy
 
 AUSENTE
 
-RIVAS, Jorge
+ROBERTI, Alberto Oscar
+
+Frente Renovador
+
+Buenos Aires
+
+AUSENTE
+
+ROMERO, Oscar Alberto
 
 Frente para la Victoria - PJ
 
@@ -2406,19 +2363,51 @@ San Luis
 
 AUSENTE
 
-SEMHAN, María de las Mercedes
+SAN MARTIN, Adrián
 
-Unión Cívica Radical
+Movimiento Popular Neuquino
 
-Corrientes
+Neuquén
 
 AUSENTE
 
-SOLA, Felipe Carlos
+SCAGLIA, Gisela
+
+Unión PRO
+
+Santa Fe
+
+AUSENTE
+
+SCHWINDT, María Liliana
 
 Frente Renovador
 
 Buenos Aires
+
+AUSENTE
+
+SCIUTTO, Rubén Darío
+
+Peronismo mas al Sur
+
+Tierra del Fuego
+
+AUSENTE
+
+STOLBIZER, Margarita Rosa
+
+GEN
+
+Buenos Aires
+
+AUSENTE
+
+TERADA, Alicia
+
+Coalición Cívica - ARI - UNEN
+
+Chaco
 
 AUSENTE
 
@@ -2430,15 +2419,15 @@ La Rioja
 
 AUSENTE
 
-VALDES, Gustavo Adolfo
+TUNDIS, Mirta
 
-Unión Cívica Radical
+Frente Renovador
 
-Corrientes
+Buenos Aires
 
 AUSENTE
 
-VALINOTTO, Jorge Anselmo
+VILLATA, Graciela Susana
 
 Frente Cívico - Córdoba
 
@@ -2446,65 +2435,23 @@ Córdoba
 
 AUSENTE
 
-VILLA, José Antonio
-
-Frente para la Victoria - PJ
-
-San Juan
-
-AUSENTE
-
-
-Página 11 de 11
-
-Votación Nominal
-133 Período Ordinario - 1ª Sesión Especial - 1º Reunión
-Expediente 2-PE-2015 - Orden del Día 1893 - Votación en General.
-
-Acta Nº 1
-
-Fecha: 09/04/2015
-
-Ult.Mod.Ver 2
-
-Base Mayoría: Votos Emitidos
-
-Tipo de Mayoría: Más de la mitad
-
-Miembros del cuerpo: 257
-
-Hora: 2:15
-
-Tipo de Quorum: Más de la mitad
-
-Resultado de la Votación:
-
-AFIRMATIVO
-
-Presidente: DOMINGUEZ, Julián Andrés
-
-Informe de auditoría de modificaciones
-Apellido y Nombre
-DUCLOS, Omar Arnaldo
-
-Versión Original
-
-Versión Actual
-
-NEGATIVO
-
-ABSTENCION
-
 Observaciones:
-Expediente 2-PE-2015 - Orden del Día 1893. Política de reactivación de los ferrocarriles de pasajeros y de cargas. Declaración de
-interés público nacional y como objetivo prioritario de la República Argentina. Constitución de Ferrocarriles Argentinos Sociedad del
-Estado. Dictamen de Mayoría.
 
-Modificación realizada el 09/04/2015 a las 02:19
+Votación en General y Particular de los siguientes Proyectos de Ley ( sin Disidencias ni Observaciones ): Expedientes
+8777-D-14, 8776-D-14 y 3247-D-14. En la versión taquigráfica correspondiente a la sesión, consta el sentido del voto de
+aquellos diputados que se abstuvieron o votaron negativamente en algunos de los expedientes enumerados.
+Modificación realizada el 29/04/2015 a las 19:25
 
-2-PE-15
+8777-D-14
 LEY
-Política de reactivación de los ferrocarriles de pasajeros y de cargas. Declaración de interés público nacional y como objetivo prioritario de la
-República Argentina. Constitución de Ferrocarriles Argentinos Sociedad del Estado.
+Régimen tarifario específico para organizaciones sociales.
+-
+8776-D-14
+LEY
+Asociaciones Civiles. Régimen de bien de utilidad social y suspensión temporaria de las subastas de los bienes afectados a la consecución del objetivo social.
+-
+3247-D-14
+LEY
+Prevención y control de los trastornos alimentarios - Ley 26.396 -. Incorporación de los artículos 21, 21 bis y 21 ter, sobre sanciones.
 -
 

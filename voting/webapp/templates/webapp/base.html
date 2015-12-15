@@ -22,14 +22,34 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/webapp">Inicio <span class="sr-only">(current)</span></a></li>
+                {% if section == 'home' %}
+                <li class="active"><a href="/webapp">Inicio</a></li>
+                {% else %}
+                <li><a href="/webapp">Inicio</a></li>
+                {% endif %}
+                <!--<span class="sr-only">(current)</span>-->
+
+                {% if section == 'question' %}
+                <li class="active"><a href="/webapp/question">Preguntas</a></li>
+                {% else %}
                 <li><a href="/webapp/question">Preguntas</a></li>
+                {% endif %}
+
+                {% if section == 'results' %}
+                <li class="active"><a href="/webapp/results">Resultados</a></li>
+                {% else %}
                 <li><a href="/webapp/results">Resultados</a></li>
+                {% endif %}
+
+                {% if section == 'developers' %}
+                <li class="active"><a href="#">Desarrolladores</a></li>
+                {% else %}
                 <li><a href="#">Desarrolladores</a></li>
+                {% endif %}
             </ul>
             <!--<a href="#" class="btn btn-primary navbar-btn">Link 3</a>-->
             <p class="navbar-text navbar-right" style="color:white">
-                Signed in as <a href="#" class="navbar-link">Mark Otto</a>
+                Usuario conectado: <a href="#" class="navbar-link">{{ user }}</a>
             </p>
 
         </div>
@@ -45,9 +65,11 @@
 
     <!--<div><br /><br /><br /></div>-->
     <div class="panel panel-default">
-      <div class="panel-body" style="background-color:#00326B; color:white">
-        Footer
-      </div>
+        <div class="panel-body" style="background-color:#00326B; color:white">
+            <p>Author: <a href="mailto:ezequiel.medina@fundasoft.org">Ezequiel Medina</a></p>
+            <p>Based on: <a href="https://github.com/machinalis/iepy">IEPY Copyright © 2014 Machinalis and individual contributors.</a></p>
+            <p>Front-End: <a href="https://bootswatch.com/paper/">Bootswatch Copyright © 2013 Thomas Park</a></p>
+        </div>
     </div>
 
 

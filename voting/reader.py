@@ -1,30 +1,37 @@
 """Convert file to single line.
 
 Usage:
-  reader.py -i <file> [-o <file>]
+  reader.py -i <folder>
   reader.py -h | --help
 
 Options:
   -i <file>     Input data file.
-  -o <file>     Output plain data file.
   -h --help     Show this screen.
 """
 from docopt import docopt
-import sys
+import glob
+from os import listdir, walk, chdir
+from os.path import isfile, join
 __author__ = 'Ezequiel Medina'
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
-    in_file = opts['-i']
-    out_file = opts['-o']
-    if out_file is None:
-        out_file = in_file + '_plain'
-    f = open(in_file, 'r')
-    data = f.readlines()
-    f.close()
+    in_folder = opts['-i']
+    out = open(join(in_folder, 'data.csv'), 'w')
+    out.write('document_id,document_text\n')
 
-    plain_data = ''.join(data)
-    plain_data = plain_data.replace('\n', ' ')
-    f = open(out_file, 'w')
-    f.write(repr(plain_data))
-    f.close()
+    for dir in listdir(in_folder):
+        path = join(in_folder, dir)
+        for (dirpath, dirnames, filenames) in walk(path):
+            for file in filenames:
+                if isfile(join(path, file)):
+                    name, ext = file.split('.')
+                    if ext == 'txt' and 'BAT' not in name:
+                        p = join(dirpath, name + '.' + ext)
+                        f = open(p, 'r')
+                        data = f.readlines()
+                        plain_data = ''.join(data)
+                        plain_data = plain_data.replace('\n', ' ')
+                        out.write('"' + name + '",' + repr(plain_data) + '\n')
+                        f.close()
+    out.close()

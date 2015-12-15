@@ -11,7 +11,10 @@ class LawNERRunner(RegExpNERRunner):
 
     def __init__(self, override=False):
         # TODO: write this regexp!
-        law = u'<Observaciones><:>(<[^(\.)].*>)*<\.>(?P<<law>><.*>+)'
+        #law = u'<Observaciones><:>(<[^(\.)].*>)*<\.>(?P<<law>><.*>+)'
+
+        law = u'<LEY>(?P<<law>><[^-].*>+)<->'
+        #law = u'(?<=<LEY>)(?P<<law>><.*>+)(?=<->)'
 
         #law = u'<LEY>(?P<<law>><.*>+)(<APROBADO>|<DESAPROBADO>|<SANCIONADO>)'
         self.regexp = regexp = law

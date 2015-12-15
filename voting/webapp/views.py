@@ -8,9 +8,7 @@ import random
 
 # Create your views here.
 def index(request):
-    # entitys = Entity.objects.all()
-    docs = IEDocument.objects.all()
-    context = {'docs': docs}
+    context = {'section': 'home'}
 
     return render(request, 'webapp/index.html', context)
 
@@ -20,7 +18,8 @@ def question(request):
         #return HttpResponse('Necesitas estar loggeado.')
         title = 'Acceso ilegal'
         msg = 'Debes iniciar sesion para poder ver esta página.'
-        return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
+        context = {'title': title, 'msg': msg}
+        return render(request, 'webapp/message.html', context)
 
     # generar la pregunta y llamar a save_choice
     user = User.objects.get(id=request.user.id)
@@ -32,11 +31,12 @@ def question(request):
         title = 'Respondiste a todas las preguntas'
         msg = 'Quieres ver los resultados?'
         links = [('Resultados', '/webapp/results')]
-        return render(request, 'webapp/message.html', {'title': title, 'msg': msg, 'links': links})
+        context = {'title': title, 'msg': msg, 'links': links}
+        return render(request, 'webapp/message.html', context)
 
     selected = random.choice(questions)
 
-    context = {'question': selected}
+    context = {'question': selected, 'section': 'question'}
     return render(request, 'webapp/question.html', context)
 
 
@@ -70,7 +70,8 @@ def save_choice(request):
         msg = 'Quieres responder otra pregunta para que los resultados sean mas precisos?'
         links = [('Responder otra pregunta', '/webapp/question')]
         links.append(('Ver los resultados parciales', '/webapp/results'))
-        return render(request, 'webapp/message.html', {'title': title, 'msg': msg, 'links': links})
+        context = {'title': title, 'msg': msg, 'links': links, 'section': 'question'}
+        return render(request, 'webapp/message.html', context)
 
     title = 'Acceso ilegal'
     msg = 'No tienes permiso para ver esta página.'
@@ -89,44 +90,47 @@ def results(request):
     docs = IEDocument.objects.all()
     cant_laws = 0
     for doc in docs:
-        cant_laws += 1
         evidences = EvidenceCandidate.objects.all()
         segments_id = [x.id for x in doc.get_text_segments()]
-
         # Collect data from iepy models
-        law = None
-        expedient = None
+        laws = []
+        # Falta usar los expedientes
+        expedients = []
         for eo in doc.get_entity_occurrences():
             e = eo.entity
-            if law is None and e.kind.name == 'LAW':
-                law = e
-            elif expedient is None and e.kind.name == 'EXPEDIENT':
-                expedient = e
-            if law is not None and expedient is not None:
-                break
-        assert law is not None and expedient is not None
+            if e.kind.name == 'LAW':
+                laws.append(e)
+            elif e.kind.name == 'EXPEDIENT':
+                expedients.append(e)
+        if len(laws) == 0:
+            continue
+        cant_laws += len(laws)
 
-        for evidence in evidences:
-            first_label = evidence.labels.first()
-            if evidence.segment_id in segments_id and first_label.label == 'YE':
-                question = Question.objects.filter(law=law)
-                choice = Choice.objects.filter(user=user, question=question)
-                if len(choice) > 0:
-                    choice = choice[0]
-                    leo = evidence.left_entity_occurrence
-                    reo = evidence.right_entity_occurrence
-                    if first_label.relation.name == 'voted':
-                        if reo.alias != 'AFIRMATIVO' and reo.alias != 'NEGATIVO':
-                            vote = Vote.objects.get(vote='INDIFERENTE')
-                        else:
-                            vote = Vote.objects.get(vote=reo.alias)
-                        counts[leo.alias] += 0
-                        if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
-                            counts[leo.alias] += 1
-                    elif first_label.relation.name == 'party':
-                        person_party[leo.alias] = reo.alias
-                else:
-                    print('Caso donde el usuario no respondio ninguna pregunta')
+        for law in laws:
+            for evidence in evidences:
+                first_label = evidence.labels.first()
+                if first_label is None:
+                    continue
+                if evidence.segment_id in segments_id and first_label.label == 'YE':
+                    # Falta implementar para muchas preguntas de la misma ley
+                    question = Question.objects.filter(law=law)
+                    choice = Choice.objects.filter(user=user, question=question)
+                    if len(choice) > 0:
+                        choice = choice[0]
+                        leo = evidence.left_entity_occurrence
+                        reo = evidence.right_entity_occurrence
+                        if first_label.relation.name == 'voted':
+                            if reo.alias != 'AFIRMATIVO' and reo.alias != 'NEGATIVO':
+                                vote = Vote.objects.get(vote='INDIFERENTE')
+                            else:
+                                vote = Vote.objects.get(vote=reo.alias)
+                            counts[leo.alias] += 0
+                            if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
+                                counts[leo.alias] += 1
+                        elif first_label.relation.name == 'party':
+                            person_party[leo.alias] = reo.alias
+                    else:
+                        print('El usuario no respondio ninguna pregunta.')
     results_by_person = []
     results_by_party = []
     for person in counts:
@@ -145,7 +149,7 @@ def results(request):
         title = 'No se pueden mostrar los resultados'
         msg = 'Debes responder alguna pregunta antes.'
         return render(request, 'webapp/message.html', {'title': title, 'msg': msg})
-    context = {'results_by_person': results_by_person, 'results_by_party': results_by_party}
+    context = {'results_by_person': results_by_person, 'results_by_party': results_by_party, 'section': 'results'}
     return render(request, 'webapp/results.html', context)
 
 
