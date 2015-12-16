@@ -1,28 +1,21 @@
 {% extends "webapp/base.html" %}
 
 {% block title %}Inicio{% endblock %}
-{% block header %}Inicio{% endblock %}
+{% block header %}Bienvenido a Voting{% endblock %}
 
 {% block content %}
-<!--<div style="background:blue; color:white">
-    Documentos
-</div>
-<div style="background:lightblue">
-    {% for doc in docs %}
-        <div>
-            <a href="evidences/{{ doc.id }}">
-            {{ doc.id }}
-            -
-            {{ doc.human_identifier }}
-            </a>
-        </div>
-    {% endfor %}
-</div>-->
-<p>Bienvenido a Voting, el sistema que te guia para votar correctamente.</p>
-<p>Para ver el porcentaje de coincidencia con los diputados y partidos usted debe:</p>
+
+<p>Voting es un sistema que te guia para votar correctamente y con conciencia.</p>
+<h5>Instrucciones</h5>
+<p>Para participar solo tienes que responder algunas preguntas y despues podras ver el porcentaje
+de coincidencia que tienes con cada diputado y con cada partido politico.</p>
+<p>Este sistema se basa unicamente en los resultados de las votaciones en la camara
+de diputados, por lo tanto los resultados son completamente imparciales
+y solo intentan reflejar que personas y partidos politicos piensa mas parecido a usted.</p>
+<h5>Comenzar ahora!</h5>
 <ul>
-    <li>Responder algunas preguntas</li>
-    <li>Ver los resultados</li>
+    <li><a href="/webapp/question">Responde una pregunta</a></li>
+    <li><a href="/webapp/results">Mira los resultados</a></li>
 </ul>
 
 {% endblock %}

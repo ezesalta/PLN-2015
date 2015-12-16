@@ -8,14 +8,18 @@ import random
 
 # Create your views here.
 def index(request):
-    context = {'section': 'home'}
+    if not request.user.is_authenticated():
+        title = 'Acceso ilegal'
+        msg = 'Debes iniciar sesion para poder ver esta página.'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'webapp/message.html', context)
 
+    context = {'section': 'home'}
     return render(request, 'webapp/index.html', context)
 
 
 def question(request):
     if not request.user.is_authenticated():
-        #return HttpResponse('Necesitas estar loggeado.')
         title = 'Acceso ilegal'
         msg = 'Debes iniciar sesion para poder ver esta página.'
         context = {'title': title, 'msg': msg}
@@ -27,11 +31,10 @@ def question(request):
     questions_ans = [x.question for x in choices]
     questions = [x for x in Question.objects.all() if x not in questions_ans]
     if len(questions) <= 0:
-        #return HttpResponse('Ya respondiste todas las preguntas.')
         title = 'Respondiste a todas las preguntas'
         msg = 'Quieres ver los resultados?'
         links = [('Resultados', '/webapp/results')]
-        context = {'title': title, 'msg': msg, 'links': links}
+        context = {'title': title, 'msg': msg, 'links': links, 'section': 'question'}
         return render(request, 'webapp/message.html', context)
 
     selected = random.choice(questions)
