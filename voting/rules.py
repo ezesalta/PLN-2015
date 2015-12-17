@@ -9,8 +9,8 @@ RELATION = ""
 @rule(True)
 def person_vote(Subject, Object):
     anything = Star(Any())
-    #return Subject + anything + Object
-    #return anything + Subject + anything + Object + anything
+    # return Subject + anything + Object
+    # return anything + Subject + anything + Object + anything
     return Subject + Kind("PARTY") + anything + Object
 
 
