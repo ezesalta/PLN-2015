@@ -35,8 +35,9 @@ class SentencerRunner(BasePreProcessStepRunner):
 
 def sentencer(tokens):
     sentences = [0]
+    votes = ['AFIRMATIVO', 'NEGATIVO', 'ABSTENCION', 'AUSENTE']
     for j, token in enumerate(tokens):
-        if token == 'AFIRMATIVO':
+        if token in votes:
             sentences.append(j + 1)
     if sentences[-1] != len(tokens):
         sentences.append(len(tokens))

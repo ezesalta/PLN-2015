@@ -27,9 +27,9 @@ class PersonNERRunner(RegExpNERRunner):
             parties_first_words.add('<' + x + '>')
         take_parties = u'(?!' + '|'.join(parties_first_words) + u')'
 
-        take_extras = u'(?!<Presentes>|<Ausentes>|<Identificados>)'
+        take_extras = u'(?!<Presentes>|<Ausentes>|<Identificados>|<Apellido>|<Informe>)'
 
-        surname_re = take_votes + u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>{1,3})'
+        surname_re = take_votes + u'(?P<<surname>><[A-ZÁÉÍÓÚÑ\'-]*>{1,3})'
         #surname_re = u'(?P<<surname>><[A-ZÁÉÍÓÚÑ]*>{1,3})'
 
         name_re = u'(' + take_parties + take_extras + '<[A-ZÁÉÍÓÚÑ][a-záéíóúñ]*>){1,3}'

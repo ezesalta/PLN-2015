@@ -1,5 +1,5 @@
 from django.db import models
-from iepy.data.models import Entity
+from iepy.data.models import Entity, EvidenceCandidate, Relation
 from django.contrib import admin
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -29,6 +29,14 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.ForeignKey(Vote, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now())
+
+
+class Label(models.Model):
+    id = models.AutoField(primary_key=True)
+    evidence = models.ForeignKey(EvidenceCandidate, on_delete=models.CASCADE, default=0)
+    relation = models.ForeignKey(Relation, on_delete=models.CASCADE, default=0)
+    #relation_name = models.CharField(max_length=30, default='')
+    label = models.BooleanField(default=0)
 
 
 """class Law(models.Model):
@@ -64,6 +72,10 @@ class ChoiceAdmin(admin.ModelAdmin):
     pass
 
 
+class LabelAdmin(admin.ModelAdmin):
+    pass
+
+
 """class LawAdmin(admin.ModelAdmin):
     pass
 
@@ -75,4 +87,5 @@ class VotingAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Choice, ChoiceAdmin)
+admin.site.register(Label, LabelAdmin)
 #admin.site.register(Voting, VotingAdmin)

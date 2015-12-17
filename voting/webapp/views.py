@@ -109,12 +109,18 @@ def results(request):
             continue
         cant_laws += len(laws)
 
-        for law in laws:
-            for evidence in evidences:
-                first_label = evidence.labels.first()
-                if first_label is None:
-                    continue
-                if evidence.segment_id in segments_id and first_label.label == 'YE':
+
+        for evidence in evidences:
+            """first_label = evidence.labels.first()
+            if first_label is None:
+                continue"""
+            first_label = Label.objects.filter(evidence=evidence)
+            if len(first_label) == 0:
+                continue
+            first_label = first_label[0]
+            #if evidence.segment_id in segments_id and first_label.label == 'YE':
+            if evidence.segment_id in segments_id and first_label.label == True:
+                for law in laws:
                     # Falta implementar para muchas preguntas de la misma ley
                     question = Question.objects.filter(law=law)
                     choice = Choice.objects.filter(user=user, question=question)
@@ -122,7 +128,7 @@ def results(request):
                         choice = choice[0]
                         leo = evidence.left_entity_occurrence
                         reo = evidence.right_entity_occurrence
-                        if first_label.relation.name == 'voted':
+                        if first_label.relation.name == 'person_vote':
                             if reo.alias != 'AFIRMATIVO' and reo.alias != 'NEGATIVO':
                                 vote = Vote.objects.get(vote='INDIFERENTE')
                             else:
@@ -130,7 +136,7 @@ def results(request):
                             counts[leo.alias] += 0
                             if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
                                 counts[leo.alias] += 1
-                        elif first_label.relation.name == 'party':
+                        elif first_label.relation.name == 'person_party':
                             person_party[leo.alias] = reo.alias
                     else:
                         print('El usuario no respondio ninguna pregunta.')
@@ -139,13 +145,14 @@ def results(request):
     for person in counts:
         val = counts[person]/cant_laws * 100.0
         #results_by_person.append((person, val))
-        results_by_person.append((val, person))
-        party = person_party[person]
-        counts_party[party] += counts[person]/cant_laws
+        results_by_person.append((round(val, 2), person))
+        if person in person_party:
+            party = person_party[person]
+            counts_party[party] += counts[person]/cant_laws
     for party in counts_party:
         cant_persons = len([x for x in person_party if person_party[x] == party])
         val = counts_party[party]/cant_persons * 100.0
-        results_by_party.append((val, party))
+        results_by_party.append((round(val, 2), party))
     results_by_person = sorted(results_by_person, reverse=True)
     results_by_party = sorted(results_by_party, reverse=True)
     if len(results_by_person) == 0:

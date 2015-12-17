@@ -39,6 +39,12 @@ def segmentation(doc):
     tokens = doc.tokens
     segments = []
     entity_occs = list(doc.get_entity_occurrences())
-    segments.append(RawSegment(sentences[0], sentences[-1], entity_occs))
+    #segments.append(RawSegment(sentences[0], sentences[-1], entity_occs))
+
+    for s, i in enumerate(sentences):
+        if s >= len(sentences) - 1:
+            break
+        j = sentences[s + 1]
+        segments.append(RawSegment(i, j, entity_occs))
 
     return {'segments': segments}
