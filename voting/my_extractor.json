@@ -8,14 +8,6 @@
     "classifier_args": {},
     "classifier": "svc",
     "dense_features": [
-        "entity_order",
-        "entity_distance",
-        "other_entities_in_between",
-        "verbs_count_in_between",
-        "verbs_count",
-        "total_number_of_entities",
-        "symbols_in_between",
-        "number_of_tokens",
         "voting.rules.voted_for"
     ]
 }

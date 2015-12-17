@@ -5,7 +5,7 @@ from refo import Question, Star, Any, Plus
 from iepy.extraction.rules import rule, Token, Pos, Kind
 
 
-RELATION = "voted"
+RELATION = "person_vote"
 
 
 @rule(True)
