@@ -145,14 +145,18 @@ def results(request):
     for person in counts:
         val = counts[person]/cant_laws * 100.0
         #results_by_person.append((person, val))
-        results_by_person.append((round(val, 2), person))
+        #results_by_person.append((round(val, 2), person))
+        person_with_party = person + ' (' + person_party[person] + ')'
+        results_by_person.append((round(val, 2), person_with_party))
         if person in person_party:
             party = person_party[person]
             counts_party[party] += counts[person]/cant_laws
     for party in counts_party:
         cant_persons = len([x for x in person_party if person_party[x] == party])
         val = counts_party[party]/cant_persons * 100.0
-        results_by_party.append((round(val, 2), party))
+        rep_val = cant_persons / len(counts) * 100.0
+        rep_index = (val + rep_val) / 2.0
+        results_by_party.append((rep_index, round(val, 2), party, round(rep_val, 2)))
     results_by_person = sorted(results_by_person, reverse=True)
     results_by_party = sorted(results_by_party, reverse=True)
     if len(results_by_person) == 0:
