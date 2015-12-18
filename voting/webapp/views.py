@@ -134,7 +134,8 @@ def results(request):
                             else:
                                 vote = Vote.objects.get(vote=reo.alias)
                             counts[leo.alias] += 0
-                            if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
+                            #if choice.choice.vote != 'INDIFERENTE' and choice.choice == vote:
+                            if choice.choice.vote == 'INDIFERENTE' or choice.choice == vote:
                                 counts[leo.alias] += 1
                         elif first_label.relation.name == 'person_party':
                             person_party[leo.alias] = reo.alias
